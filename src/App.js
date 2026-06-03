@@ -12,15 +12,22 @@ const PRESET_COLORS = [
   { color: "#a78bfa", accent: "#6d28d9", name: "バイオレット" },
 ];
 
-function AddPatternModal({ onClose, onSave }) {
+function colorToIdx(color) {
+  const idx = PRESET_COLORS.findIndex((c) => c.color === color);
+  return idx >= 0 ? idx : 0;
+}
+
+function AddPatternModal({ onClose, onSave, editPattern }) {
+  const isEdit = !!editPattern;
+
   const [form, setForm] = useState({
-    label: "",
-    sub: "",
-    colorIdx: 0,
-    experiences: "",
-    worldview: "",
-    behaviors: "",
-    lack: "",
+    label: isEdit ? editPattern.label : "",
+    sub: isEdit ? editPattern.sub || "" : "",
+    colorIdx: isEdit ? colorToIdx(editPattern.color) : 0,
+    experiences: isEdit ? (editPattern.experiences || []).join("\n") : "",
+    worldview: isEdit ? (editPattern.worldview || []).join("\n") : "",
+    behaviors: isEdit ? (editPattern.behaviors || []).join("\n") : "",
+    lack: isEdit ? editPattern.lack || "" : "",
   });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -60,10 +67,7 @@ function AddPatternModal({ onClose, onSave }) {
     setError("");
 
     const { color, accent } = PRESET_COLORS[form.colorIdx];
-    const sign_id = "custom_" + Date.now();
-
-    const { error: dbError } = await supabase.from("patterns").insert({
-      sign_id,
+    const payload = {
       label: form.label.trim(),
       sub: form.sub.trim(),
       color,
@@ -72,7 +76,19 @@ function AddPatternModal({ onClose, onSave }) {
       worldview: form.worldview.split("\n").map((s) => s.trim()).filter(Boolean),
       behaviors: form.behaviors.split("\n").map((s) => s.trim()).filter(Boolean),
       lack: form.lack.trim(),
-    });
+    };
+
+    let dbError;
+    if (isEdit) {
+      ({ error: dbError } = await supabase
+        .from("patterns")
+        .update(payload)
+        .eq("id", editPattern.id));
+    } else {
+      ({ error: dbError } = await supabase
+        .from("patterns")
+        .insert({ ...payload, sign_id: "custom_" + Date.now() }));
+    }
 
     setSaving(false);
     if (dbError) {
@@ -87,7 +103,7 @@ function AddPatternModal({ onClose, onSave }) {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>＋ パターンを追加</h2>
+          <h2>{isEdit ? "✏️ パターンを編集" : "＋ パターンを追加"}</h2>
           <button className="icon-btn" onClick={onClose} aria-label="閉じる">✕</button>
         </div>
 
@@ -198,7 +214,7 @@ function AddPatternModal({ onClose, onSave }) {
             style={{ background: PRESET_COLORS[form.colorIdx].accent }}
             disabled={saving}
           >
-            {saving ? "保存中..." : "保存する"}
+            {saving ? "保存中..." : isEdit ? "更新する" : "保存する"}
           </button>
         </form>
       </div>
@@ -310,6 +326,7 @@ export default function App() {
   const [selected, setSelected] = useState(null);
   const [customPatterns, setCustomPatterns] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [editingPattern, setEditingPattern] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -323,6 +340,16 @@ export default function App() {
       .order("created_at");
     if (data) setCustomPatterns(data);
     setLoading(false);
+  }
+
+  function openEdit(e, pattern) {
+    e.stopPropagation();
+    setEditingPattern(pattern);
+  }
+
+  function closeModal() {
+    setShowModal(false);
+    setEditingPattern(null);
   }
 
   const allSigns = [
@@ -375,8 +402,13 @@ export default function App() {
             <div className="sign-grid">
               {allSigns.map((sign) => {
                 const flow = allFlows[sign.id];
+                const isCustom = sign.id.startsWith("custom_");
+                const rawPattern = isCustom
+                  ? customPatterns.find((p) => p.sign_id === sign.id)
+                  : null;
+
                 return (
-                  <button
+                  <div
                     key={sign.id}
                     className={`sign-card${selected === sign.id ? " active" : ""}`}
                     style={{
@@ -389,7 +421,17 @@ export default function App() {
                     {sign.sub && (
                       <span className="sign-sub">{sign.sub}</span>
                     )}
-                  </button>
+                    {isCustom && rawPattern && (
+                      <button
+                        className="edit-btn"
+                        onClick={(e) => openEdit(e, rawPattern)}
+                        aria-label="編集"
+                        title="編集"
+                      >
+                        ✏️
+                      </button>
+                    )}
+                  </div>
                 );
               })}
             </div>
@@ -409,10 +451,11 @@ export default function App() {
         ＋ パターン追加
       </button>
 
-      {showModal && (
+      {(showModal || editingPattern) && (
         <AddPatternModal
-          onClose={() => setShowModal(false)}
+          onClose={closeModal}
           onSave={fetchPatterns}
+          editPattern={editingPattern}
         />
       )}
     </div>
