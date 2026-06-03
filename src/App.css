@@ -459,6 +459,76 @@ body {
   outline-offset: 3px;
 }
 
+.json-paste-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: #0f0f18;
+  border: 1px dashed #2a2a3e;
+  border-radius: 10px;
+  padding: 1rem;
+}
+
+.json-textarea {
+  background: #0a0a12;
+  border: 1px solid #22222e;
+  border-radius: 8px;
+  color: #a0a0c0;
+  font-size: 0.8rem;
+  font-family: monospace;
+  padding: 0.65rem 0.85rem;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.json-textarea:focus {
+  outline: none;
+  border-color: #7c3aed;
+}
+
+.json-textarea::placeholder {
+  color: #2e2e4e;
+}
+
+.load-json-btn {
+  background: #7c3aed;
+  color: #fff;
+  border: none;
+  padding: 0.55rem 1rem;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  align-self: flex-start;
+}
+
+.load-json-btn:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.load-json-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #444;
+  font-size: 0.75rem;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #22222e;
+}
+
 .form-error {
   color: #f87171;
   font-size: 0.85rem;

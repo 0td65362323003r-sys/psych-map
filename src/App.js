@@ -24,9 +24,30 @@ function AddPatternModal({ onClose, onSave }) {
   });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [jsonInput, setJsonInput] = useState("");
+  const [jsonError, setJsonError] = useState("");
 
   function set(key, value) {
     setForm((f) => ({ ...f, [key]: value }));
+  }
+
+  function loadFromJson() {
+    setJsonError("");
+    try {
+      const parsed = JSON.parse(jsonInput);
+      setForm((f) => ({
+        ...f,
+        label: parsed.label || "",
+        sub: parsed.sub || "",
+        experiences: Array.isArray(parsed.experiences) ? parsed.experiences.join("\n") : "",
+        worldview: Array.isArray(parsed.worldview) ? parsed.worldview.join("\n") : "",
+        behaviors: Array.isArray(parsed.behaviors) ? parsed.behaviors.join("\n") : "",
+        lack: parsed.lack || "",
+      }));
+      setJsonInput("");
+    } catch {
+      setJsonError("JSONの形式が正しくありません");
+    }
   }
 
   async function handleSubmit(e) {
@@ -71,6 +92,28 @@ function AddPatternModal({ onClose, onSave }) {
         </div>
 
         <form onSubmit={handleSubmit} className="add-form">
+          <div className="json-paste-section">
+            <span className="field-label">📋 一括貼り付け（Claudeに作ってもらったJSONをここに貼る）</span>
+            <textarea
+              className="json-textarea"
+              placeholder={'{\n  "label": "「〇〇だよね」",\n  "sub": "という〇〇",\n  "experiences": ["〇〇", "〇〇"],\n  "worldview": ["〇〇"],\n  "behaviors": ["〇〇", "〇〇"],\n  "lack": "〇〇"\n}'}
+              value={jsonInput}
+              onChange={(e) => setJsonInput(e.target.value)}
+              rows={5}
+            />
+            {jsonError && <p className="form-error">{jsonError}</p>}
+            <button
+              type="button"
+              className="load-json-btn"
+              onClick={loadFromJson}
+              disabled={!jsonInput.trim()}
+            >
+              フォームに読み込む
+            </button>
+          </div>
+
+          <div className="divider"><span>または手動で入力</span></div>
+
           <label>
             <span>サイン（必須）</span>
             <input
