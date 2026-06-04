@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "./supabaseClient";
-import { defaultData } from "./data";
+import { defaultData, defaultJobData } from "./data";
 import "./App.css";
 
 const PRESET_COLORS = [
@@ -17,7 +17,32 @@ function colorToIdx(color) {
   return idx >= 0 ? idx : 0;
 }
 
-function AddPatternModal({ onClose, onSave, editPattern }) {
+// ─── ホームページ ───────────────────────────────────────
+function HomePage({ onSelect }) {
+  return (
+    <div className="home-page">
+      <header className="app-header">
+        <h1>心理マップ</h1>
+        <p>サインから心理を読み解くガイド</p>
+      </header>
+      <div className="category-grid">
+        <button className="category-card" onClick={() => onSelect("sign")}>
+          <span className="category-icon">💬</span>
+          <span className="category-title">発言パターン</span>
+          <span className="category-desc">口癖・発言から心理を読む</span>
+        </button>
+        <button className="category-card" onClick={() => onSelect("job")}>
+          <span className="category-icon">💼</span>
+          <span className="category-title">職業ジャンル</span>
+          <span className="category-desc">職業・仕事から心理を読む</span>
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ─── 追加・編集モーダル ─────────────────────────────────
+function AddPatternModal({ onClose, onSave, editPattern, category }) {
   const isEdit = !!editPattern;
 
   const [form, setForm] = useState({
@@ -76,6 +101,7 @@ function AddPatternModal({ onClose, onSave, editPattern }) {
       worldview: form.worldview.split("\n").map((s) => s.trim()).filter(Boolean),
       behaviors: form.behaviors.split("\n").map((s) => s.trim()).filter(Boolean),
       lack: form.lack.trim(),
+      category,
     };
 
     let dbError;
@@ -131,10 +157,10 @@ function AddPatternModal({ onClose, onSave, editPattern }) {
           <div className="divider"><span>または手動で入力</span></div>
 
           <label>
-            <span>サイン（必須）</span>
+            <span>{category === "job" ? "職業名（必須）" : "サイン（必須）"}</span>
             <input
               type="text"
-              placeholder="例：「〇〇だよね」という発言"
+              placeholder={category === "job" ? "例：〇〇職" : "例：「〇〇だよね」という発言"}
               value={form.label}
               onChange={(e) => set("label", e.target.value)}
             />
@@ -222,6 +248,7 @@ function AddPatternModal({ onClose, onSave, editPattern }) {
   );
 }
 
+// ─── 詳細パネル ─────────────────────────────────────────
 function FlowDetail({ sign, flow, onClose }) {
   const [diagAnswer, setDiagAnswer] = useState(null);
   const diag = flow.counterexample?.diagnostic;
@@ -232,10 +259,7 @@ function FlowDetail({ sign, flow, onClose }) {
   }
 
   return (
-    <div
-      className="flow-detail"
-      style={{ "--accent": flow.accent, "--card-color": flow.color }}
-    >
+    <div className="flow-detail" style={{ "--accent": flow.accent, "--card-color": flow.color }}>
       <div className="flow-detail-header">
         <div>
           <h2 className="flow-title">{sign.label}</h2>
@@ -251,51 +275,35 @@ function FlowDetail({ sign, flow, onClose }) {
             <ul>{flow.experiences.map((e, i) => <li key={i}>{e}</li>)}</ul>
           </section>
         )}
-
         {flow.worldview?.length > 0 && (
           <section className="flow-section">
             <h3><span className="section-icon">🧠</span>形成された世界観</h3>
             <ul>{flow.worldview.map((w, i) => <li key={i}>{w}</li>)}</ul>
           </section>
         )}
-
         {flow.behaviors?.length > 0 && (
           <section className="flow-section">
             <h3><span className="section-icon">👁</span>表れる行動パターン</h3>
             <ul>{flow.behaviors.map((b, i) => <li key={i}>{b}</li>)}</ul>
           </section>
         )}
-
         {flow.lack && (
           <section className="flow-section lack-section">
             <h3><span className="section-icon">💎</span>本当に求めているもの</h3>
             <p className="lack-text">{flow.lack}</p>
           </section>
         )}
-
         {flow.counterexample?.text && (
           <section className="flow-section counter-section">
             <h3><span className="section-icon">⚠️</span>例外パターン・注意点</h3>
             <p>{flow.counterexample.text}</p>
-
             {diag && (
               <div className="diagnostic">
                 <p className="diag-question">🔍 {diag.question}</p>
                 <div className="diag-buttons">
-                  <button
-                    className={`diag-btn${diagAnswer === "yes" ? " active" : ""}`}
-                    onClick={() => toggleDiag("yes")}
-                  >
-                    {diag.yes.label}
-                  </button>
-                  <button
-                    className={`diag-btn${diagAnswer === "no" ? " active" : ""}`}
-                    onClick={() => toggleDiag("no")}
-                  >
-                    {diag.no.label}
-                  </button>
+                  <button className={`diag-btn${diagAnswer === "yes" ? " active" : ""}`} onClick={() => toggleDiag("yes")}>{diag.yes.label}</button>
+                  <button className={`diag-btn${diagAnswer === "no" ? " active" : ""}`} onClick={() => toggleDiag("no")}>{diag.no.label}</button>
                 </div>
-
                 {diagResult && (
                   <div className="diag-result">
                     <p className="diag-insight">{diagResult.insight}</p>
@@ -306,13 +314,8 @@ function FlowDetail({ sign, flow, onClose }) {
             )}
           </section>
         )}
-
         {flow.actions?.map((group, gi) => (
-          <section
-            key={gi}
-            className="flow-section action-section"
-            style={{ background: flow.color + "18" }}
-          >
+          <section key={gi} className="flow-section action-section" style={{ background: flow.color + "18" }}>
             <h3><span className="section-icon">🎯</span>{group.label}</h3>
             <ol>{group.items.map((item, i) => <li key={i}>{item}</li>)}</ol>
           </section>
@@ -322,49 +325,24 @@ function FlowDetail({ sign, flow, onClose }) {
   );
 }
 
-export default function App() {
+// ─── パターン一覧ページ ──────────────────────────────────
+function PatternPage({ category, customPatterns, onBack, onRefetch }) {
   const [selected, setSelected] = useState(null);
-  const [customPatterns, setCustomPatterns] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [editingPattern, setEditingPattern] = useState(null);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchPatterns();
-  }, []);
-
-  async function fetchPatterns() {
-    const { data } = await supabase
-      .from("patterns")
-      .select("*")
-      .order("created_at");
-    if (data) setCustomPatterns(data);
-    setLoading(false);
-  }
-
-  function openEdit(e, pattern) {
-    e.stopPropagation();
-    setEditingPattern(pattern);
-  }
-
-  function closeModal() {
-    setShowModal(false);
-    setEditingPattern(null);
-  }
+  const baseData = category === "job" ? defaultJobData : defaultData;
+  const filtered = customPatterns.filter((p) => p.category === category);
 
   const allSigns = [
-    ...defaultData.signs,
-    ...customPatterns.map((p) => ({
-      id: p.sign_id,
-      label: p.label,
-      sub: p.sub,
-    })),
+    ...baseData.signs,
+    ...filtered.map((p) => ({ id: p.sign_id, label: p.label, sub: p.sub })),
   ];
 
   const allFlows = {
-    ...defaultData.flows,
+    ...baseData.flows,
     ...Object.fromEntries(
-      customPatterns.map((p) => [
+      filtered.map((p) => [
         p.sign_id,
         {
           color: p.color,
@@ -383,81 +361,104 @@ export default function App() {
   const selectedSign = selected ? allSigns.find((s) => s.id === selected) : null;
   const selectedFlow = selected ? allFlows[selected] : null;
 
-  function handleSelect(id) {
-    setSelected((prev) => (prev === id ? null : id));
+  function openEdit(e, pattern) {
+    e.stopPropagation();
+    setEditingPattern(pattern);
+  }
+
+  function closeModal() {
+    setShowModal(false);
+    setEditingPattern(null);
   }
 
   return (
     <div className="app">
       <header className="app-header">
-        <h1>心理マップ</h1>
-        <p>サインから心理を読み解くガイド</p>
+        <button className="back-btn" onClick={onBack}>← 戻る</button>
+        <h1>{category === "job" ? "職業ジャンル" : "発言パターン"}</h1>
+        <p>{category === "job" ? "職業・仕事から心理を読む" : "サインから心理を読み解くガイド"}</p>
       </header>
 
       <main className="app-main">
-        {loading ? (
-          <div className="loading">読み込み中...</div>
-        ) : (
-          <>
-            <div className="sign-grid">
-              {allSigns.map((sign) => {
-                const flow = allFlows[sign.id];
-                const isCustom = sign.id.startsWith("custom_");
-                const rawPattern = isCustom
-                  ? customPatterns.find((p) => p.sign_id === sign.id)
-                  : null;
+        <div className="sign-grid">
+          {allSigns.map((sign) => {
+            const flow = allFlows[sign.id];
+            const isCustom = sign.id.startsWith("custom_");
+            const rawPattern = isCustom ? filtered.find((p) => p.sign_id === sign.id) : null;
 
-                return (
-                  <div
-                    key={sign.id}
-                    className={`sign-card${selected === sign.id ? " active" : ""}`}
-                    style={{
-                      "--card-color": flow?.color || "#c084fc",
-                      "--card-accent": flow?.accent || "#7c3aed",
-                    }}
-                    onClick={() => handleSelect(sign.id)}
-                  >
-                    <span className="sign-label">{sign.label}</span>
-                    {sign.sub && (
-                      <span className="sign-sub">{sign.sub}</span>
-                    )}
-                    {isCustom && rawPattern && (
-                      <button
-                        className="edit-btn"
-                        onClick={(e) => openEdit(e, rawPattern)}
-                        aria-label="編集"
-                        title="編集"
-                      >
-                        ✏️
-                      </button>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+            return (
+              <div
+                key={sign.id}
+                className={`sign-card${selected === sign.id ? " active" : ""}`}
+                style={{
+                  "--card-color": flow?.color || "#c084fc",
+                  "--card-accent": flow?.accent || "#7c3aed",
+                }}
+                onClick={() => setSelected((prev) => (prev === sign.id ? null : sign.id))}
+              >
+                <span className="sign-label">{sign.label}</span>
+                {sign.sub && <span className="sign-sub">{sign.sub}</span>}
+                {isCustom && rawPattern && (
+                  <button className="edit-btn" onClick={(e) => openEdit(e, rawPattern)} aria-label="編集" title="編集">✏️</button>
+                )}
+              </div>
+            );
+          })}
+        </div>
 
-            {selectedSign && selectedFlow && (
-              <FlowDetail
-                sign={selectedSign}
-                flow={selectedFlow}
-                onClose={() => setSelected(null)}
-              />
-            )}
-          </>
+        {selectedSign && selectedFlow && (
+          <FlowDetail sign={selectedSign} flow={selectedFlow} onClose={() => setSelected(null)} />
         )}
       </main>
 
-      <button className="fab" onClick={() => setShowModal(true)}>
-        ＋ パターン追加
-      </button>
+      <button className="fab" onClick={() => setShowModal(true)}>＋ パターン追加</button>
 
       {(showModal || editingPattern) && (
         <AddPatternModal
           onClose={closeModal}
-          onSave={fetchPatterns}
+          onSave={onRefetch}
           editPattern={editingPattern}
+          category={category}
         />
       )}
     </div>
+  );
+}
+
+// ─── メインApp ───────────────────────────────────────────
+export default function App() {
+  const [page, setPage] = useState("home");
+  const [customPatterns, setCustomPatterns] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchPatterns();
+  }, []);
+
+  async function fetchPatterns() {
+    const { data } = await supabase.from("patterns").select("*").order("created_at");
+    if (data) setCustomPatterns(data);
+    setLoading(false);
+  }
+
+  if (loading) {
+    return (
+      <div className="app">
+        <div className="loading">読み込み中...</div>
+      </div>
+    );
+  }
+
+  if (page === "home") {
+    return <HomePage onSelect={setPage} />;
+  }
+
+  return (
+    <PatternPage
+      category={page}
+      customPatterns={customPatterns}
+      onBack={() => setPage("home")}
+      onRefetch={fetchPatterns}
+    />
   );
 }
