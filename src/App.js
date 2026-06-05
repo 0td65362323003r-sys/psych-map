@@ -330,6 +330,7 @@ function PatternPage({ category, customPatterns, onBack, onRefetch }) {
   const [selected, setSelected] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [editingPattern, setEditingPattern] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const baseData = category === "job" ? defaultJobData : defaultData;
   const filtered = customPatterns.filter((p) => p.category === category);
@@ -357,6 +358,13 @@ function PatternPage({ category, customPatterns, onBack, onRefetch }) {
       ])
     ),
   };
+
+  const filteredSigns = searchQuery.trim()
+    ? allSigns.filter((s) =>
+        s.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (s.sub || "").toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : allSigns;
 
   const selectedSign = selected ? allSigns.find((s) => s.id === selected) : null;
   const selectedFlow = selected ? allFlows[selected] : null;
@@ -387,8 +395,29 @@ function PatternPage({ category, customPatterns, onBack, onRefetch }) {
       </header>
 
       <main className="app-main">
+        <div className="search-box">
+          <span className="search-icon">🔍</span>
+          <input
+            type="text"
+            className="search-input"
+            placeholder="キーワードで絞り込む..."
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setSelected(null);
+            }}
+          />
+          {searchQuery && (
+            <button className="search-clear" onClick={() => { setSearchQuery(""); setSelected(null); }}>✕</button>
+          )}
+        </div>
+
+        {filteredSigns.length === 0 && (
+          <p className="no-results">「{searchQuery}」に一致するパターンはありません</p>
+        )}
+
         <div className="sign-grid">
-          {allSigns.map((sign) => {
+          {filteredSigns.map((sign) => {
             const flow = allFlows[sign.id];
             const isCustom = sign.id.startsWith("custom_");
             const rawPattern = isCustom ? filtered.find((p) => p.sign_id === sign.id) : null;

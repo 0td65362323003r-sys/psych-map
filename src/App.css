@@ -112,6 +112,64 @@ body {
   color: #e8e8f0;
 }
 
+/* Search */
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #16161f;
+  border: 1px solid #22222e;
+  border-radius: 10px;
+  padding: 0.6rem 0.85rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus-within {
+  border-color: #7c3aed;
+}
+
+.search-icon {
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.search-input {
+  background: none;
+  border: none;
+  color: #e8e8f0;
+  font-size: 0.92rem;
+  font-family: inherit;
+  flex: 1;
+  outline: none;
+}
+
+.search-input::placeholder {
+  color: #444;
+}
+
+.search-clear {
+  background: none;
+  border: none;
+  color: #555;
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+
+.search-clear:hover {
+  color: #e8e8f0;
+}
+
+.no-results {
+  text-align: center;
+  color: #555;
+  font-size: 0.9rem;
+  padding: 2rem 0;
+}
+
 /* Sign Grid */
 .sign-grid {
   display: grid;
