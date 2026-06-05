@@ -366,6 +366,13 @@ function PatternPage({ category, customPatterns, onBack, onRefetch }) {
     setEditingPattern(pattern);
   }
 
+  async function handleDelete(e, pattern) {
+    e.stopPropagation();
+    if (!window.confirm(`「${pattern.label}」を削除しますか？`)) return;
+    await supabase.from("patterns").delete().eq("id", pattern.id);
+    onRefetch();
+  }
+
   function closeModal() {
     setShowModal(false);
     setEditingPattern(null);
@@ -399,7 +406,10 @@ function PatternPage({ category, customPatterns, onBack, onRefetch }) {
                 <span className="sign-label">{sign.label}</span>
                 {sign.sub && <span className="sign-sub">{sign.sub}</span>}
                 {isCustom && rawPattern && (
-                  <button className="edit-btn" onClick={(e) => openEdit(e, rawPattern)} aria-label="編集" title="編集">✏️</button>
+                  <div className="card-actions">
+                    <button className="edit-btn" onClick={(e) => openEdit(e, rawPattern)} aria-label="編集" title="編集">✏️</button>
+                    <button className="delete-btn" onClick={(e) => handleDelete(e, rawPattern)} aria-label="削除" title="削除">🗑️</button>
+                  </div>
                 )}
               </div>
             );

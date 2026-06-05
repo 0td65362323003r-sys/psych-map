@@ -161,27 +161,42 @@ body {
   opacity: 0.12;
 }
 
-.edit-btn {
+.card-actions {
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
-  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  gap: 0.25rem;
+  opacity: 0;
+  transition: opacity 0.15s;
+  z-index: 2;
+}
+
+.sign-card:hover .card-actions {
+  opacity: 1;
+}
+
+.edit-btn,
+.delete-btn {
+  background: rgba(0, 0, 0, 0.5);
   border: none;
   border-radius: 6px;
   width: 28px;
   height: 28px;
   font-size: 0.75rem;
   cursor: pointer;
-  opacity: 0;
-  transition: opacity 0.15s;
-  z-index: 2;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: background 0.15s;
 }
 
-.sign-card:hover .edit-btn {
-  opacity: 1;
+.edit-btn:hover {
+  background: rgba(124, 58, 237, 0.6);
+}
+
+.delete-btn:hover {
+  background: rgba(190, 18, 60, 0.6);
 }
 
 .sign-label {
