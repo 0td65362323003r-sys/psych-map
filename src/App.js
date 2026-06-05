@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import { supabase } from "./supabaseClient";
 import { defaultData, defaultJobData } from "./data";
 import "./App.css";
@@ -421,33 +421,36 @@ function PatternPage({ category, customPatterns, onBack, onRefetch }) {
             const flow = allFlows[sign.id];
             const isCustom = sign.id.startsWith("custom_");
             const rawPattern = isCustom ? filtered.find((p) => p.sign_id === sign.id) : null;
+            const isSelected = selected === sign.id;
 
             return (
-              <div
-                key={sign.id}
-                className={`sign-card${selected === sign.id ? " active" : ""}`}
-                style={{
-                  "--card-color": flow?.color || "#c084fc",
-                  "--card-accent": flow?.accent || "#7c3aed",
-                }}
-                onClick={() => setSelected((prev) => (prev === sign.id ? null : sign.id))}
-              >
-                <span className="sign-label">{sign.label}</span>
-                {sign.sub && <span className="sign-sub">{sign.sub}</span>}
-                {isCustom && rawPattern && (
-                  <div className="card-actions">
-                    <button className="edit-btn" onClick={(e) => openEdit(e, rawPattern)} aria-label="編集" title="編集">✏️</button>
-                    <button className="delete-btn" onClick={(e) => handleDelete(e, rawPattern)} aria-label="削除" title="削除">🗑️</button>
+              <Fragment key={sign.id}>
+                <div
+                  className={`sign-card${isSelected ? " active" : ""}`}
+                  style={{
+                    "--card-color": flow?.color || "#c084fc",
+                    "--card-accent": flow?.accent || "#7c3aed",
+                  }}
+                  onClick={() => setSelected((prev) => (prev === sign.id ? null : sign.id))}
+                >
+                  <span className="sign-label">{sign.label}</span>
+                  {sign.sub && <span className="sign-sub">{sign.sub}</span>}
+                  {isCustom && rawPattern && (
+                    <div className="card-actions">
+                      <button className="edit-btn" onClick={(e) => openEdit(e, rawPattern)} aria-label="編集" title="編集">✏️</button>
+                      <button className="delete-btn" onClick={(e) => handleDelete(e, rawPattern)} aria-label="削除" title="削除">🗑️</button>
+                    </div>
+                  )}
+                </div>
+                {isSelected && flow && (
+                  <div className="inline-detail">
+                    <FlowDetail sign={sign} flow={flow} onClose={() => setSelected(null)} />
                   </div>
                 )}
-              </div>
+              </Fragment>
             );
           })}
         </div>
-
-        {selectedSign && selectedFlow && (
-          <FlowDetail sign={selectedSign} flow={selectedFlow} onClose={() => setSelected(null)} />
-        )}
       </main>
 
       <button className="fab" onClick={() => setShowModal(true)}>＋ パターン追加</button>

@@ -276,6 +276,11 @@ body {
   z-index: 1;
 }
 
+/* Inline Detail (appears below clicked card) */
+.inline-detail {
+  grid-column: 1 / -1;
+}
+
 /* Flow Detail */
 .flow-detail {
   background: #16161f;
