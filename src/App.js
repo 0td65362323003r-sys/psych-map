@@ -366,9 +366,6 @@ function PatternPage({ category, customPatterns, onBack, onRefetch }) {
       )
     : allSigns;
 
-  const selectedSign = selected ? allSigns.find((s) => s.id === selected) : null;
-  const selectedFlow = selected ? allFlows[selected] : null;
-
   function openEdit(e, pattern) {
     e.stopPropagation();
     setEditingPattern(pattern);
