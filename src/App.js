@@ -1,6 +1,7 @@
 import { useState, useEffect, Fragment } from "react";
 import { supabase } from "./supabaseClient";
 import { defaultData, defaultJobData } from "./data";
+import ShishaHearing from "./ShishaHearing";
 import "./App.css";
 
 const PRESET_COLORS = [
@@ -35,6 +36,11 @@ function HomePage({ onSelect }) {
           <span className="category-icon">💼</span>
           <span className="category-title">職業ジャンル</span>
           <span className="category-desc">職業・仕事から心理を読む</span>
+        </button>
+        <button className="category-card" onClick={() => onSelect("shisha")}>
+          <span className="category-icon">💨</span>
+          <span className="category-title">シーシャ ヒアリング</span>
+          <span className="category-desc">好みのフレーバーを4問で整理</span>
         </button>
       </div>
     </div>
@@ -490,6 +496,10 @@ export default function App() {
 
   if (page === "home") {
     return <HomePage onSelect={setPage} />;
+  }
+
+  if (page === "shisha") {
+    return <ShishaHearing onBack={() => setPage("home")} />;
   }
 
   return (
