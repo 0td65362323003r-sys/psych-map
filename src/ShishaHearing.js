@@ -15,15 +15,17 @@ const SENSES = [
   { id: "middle", label: "中間", desc: "味も香りもバランスよく" },
 ];
 
-// 味の強さのスケール。甘め・さっぱりめは指定どおり、それ以外は両端を通しで使う
-const SCALES = {
-  sweet: { left: "甘さっぱり", right: "超甘い" },
-  fresh: { left: "超さっぱり", right: "甘さっぱり" },
-  other: { left: "超さっぱり", right: "超甘い" },
-};
+// 味の強さ。味の種類に関係なく、超さっぱり〜超甘いの1本のスケールで聞く
+const LEVELS = [
+  { n: 1, label: "超さっぱり" },
+  { n: 2, label: "さっぱり" },
+  { n: 3, label: "甘さっぱり" },
+  { n: 4, label: "甘い" },
+  { n: 5, label: "超甘い" },
+];
 
-function scaleFor(taste) {
-  return SCALES[taste] || SCALES.other;
+function levelLabel(n) {
+  return LEVELS.find((l) => l.n === n).label;
 }
 
 const STEPS = ["味", "感じ方", "強さ", "苦手"];
@@ -61,25 +63,19 @@ function ChoiceList({ options, value, onChange }) {
   );
 }
 
-function StrengthScale({ taste, value, onChange }) {
-  const scale = scaleFor(taste);
+function StrengthScale({ value, onChange }) {
   return (
-    <div className="sh-scale">
-      <div className="sh-scale-buttons">
-        {[1, 2, 3, 4, 5].map((n) => (
-          <button
-            key={n}
-            className={`sh-scale-btn ${value === n ? "selected" : ""}`}
-            onClick={() => onChange(n)}
-          >
-            {n}
-          </button>
-        ))}
-      </div>
-      <div className="sh-scale-labels">
-        <span>1：{scale.left}</span>
-        <span>5：{scale.right}</span>
-      </div>
+    <div className="sh-levels">
+      {LEVELS.map((l) => (
+        <button
+          key={l.n}
+          className={`sh-level ${value === l.n ? "selected" : ""}`}
+          onClick={() => onChange(l.n)}
+        >
+          <span className="sh-level-num">{l.n}</span>
+          <span className="sh-level-label">{l.label}</span>
+        </button>
+      ))}
     </div>
   );
 }
@@ -87,11 +83,10 @@ function StrengthScale({ taste, value, onChange }) {
 function buildSummary(answers) {
   const taste = TASTES.find((t) => t.id === answers.taste);
   const sense = SENSES.find((s) => s.id === answers.sense);
-  const scale = scaleFor(answers.taste);
   return [
     `味：${taste.label}`,
     `感じ方：${sense.label}`,
-    `味の強さ：${answers.strength}（1：${scale.left} 〜 5：${scale.right}）`,
+    `味の強さ：${answers.strength}（${levelLabel(answers.strength)}）`,
     `苦手なフレーバー：${answers.dislike.trim() || "特になし"}`,
   ].join("\n");
 }
@@ -100,7 +95,6 @@ function Result({ answers, onRestart }) {
   const [copied, setCopied] = useState(false);
   const taste = TASTES.find((t) => t.id === answers.taste);
   const sense = SENSES.find((s) => s.id === answers.sense);
-  const scale = scaleFor(answers.taste);
   const summary = buildSummary(answers);
 
   async function copy() {
@@ -128,8 +122,8 @@ function Result({ answers, onRestart }) {
               <span key={n} className={`sh-meter-dot ${n <= answers.strength ? "on" : ""}`} />
             ))}
           </span>
-          {answers.strength} / 5
-          <span className="sh-sub">1：{scale.left} 〜 5：{scale.right}</span>
+          {answers.strength}（{levelLabel(answers.strength)}）
+          <span className="sh-sub">1：超さっぱり 〜 5：超甘い</span>
         </dd>
         <dt>苦手なフレーバー</dt>
         <dd className="sh-dislike">{answers.dislike.trim() || "特になし"}</dd>
@@ -154,12 +148,7 @@ export default function ShishaHearing({ onBack }) {
 
   // 選択式は選んだら次へ進む
   function choose(key, value) {
-    // 味を変えたら強さのスケールの意味が変わるのでリセット
-    if (key === "taste" && value !== answers.taste) {
-      setAnswers((a) => ({ ...a, taste: value, strength: null }));
-    } else {
-      set(key, value);
-    }
+    set(key, value);
     setStep((s) => s + 1);
   }
 
@@ -201,7 +190,7 @@ export default function ShishaHearing({ onBack }) {
           <>
             <h2 className="sh-question"><span className="sh-num">Q3</span>味の強さは？</h2>
             <p className="sh-hint">数字で選んでください</p>
-            <StrengthScale taste={answers.taste} value={answers.strength} onChange={(v) => choose("strength", v)} />
+            <StrengthScale value={answers.strength} onChange={(v) => choose("strength", v)} />
           </>
         )}
 

@@ -127,42 +127,47 @@
   color: #888;
 }
 
-.sh-scale-buttons {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
+.sh-levels {
+  display: flex;
+  flex-direction: column;
   gap: 0.5rem;
 }
 
-.sh-scale-btn {
-  aspect-ratio: 1;
-  max-height: 72px;
+.sh-level {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
   border-radius: 12px;
   border: 1px solid #2a2a38;
   background: #1c1c28;
   color: #e8e8f0;
   font-family: inherit;
-  font-size: 1.4rem;
-  font-weight: 800;
+  text-align: left;
   cursor: pointer;
   transition: border-color 0.15s, background 0.15s;
 }
 
-.sh-scale-btn:hover {
+.sh-level:hover {
   border-color: #7c3aed;
 }
 
-.sh-scale-btn.selected {
+.sh-level.selected {
   border-color: #c084fc;
   background: #231a33;
 }
 
-.sh-scale-labels {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-top: 0.6rem;
-  font-size: 0.8rem;
-  color: #999;
+.sh-level-num {
+  font-size: 1.4rem;
+  font-weight: 800;
+  width: 1.5rem;
+  text-align: center;
+}
+
+.sh-level-label {
+  font-size: 1rem;
+  font-weight: 700;
 }
 
 .sh-textarea {
