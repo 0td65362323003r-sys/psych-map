@@ -472,6 +472,27 @@ export default function App() {
 
   useEffect(() => {
     fetchPatterns();
+
+    // 他の端末（携帯アプリ・別タブ）での追加・編集・削除をリアルタイムに反映
+    const channel = supabase
+      .channel("patterns-sync")
+      .on("postgres_changes", { event: "*", schema: "public", table: "patterns" }, () => {
+        fetchPatterns();
+      })
+      .subscribe();
+
+    // ホーム画面アプリがバックグラウンドから復帰した時にも最新を取得
+    function handleVisible() {
+      if (document.visibilityState === "visible") fetchPatterns();
+    }
+    document.addEventListener("visibilitychange", handleVisible);
+    window.addEventListener("focus", handleVisible);
+
+    return () => {
+      supabase.removeChannel(channel);
+      document.removeEventListener("visibilitychange", handleVisible);
+      window.removeEventListener("focus", handleVisible);
+    };
   }, []);
 
   async function fetchPatterns() {
