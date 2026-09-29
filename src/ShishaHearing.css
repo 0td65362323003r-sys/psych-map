@@ -1,0 +1,262 @@
+/* Shisha Hearing */
+.sh-page .app-header {
+  text-align: center;
+}
+
+.sh-page .back-btn {
+  margin: 0 auto 1rem 0;
+  text-align: left;
+}
+
+.sh-progress {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.4rem;
+  max-width: 560px;
+  margin: 0 auto 1.25rem;
+}
+
+.sh-progress-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  color: #555;
+  text-align: center;
+}
+
+.sh-progress-bar {
+  height: 4px;
+  border-radius: 2px;
+  background: #22222e;
+  transition: background 0.2s;
+}
+
+.sh-progress-item.active {
+  color: #e8e8f0;
+}
+
+.sh-progress-item.active .sh-progress-bar {
+  background: linear-gradient(90deg, #c084fc, #67e8f9);
+}
+
+.sh-card {
+  max-width: 560px;
+  margin: 0 auto;
+  background: #16161f;
+  border: 1px solid #22222e;
+  border-radius: 16px;
+  padding: 1.5rem 1.25rem;
+}
+
+.sh-question {
+  font-size: 1.2rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.sh-num {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #0d0d14;
+  background: #c084fc;
+  border-radius: 6px;
+  padding: 0.15rem 0.45rem;
+}
+
+.sh-hint {
+  color: #777;
+  font-size: 0.85rem;
+  margin: -0.5rem 0 1rem;
+}
+
+.sh-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.sh-choice {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  width: 100%;
+  background: #1c1c28;
+  border: 1px solid #2a2a38;
+  border-radius: 12px;
+  padding: 0.9rem 1rem;
+  color: #e8e8f0;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.15s, background 0.15s;
+}
+
+.sh-choice:hover {
+  border-color: #7c3aed;
+  transform: translateY(-1px);
+}
+
+.sh-choice.selected {
+  border-color: #c084fc;
+  background: #231a33;
+}
+
+.sh-choice-icon {
+  font-size: 1.6rem;
+  width: 2rem;
+  text-align: center;
+}
+
+.sh-choice-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.sh-choice-label {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.sh-choice-desc {
+  font-size: 0.78rem;
+  color: #888;
+}
+
+.sh-levels {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sh-level {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  border: 1px solid #2a2a38;
+  background: #1c1c28;
+  color: #e8e8f0;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.sh-level:hover {
+  border-color: #7c3aed;
+}
+
+.sh-level.selected {
+  border-color: #c084fc;
+  background: #231a33;
+}
+
+.sh-level-num {
+  font-size: 1.4rem;
+  font-weight: 800;
+  width: 1.5rem;
+  text-align: center;
+}
+
+.sh-level-label {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.sh-textarea {
+  width: 100%;
+  background: #1c1c28;
+  border: 1px solid #2a2a38;
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+  color: #e8e8f0;
+  font-family: inherit;
+  font-size: 1rem;
+  resize: vertical;
+}
+
+.sh-textarea:focus {
+  outline: none;
+  border-color: #c084fc;
+}
+
+.sh-actions {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.sh-btn {
+  flex: 1;
+  min-width: 140px;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  border: 1px solid #2a2a38;
+  background: #1c1c28;
+  color: #e8e8f0;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.sh-btn.primary {
+  background: linear-gradient(135deg, #7c3aed, #0891b2);
+  border-color: transparent;
+}
+
+.sh-summary {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.9rem 1rem;
+  align-items: baseline;
+}
+
+.sh-summary dt {
+  font-size: 0.8rem;
+  color: #888;
+  white-space: nowrap;
+}
+
+.sh-summary dd {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.sh-sub {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: #888;
+  margin-top: 0.2rem;
+}
+
+.sh-dislike {
+  white-space: pre-wrap;
+}
+
+.sh-meter {
+  display: inline-flex;
+  gap: 4px;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+
+.sh-meter-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #2a2a38;
+}
+
+.sh-meter-dot.on {
+  background: #c084fc;
+}
