@@ -1,0 +1,1013 @@
+<title>口コミアシスト</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Zen+Maru+Gothic:wght@500;700&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+/* Layout: 表示画面は片手で操作する縦一列のカード、管理画面は上部タブ＋可変グリッド */
+:root {
+  --paper: #f5f6f3;
+  --surface: #ffffff;
+  --ink: #1c2320;
+  --ink-soft: #5d6762;
+  --line: #dfe3df;
+  --accent: #0e6b5a;
+  --accent-soft: #e2f1ec;
+  --star: #e3a008;
+  --google: #1a73e8;
+  --good: #1f8a4c;
+  --warn: #b7791f;
+  --bad: #c2362f;
+  --bad-soft: #fbeceb;
+  --font-display: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Hiragino Sans", sans-serif;
+  --font-body: "Zen Kaku Gothic New", "Hiragino Sans", "Noto Sans JP", system-ui, sans-serif;
+  --radius: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #121614; --surface: #1a201d; --ink: #e6ebe8; --ink-soft: #9ba6a0; --line: #2c3531;
+    --accent: #4fc2a6; --accent-soft: #173029; --star: #f0b429; --google: #6ea8fe;
+    --good: #4ade80; --warn: #f2b84b; --bad: #f2786f; --bad-soft: #3a1d1b; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #121614; --surface: #1a201d; --ink: #e6ebe8; --ink-soft: #9ba6a0; --line: #2c3531;
+  --accent: #4fc2a6; --accent-soft: #173029; --star: #f0b429; --google: #6ea8fe;
+  --good: #4ade80; --warn: #f2b84b; --bad: #f2786f; --bad-soft: #3a1d1b; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  background: var(--paper); color: var(--ink); font-family: var(--font-body);
+  font-size: 15px; line-height: 1.7; padding-inline: 16px; padding-block: 0 48px;
+}
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; line-height: 1.35; margin: 0; }
+button, input, select, textarea { font: inherit; color: inherit; }
+a { color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.muted { color: var(--ink-soft); font-size: 0.88rem; }
+.err { color: var(--bad); font-size: 0.88rem; }
+.ok { color: var(--good); font-size: 0.88rem; }
+.row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.spacer { flex: 1; }
+.stack { display: flex; flex-direction: column; gap: 12px; }
+
+/* ── ボタン・チップ ── */
+.btn {
+  appearance: none; border: 1px solid var(--line); background: var(--surface); padding: 9px 16px;
+  border-radius: 10px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+  gap: 6px; white-space: nowrap; text-decoration: none; color: var(--ink);
+}
+.btn:hover { border-color: var(--ink-soft); }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.btn-primary { background: var(--accent); border-color: var(--accent); color: var(--surface); font-weight: 700; }
+.btn-google { background: var(--google); border-color: var(--google); color: #fff; font-weight: 700; }
+.btn-quiet { border-color: transparent; background: transparent; color: var(--ink-soft); }
+.btn-danger { border-color: var(--bad); color: var(--bad); background: transparent; }
+.btn-block { width: 100%; padding: 14px; font-size: 1rem; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 7px 14px;
+  cursor: pointer; font-size: 0.92rem;
+}
+.chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); font-weight: 700; }
+.tag {
+  display: inline-block; font-size: 0.74rem; padding: 0 8px; border-radius: 999px; border: 1px solid var(--line);
+  color: var(--ink-soft); background: var(--paper); white-space: nowrap;
+}
+.tag-bad { color: var(--bad); border-color: var(--bad); background: var(--bad-soft); }
+.tag-google { color: var(--google); border-color: var(--google); }
+
+/* ── 上部バー（画面切替） ── */
+.topbar {
+  max-width: 1080px; margin: 0 auto; display: flex; align-items: center; gap: 12px; padding-block: 14px;
+  flex-wrap: wrap;
+}
+.brand { font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; color: var(--accent); margin-right: auto; }
+.brand small { color: var(--ink-soft); font-weight: 500; font-size: 0.75rem; margin-left: 8px; letter-spacing: .04em; }
+.switch { display: inline-flex; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--surface); }
+.switch a { padding: 7px 14px; text-decoration: none; color: var(--ink-soft); font-size: 0.9rem; }
+.switch a[aria-current="page"] { background: var(--accent); color: var(--surface); font-weight: 700; }
+
+/* ── 表示画面（お客様） ── */
+.survey { max-width: 460px; margin: 0 auto; }
+.survey-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-block: 6px 12px; }
+.store-name { font-weight: 700; font-size: 1.05rem; min-width: 0; overflow-wrap: anywhere; }
+.card {
+  background: var(--surface); border-radius: 20px; padding: 24px 20px; border: 1px solid var(--line);
+  display: flex; flex-direction: column; gap: 14px;
+}
+.hello { font-size: 1.45rem; }
+.q { font-size: 1.02rem; margin-top: 6px; }
+.stars { display: flex; justify-content: center; gap: 4px; }
+.star {
+  background: none; border: 0; font-size: 2.7rem; line-height: 1; color: var(--line); cursor: pointer; padding: 2px 4px;
+  transition: transform .12s;
+}
+.star.on { color: var(--star); }
+.star:active { transform: scale(.9); }
+.star-label { text-align: center; min-height: 1.4em; font-size: 0.9rem; color: var(--ink-soft); }
+.stars-static { color: var(--star); letter-spacing: 2px; }
+textarea, .field input, .field select {
+  width: 100%; border: 1px solid var(--line); background: var(--surface); border-radius: 10px;
+  padding: 10px 12px; font-size: 16px;
+}
+textarea { resize: vertical; line-height: 1.7; }
+.steps { display: flex; gap: 6px; }
+.steps span { flex: 1; height: 4px; border-radius: 2px; background: var(--line); }
+.steps span.on { background: var(--accent); }
+.thinking { display: flex; flex-direction: column; align-items: center; gap: 12px; padding-block: 24px; }
+.dots { display: flex; gap: 6px; }
+.dots i { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); animation: bob 1s infinite ease-in-out; }
+.dots i:nth-child(2) { animation-delay: .15s; } .dots i:nth-child(3) { animation-delay: .3s; }
+@keyframes bob { 0%, 80%, 100% { opacity: .25; } 40% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .dots i { animation: none; opacity: .7; } .star { transition: none; } }
+.coupon {
+  border: 2px dashed var(--accent); border-radius: 14px; padding: 16px; background: var(--accent-soft);
+  text-align: center; display: flex; flex-direction: column; gap: 4px;
+}
+.coupon-label { font-size: 0.78rem; letter-spacing: .08em; color: var(--accent); font-weight: 700; }
+.coupon-title { font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; }
+.coupon-code { font-family: ui-monospace, Menlo, monospace; font-size: 1.25rem; letter-spacing: 3px; }
+.center { text-align: center; }
+.big-emoji { font-size: 2.6rem; }
+
+/* ── 管理画面 ── */
+.admin { max-width: 1080px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+.admin-bar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.admin-bar select { border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; background: var(--surface); max-width: 260px; }
+.tabs { display: flex; gap: 2px; overflow-x: auto; border-bottom: 1px solid var(--line); }
+.tab {
+  background: none; border: 0; border-bottom: 3px solid transparent; padding: 10px 14px; cursor: pointer;
+  color: var(--ink-soft); white-space: nowrap;
+}
+.tab[aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); font-weight: 700; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; min-width: 0; }
+.panel h3 { font-size: 1rem; margin-bottom: 12px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+.kpi { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; }
+.kpi-label { font-size: 0.8rem; color: var(--ink-soft); }
+.kpi-value { font-size: 1.7rem; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.3; }
+.kpi-sub { font-size: 0.8rem; color: var(--ink-soft); }
+.bar { display: grid; grid-template-columns: 76px 1fr 40px; gap: 8px; align-items: center; margin-block: 5px; font-size: 0.9rem; }
+.bar-track { height: 12px; background: var(--paper); border-radius: 6px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 6px; }
+.bar-val { text-align: right; font-variant-numeric: tabular-nums; }
+.cols { display: flex; align-items: flex-end; gap: 4px; height: 150px; padding-bottom: 22px; }
+.col { flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; position: relative; }
+.col-fill { background: var(--accent); border-radius: 4px 4px 0 0; min-height: 2px; }
+.col-label { position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); font-size: 0.66rem; color: var(--ink-soft); white-space: nowrap; }
+.col:nth-child(even) .col-label { visibility: hidden; }
+.rank { margin: 0; padding-left: 1.4em; }
+.rank li { padding-block: 6px; border-bottom: 1px solid var(--line); }
+.rank li > div { display: flex; gap: 6px; align-items: center; }
+.rank b { margin-left: auto; font-variant-numeric: tabular-nums; }
+.empty { text-align: center; padding: 40px 20px; display: flex; flex-direction: column; gap: 10px; align-items: center; }
+.sample-note { background: var(--accent-soft); color: var(--accent); border-radius: 10px; padding: 8px 12px; font-size: 0.88rem; }
+.field { display: flex; flex-direction: column; gap: 6px; font-weight: 700; font-size: 0.9rem; }
+.field > small { font-weight: 400; color: var(--ink-soft); }
+.form { display: flex; flex-direction: column; gap: 16px; }
+.form h3 { margin-top: 10px; margin-bottom: 0; }
+.opt-list { display: flex; flex-direction: column; gap: 8px; }
+.opt { display: grid; grid-template-columns: 1.1fr 2fr .9fr 1.1fr auto; gap: 6px; align-items: center; }
+.opt input, .opt select { width: 100%; border: 1px solid var(--line); border-radius: 8px; padding: 8px; background: var(--surface); font-size: 0.9rem; min-width: 0; }
+@media (max-width: 720px) {
+  .opt { grid-template-columns: 1fr 1fr; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+  .opt input:nth-child(2) { grid-column: 1 / -1; order: 3; }
+}
+.check { display: inline-flex; gap: 6px; align-items: center; font-weight: 400; margin-right: 14px; }
+.savebar { position: sticky; bottom: 0; background: var(--surface); border-top: 1px solid var(--line); padding-block: 12px; }
+.url-box { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.url-box code { flex: 1; min-width: 0; overflow-wrap: anywhere; background: var(--paper); padding: 8px 10px; border-radius: 8px; font-size: 0.82rem; }
+.pop {
+  width: min(300px, 100%); margin: 0 auto; border: 3px solid var(--accent); border-radius: 18px; padding: 22px 18px;
+  background: #fff; color: #1c2320; text-align: center; display: flex; flex-direction: column; gap: 4px; align-items: center;
+}
+.pop-store { font-size: 0.85rem; color: #5d6762; }
+.pop-catch { font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; text-wrap: balance; }
+.pop-qr { width: 196px; height: 196px; margin-block: 10px; }
+.pop-qr img, .pop-qr canvas { width: 100% !important; height: 100% !important; }
+.pop-coupon { background: #0e6b5a; color: #fff; border-radius: 8px; padding: 4px 10px; font-weight: 700; font-size: 0.88rem; }
+.list { list-style: none; margin: 0; padding: 0; }
+.item { border-top: 1px solid var(--line); padding-block: 12px; display: flex; flex-direction: column; gap: 6px; }
+.item.low { background: linear-gradient(90deg, var(--bad-soft), transparent 70%); padding-inline: 8px; border-radius: 6px; }
+.item p { margin: 0; overflow-wrap: anywhere; }
+.feedback { color: var(--bad); }
+.table-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 8px; border-bottom: 1px solid var(--line); }
+.result { font-size: 1.1rem; }
+.result b { color: var(--accent); font-size: 1.6rem; }
+.confirm { background: var(--bad-soft); border-radius: 10px; padding: 12px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.notice { max-width: 460px; margin: 40px auto; text-align: center; }
+</style>
+
+<header class="topbar" id="topbar" hidden>
+  <div class="brand">口コミアシスト<small id="brandSub"></small></div>
+  <nav class="switch" aria-label="画面切替">
+    <a href="#r" id="navSurvey">表示画面</a>
+    <a href="#admin" id="navAdmin">管理画面</a>
+  </nav>
+</header>
+<main id="app">
+  <div class="notice">
+    <h2>口コミアシスト</h2>
+    <p class="muted">読み込み中です…</p>
+  </div>
+</main>
+
+<script>
+"use strict";
+
+/* ───────── 定数・テンプレート ───────── */
+const CATEGORIES = [
+  { id: "service", label: "接客", color: "#2f6fd6" },
+  { id: "quality", label: "味・品質", color: "#1f8a4c" },
+  { id: "price", label: "価格", color: "#c27c0e" },
+  { id: "clean", label: "清潔感", color: "#0f8aa0" },
+  { id: "atmosphere", label: "雰囲気", color: "#8a4fd0" },
+  { id: "access", label: "アクセス", color: "#6b7a74" },
+];
+const catLabel = (id) => (CATEGORIES.find((c) => c.id === id) || {}).label || id;
+const rid = () => Math.random().toString(36).slice(2, 10);
+const o = (cat, label, phrase, en, phraseEn) => ({ id: rid(), cat, label, phrase, en, phraseEn });
+
+const INDUSTRIES = {
+  restaurant: { label: "飲食店", purposes: ["ランチ", "ディナー", "飲み会", "デート", "家族で", "一人で"], options: () => [
+    o("quality", "料理が美味しい", "料理がとても美味しかったです", "Delicious food", "The food was delicious"),
+    o("quality", "盛り付けがきれい", "盛り付けが綺麗で目でも楽しめました", "Beautiful presentation", "The presentation was beautiful"),
+    o("quality", "ドリンクが充実", "ドリンクの種類が豊富で嬉しかったです", "Great drinks", "There was a great selection of drinks"),
+    o("service", "スタッフが親切", "スタッフの方がとても親切でした", "Friendly staff", "The staff were very friendly"),
+    o("service", "提供が早い", "料理の提供がスムーズでした", "Fast service", "The food came out quickly"),
+    o("price", "コスパが良い", "この内容でこの価格はコスパが良いと思います", "Good value", "Great value for the price"),
+    o("clean", "店内が清潔", "店内が清潔で気持ちよく過ごせました", "Clean restaurant", "The restaurant was very clean"),
+    o("atmosphere", "雰囲気が良い", "お店の雰囲気が落ち着いていて居心地が良かったです", "Nice atmosphere", "The atmosphere was cozy"),
+    o("access", "駅から近い", "駅から近くて立ち寄りやすいです", "Close to the station", "It's close to the station"),
+  ]},
+  beauty: { label: "美容室・サロン", purposes: ["カット", "カラー", "パーマ", "トリートメント", "ネイル", "エステ"], options: () => [
+    o("quality", "仕上がりが理想通り", "仕上がりがイメージ通りで大満足です", "Perfect result", "The result was exactly what I wanted"),
+    o("quality", "技術が高い", "技術の高さを感じました", "Skilled stylist", "The stylist was very skilled"),
+    o("service", "カウンセリングが丁寧", "カウンセリングが丁寧で安心してお任せできました", "Careful consultation", "The consultation was thorough"),
+    o("service", "会話が楽しい", "会話も楽しくあっという間の時間でした", "Pleasant conversation", "The conversation was enjoyable"),
+    o("price", "価格が明確", "料金が明確で安心でした", "Clear pricing", "The pricing was clear"),
+    o("clean", "店内が清潔", "店内が清潔で気持ちよかったです", "Clean salon", "The salon was clean"),
+    o("atmosphere", "リラックスできた", "リラックスして過ごせました", "Relaxing", "It was very relaxing"),
+    o("access", "予約が取りやすい", "予約が取りやすくて助かります", "Easy booking", "Booking was easy"),
+  ]},
+  clinic: { label: "歯科・クリニック", purposes: ["初診", "定期検診", "治療", "クリーニング", "相談"], options: () => [
+    o("quality", "説明が分かりやすい", "治療内容の説明が分かりやすかったです", "Clear explanations", "The explanations were easy to understand"),
+    o("quality", "痛みが少ない", "痛みへの配慮があり安心できました", "Little pain", "They were careful to minimize pain"),
+    o("service", "受付が丁寧", "受付の方の対応が丁寧でした", "Polite reception", "The reception staff were polite"),
+    o("service", "待ち時間が短い", "待ち時間が短くスムーズでした", "Short wait", "The wait time was short"),
+    o("price", "費用の説明が明確", "費用について事前にきちんと説明してもらえました", "Clear costs", "Costs were explained in advance"),
+    o("clean", "院内が清潔", "院内が清潔で安心感がありました", "Clean clinic", "The clinic was very clean"),
+    o("atmosphere", "落ち着いた雰囲気", "院内が落ち着いた雰囲気でした", "Calm atmosphere", "The atmosphere was calm"),
+    o("access", "通いやすい", "立地が良く通いやすいです", "Convenient location", "The location is convenient"),
+  ]},
+  hotel: { label: "ホテル・宿泊", purposes: ["観光", "出張", "家族旅行", "記念日", "一人旅"], options: () => [
+    o("quality", "部屋が快適", "お部屋が快適でぐっすり眠れました", "Comfortable room", "The room was very comfortable"),
+    o("quality", "朝食が美味しい", "朝食がとても美味しかったです", "Great breakfast", "Breakfast was excellent"),
+    o("service", "フロントが親切", "フロントの方の対応がとても親切でした", "Helpful front desk", "The front desk staff were very helpful"),
+    o("price", "価格以上の満足感", "価格以上の満足感がありました", "Great value", "It was worth more than the price"),
+    o("clean", "清掃が行き届いている", "清掃が行き届いていて気持ちよかったです", "Very clean", "Everything was spotless"),
+    o("atmosphere", "眺めが良い", "部屋からの眺めが素晴らしかったです", "Great view", "The view was amazing"),
+    o("access", "観光に便利", "観光の拠点としてとても便利な立地でした", "Convenient for sightseeing", "The location is great for sightseeing"),
+  ]},
+  shisha: { label: "シーシャ・バー", purposes: ["一人で", "友人と", "デート", "作業", "二軒目"], options: () => [
+    o("quality", "フレーバーが美味しい", "フレーバーがとても美味しかったです", "Tasty flavors", "The flavors were delicious"),
+    o("quality", "煙が濃くて長持ち", "煙がしっかり出て最後まで楽しめました", "Rich, long-lasting smoke", "The smoke was rich and lasted long"),
+    o("service", "好みを聞いて調合", "好みを丁寧に聞いてミックスを作ってもらえました", "Custom mix", "They made a mix tailored to my taste"),
+    o("service", "炭替えがこまめ", "炭替えがこまめで快適でした", "Attentive coal service", "Coal changes were attentive"),
+    o("price", "価格が手頃", "価格も手頃で通いやすいです", "Reasonable price", "Prices are reasonable"),
+    o("clean", "店内が清潔", "店内が清潔で居心地が良かったです", "Clean", "The place was clean"),
+    o("atmosphere", "ゆっくりできる", "ソファが快適でゆっくり過ごせました", "Relaxing space", "It was a great place to relax"),
+  ]},
+  other: { label: "その他", purposes: ["初めて", "リピート", "紹介"], options: () => [
+    o("quality", "品質が高い", "サービスの質が高いと感じました", "High quality", "The quality was high"),
+    o("service", "対応が丁寧", "対応がとても丁寧でした", "Polite service", "The service was polite"),
+    o("price", "価格に納得", "価格にも納得です", "Fair price", "The price was fair"),
+    o("clean", "清潔感がある", "清潔感がありました", "Clean", "It was clean"),
+    o("atmosphere", "雰囲気が良い", "雰囲気が良かったです", "Nice atmosphere", "The atmosphere was nice"),
+  ]},
+};
+
+function newStore(industry, name) {
+  const ind = INDUSTRIES[industry] || INDUSTRIES.other;
+  return {
+    id: rid(), name, industry, googleReviewUrl: "", tone: "friendly",
+    options: ind.options(), purposes: [...ind.purposes], ngWords: [],
+    languages: ["ja", "en", "zh", "ko"],
+    coupon: { enabled: false, mode: "coupon", title: "", body: "", code: "", winRate: 30 },
+    googleStats: { rating: "", count: "" },
+    createdAt: new Date().toISOString(),
+  };
+}
+
+const LANGS = { ja: "日本語", en: "English", zh: "中文", ko: "한국어" };
+const T = {
+  ja: { hello: "ご来店ありがとうございます", lead: "30秒で終わるアンケートにご協力ください", q1: "今回のご満足度は？", q2: "ご利用シーン", q3: "良かった点を選んでください（いくつでも）", q4: "ひとことあれば（任意）", ph: "例：また来たいです", next: "次へ", back: "戻る", gen: "口コミ文を作成しています…", draftTitle: "口コミ文の下書きができました", draftNote: "ご自身の言葉に自由に書き換えてください。内容に問題なければ、コピーしてGoogleに投稿できます。", post: "コピーしてGoogleで投稿する", copied: "コピーしました。Googleの投稿画面に貼り付けてください。", skip: "投稿せずに終了する", regen: "別の文章にする", lowTitle: "ご期待に沿えず申し訳ありません", lowLead: "改善のため、お気づきの点をお店に直接お伝えいただけますか？", send: "お店に送信する", alsoGoogle: "Googleにも口コミを書く", thanks: "ご協力ありがとうございました", reward: "ご回答特典", win: "当たりです！", lose: "今回ははずれです。またのご来店をお待ちしています。", show: "この画面をスタッフにご提示ください", ng: "使えない言葉が含まれています", rateFirst: "満足度を選んでください", feedbackFirst: "ご意見を入力してください", noGoogle: "このお店はまだGoogleの投稿先が設定されていません。文章はコピーされています。", starLabels: ["", "不満", "やや不満", "ふつう", "満足", "大満足"] },
+  en: { hello: "Thank you for visiting!", lead: "Please take our 30-second survey", q1: "How satisfied were you?", q2: "Occasion", q3: "What did you like? (choose any)", q4: "Any comments? (optional)", ph: "e.g. I'd love to come back", next: "Next", back: "Back", gen: "Writing your review draft…", draftTitle: "Your review draft is ready", draftNote: "Edit it freely in your own words, then copy it and post it on Google.", post: "Copy & post on Google", copied: "Copied. Paste it into the Google review form.", skip: "Finish without posting", regen: "Write another version", lowTitle: "We're sorry we let you down", lowLead: "Could you tell the store directly what we can improve?", send: "Send to the store", alsoGoogle: "Also write a Google review", thanks: "Thank you!", reward: "Your reward", win: "You won!", lose: "Not this time. We hope to see you again.", show: "Please show this screen to our staff", ng: "Contains words that can't be used", rateFirst: "Please choose a rating", feedbackFirst: "Please enter your comment", noGoogle: "This store hasn't set up its Google link yet. Your text has been copied.", starLabels: ["", "Poor", "Fair", "OK", "Good", "Excellent"] },
+  zh: { hello: "感谢您的光临", lead: "请花30秒填写问卷", q1: "您的满意度如何？", q2: "使用场景", q3: "请选择满意的地方（可多选）", q4: "其他意见（可选）", ph: "例：还想再来", next: "下一步", back: "返回", gen: "正在生成评价草稿…", draftTitle: "评价草稿已生成", draftNote: "您可以自由修改，确认后复制并发布到Google。", post: "复制并在Google发布", copied: "已复制，请粘贴到Google评价页面。", skip: "不发布，直接结束", regen: "换一种写法", lowTitle: "很抱歉没能让您满意", lowLead: "能否直接告诉店铺需要改进的地方？", send: "发送给店铺", alsoGoogle: "也在Google写评价", thanks: "感谢您的配合", reward: "回答特典", win: "恭喜中奖！", lose: "很遗憾没有中奖，期待您再次光临。", show: "请向店员出示此画面", ng: "包含不可使用的词语", rateFirst: "请选择满意度", feedbackFirst: "请输入您的意见", noGoogle: "该店铺尚未设置Google链接，文字已复制。", starLabels: ["", "不满意", "较不满意", "一般", "满意", "非常满意"] },
+  ko: { hello: "방문해 주셔서 감사합니다", lead: "30초 설문에 협조 부탁드립니다", q1: "만족도는 어떠셨나요?", q2: "이용 목적", q3: "좋았던 점을 선택해 주세요 (복수 선택)", q4: "한마디 (선택)", ph: "예: 또 오고 싶어요", next: "다음", back: "뒤로", gen: "리뷰 초안 작성 중…", draftTitle: "리뷰 초안이 완성되었습니다", draftNote: "자유롭게 수정한 뒤 복사하여 Google에 게시할 수 있습니다.", post: "복사하고 Google에 게시", copied: "복사했습니다. Google 리뷰 화면에 붙여넣어 주세요.", skip: "게시하지 않고 종료", regen: "다른 문장으로", lowTitle: "기대에 미치지 못해 죄송합니다", lowLead: "개선을 위해 매장에 직접 의견을 보내주시겠어요?", send: "매장에 보내기", alsoGoogle: "Google에도 리뷰 쓰기", thanks: "협조해 주셔서 감사합니다", reward: "응답 특전", win: "당첨입니다!", lose: "아쉽게도 꽝입니다. 또 방문해 주세요.", show: "이 화면을 직원에게 보여주세요", ng: "사용할 수 없는 단어가 포함되어 있습니다", rateFirst: "만족도를 선택해 주세요", feedbackFirst: "의견을 입력해 주세요", noGoogle: "이 매장은 아직 Google 링크를 설정하지 않았습니다. 문장은 복사되었습니다.", starLabels: ["", "불만", "다소 불만", "보통", "만족", "매우 만족"] },
+};
+
+/* ───────── 小さなDOMヘルパー（共有データはすべて textContent で描画） ───────── */
+function h(tag, attrs, ...kids) {
+  const el = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (v == null || v === false) continue;
+    if (k === "class") el.className = v;
+    else if (k.startsWith("on")) el.addEventListener(k.slice(2), v);
+    else if (k === "style") el.setAttribute("style", v);
+    else if (k in el && k !== "list") el[k] = v;
+    else el.setAttribute(k, v === true ? "" : v);
+  }
+  for (const kid of kids.flat()) {
+    if (kid == null || kid === false) continue;
+    el.append(kid instanceof Node ? kid : document.createTextNode(String(kid)));
+  }
+  return el;
+}
+const app = document.getElementById("app");
+function mount(...nodes) { app.replaceChildren(...nodes); }
+
+async function copyText(text) {
+  try { await navigator.clipboard.writeText(text); return true; }
+  catch {
+    const ta = h("textarea", { value: text, style: "position:fixed;opacity:0" });
+    document.body.append(ta); ta.select();
+    let ok = false; try { ok = document.execCommand("copy"); } catch {}
+    ta.remove(); return ok;
+  }
+}
+function googleUrl(v) {
+  v = (v || "").trim();
+  if (!v) return "";
+  if (/^https?:\/\//.test(v)) return v;
+  return "https://search.google.com/local/writereview?placeid=" + encodeURIComponent(v);
+}
+const findNg = (text, ng) => (ng || []).filter((w) => w && text.includes(w));
+const pick = (a) => a[Math.floor(Math.random() * a.length)];
+const shuffle = (a) => { a = [...a]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+/* ───────── 文章生成（AI優先、使えなければテンプレート） ───────── */
+function templateReview({ store, rating, purpose, selected, comment, lang }) {
+  const en = lang !== "ja";
+  const phrases = shuffle(selected).map((x) => (en ? x.phraseEn || x.en || x.phrase : x.phrase));
+  if (en) {
+    const open = rating >= 4 ? pick([`I visited ${store.name}${purpose ? ` for ${purpose}` : ""}.`, `Had a great time at ${store.name}.`]) : `I visited ${store.name}.`;
+    const close = rating >= 4 ? pick(["I'd definitely come back!", "Highly recommended."]) : "";
+    return [open, phrases.map((p) => p + ".").join(" "), comment, close].filter(Boolean).join(" ");
+  }
+  const open = rating >= 4
+    ? pick([`${purpose ? purpose + "で" : ""}${store.name}さんを利用しました。`, `${store.name}さんに${purpose ? purpose + "で" : ""}伺いました。`])
+    : `${store.name}さんを利用しました。`;
+  const con = ["", "また、", "それに、", ""];
+  const body = phrases.map((p, i) => (i > 0 ? con[i % con.length] : "") + p + "。").join("");
+  const c = comment ? (/[。！!？?]$/.test(comment) ? comment : comment + "。") : "";
+  const close = rating >= 5 ? pick(["また伺いたいと思います！", "ぜひまた利用したいです。", "友人にもおすすめしたいお店です。"])
+    : rating >= 4 ? pick(["また利用したいと思います。", "次回も楽しみにしています。"]) : "";
+  return open + body + c + close;
+}
+function templateReply(name, rating) {
+  if (rating >= 4) return `この度はご来店いただき、また口コミをお寄せいただき誠にありがとうございます。いただいたお言葉、スタッフ一同大変励みになります。今後もご期待に沿えるよう努めてまいりますので、またのご来店を心よりお待ちしております。\n\n${name} スタッフ一同`;
+  if (rating === 3) return `この度はご来店いただき、また口コミをお寄せいただき誠にありがとうございます。至らない点があったことを真摯に受け止め、より満足いただけるよう改善してまいります。またの機会がございましたら、ぜひお声がけください。\n\n${name} スタッフ一同`;
+  return `口コミをお寄せいただき、誠にありがとうございます。この度はご期待に沿えず、大変申し訳ございませんでした。いただいたご指摘はスタッフ全員で共有し、改善に努めてまいります。もしよろしければ、お店まで直接お声をお聞かせいただけますと幸いです。\n\n${name} スタッフ一同`;
+}
+const LANG_NAME = { ja: "日本語", en: "English", zh: "简体中文", ko: "한국어" };
+const TONE = { friendly: "親しみやすく自然な口調", polite: "丁寧で落ち着いた口調", casual: "くだけたカジュアルな口調" };
+
+async function aiReview(input, onText) {
+  const { store, rating, purpose, selected, comment, lang } = input;
+  if (typeof cap.sample !== "function") return { text: templateReview(input), source: "template" };
+  const prompt = [
+    "あなたは来店客本人がGoogleマップに投稿する口コミの下書きを手伝います。",
+    "客が選んだ項目と客自身のコメントに書かれた事実だけを使い、体験していないこと、具体的なメニュー名、数字、人名を創作しないでください。",
+    "誇張した宣伝文句や不自然な絶賛は避け、一般のお客さんが書いたような自然な文章にしてください。満足度が低い場合は無理に褒めないでください。",
+    `出力は${LANG_NAME[lang]}の口コミ本文だけ（前置き・見出し・引用符なし）。長さは${lang === "ja" ? "80〜180文字" : "40〜90 words"}程度。`,
+    store.ngWords.length ? `使用禁止の語句: ${store.ngWords.join("、")}` : "",
+    "",
+    `店名: ${store.name}`,
+    `業種: ${(INDUSTRIES[store.industry] || INDUSTRIES.other).label}`,
+    `文体: ${TONE[store.tone] || TONE.friendly}`,
+    `満足度: ★${rating}`,
+    purpose ? `利用シーン: ${purpose}` : "",
+    `良かった点: ${selected.length ? selected.map((x) => x.phrase).join(" / ") : "（選択なし）"}`,
+    comment ? `客のコメント: ${comment.slice(0, 300)}` : "",
+  ].filter(Boolean).join("\n");
+  try {
+    const r = await cap.sample(prompt, { modelTier: "quick", cache: false, onText: ({ text }) => onText && onText(text) });
+    return { text: r.text.trim(), source: "ai" };
+  } catch (e) {
+    if (["not_granted", "sampling_disabled", "not_declared", "capability_disabled", "capability_removed"].includes(e.code)) cap.sample = null;
+    return { text: templateReview(input), source: "template" };
+  }
+}
+async function aiReply(store, rating, review, onText) {
+  if (typeof cap.sample !== "function") return { text: templateReply(store.name, rating), source: "template" };
+  const prompt = [
+    "店舗オーナーに代わって、Googleマップの口コミへの返信文案を書いてください。",
+    "口コミと同じ言語で返信し、口コミの具体的な内容に一言触れてください。",
+    "低評価には言い訳や反論をせず、お詫びと具体的な改善姿勢を示し、必要なら直接の連絡を促してください。",
+    "口コミに書かれていない事実は書かないこと。200文字前後、返信本文のみを出力し、最後に店名の署名を入れてください。",
+    store.ngWords.length ? `使用禁止の語句: ${store.ngWords.join("、")}` : "",
+    "",
+    `店名: ${store.name}`, `評価: ★${rating}`, `口コミ本文:\n${review.slice(0, 2000) || "（本文なし・星のみ）"}`,
+  ].filter(Boolean).join("\n");
+  try {
+    const r = await cap.sample(prompt, { cache: false, onText: ({ text }) => onText && onText(text) });
+    return { text: r.text.trim(), source: "ai" };
+  } catch (e) {
+    if (["not_granted", "sampling_disabled", "not_declared", "capability_disabled", "capability_removed"].includes(e.code)) cap.sample = null;
+    return { text: templateReply(store.name, rating), source: "template" };
+  }
+}
+
+/* ───────── 集計 ───────── */
+function summarize(rs, store) {
+  const n = rs.length;
+  const dist = [1, 2, 3, 4, 5].map((r) => rs.filter((x) => x.rating === r).length);
+  const avg = n ? rs.reduce((s, x) => s + (x.rating || 0), 0) / n : 0;
+  const google = rs.filter((x) => x.action === "google").length;
+  const feedback = rs.filter((x) => x.feedback).length;
+  const cnt = {};
+  for (const r of rs) for (const id of r.selectedIds || []) cnt[id] = (cnt[id] || 0) + 1;
+  const byCat = CATEGORIES.map((c) => ({ ...c, count: store.options.filter((x) => x.cat === c.id).reduce((s, x) => s + (cnt[x.id] || 0), 0) }));
+  const top = store.options.map((x) => ({ ...x, count: cnt[x.id] || 0 })).sort((a, b) => b.count - a.count);
+  const days = [];
+  for (let i = 13; i >= 0; i--) {
+    const d = new Date(); d.setDate(d.getDate() - i);
+    days.push({ key: d.toISOString().slice(0, 10), label: `${d.getMonth() + 1}/${d.getDate()}`, count: 0 });
+  }
+  for (const r of rs) { const d = days.find((x) => x.key === (r.createdAt || "").slice(0, 10)); if (d) d.count++; }
+  return { n, dist, avg, google, rate: n ? google / n : 0, feedback, byCat, top, days };
+}
+function needFive(avg, count, target) {
+  avg = +avg; count = +count; target = +target;
+  if (!(target > 0) || target >= 5 || !(count >= 0) || !(avg >= 0)) return null;
+  if (avg >= target) return 0;
+  return Math.max(0, Math.ceil((target * count - avg * count) / (5 - target) - 1e-9));
+}
+function sampleResponses(store) {
+  const out = [];
+  for (let i = 0; i < 40; i++) {
+    const rating = [5, 5, 5, 5, 4, 4, 4, 3, 2, 1][Math.floor(Math.random() * 10)];
+    const picks = store.options.filter(() => Math.random() < (rating >= 4 ? 0.35 : 0.1));
+    const d = new Date(); d.setDate(d.getDate() - Math.floor(Math.random() * 14));
+    out.push({
+      id: "s" + i, storeId: store.id, rating, purpose: pick(store.purposes) || "",
+      selectedIds: picks.map((x) => x.id), lang: Math.random() < 0.15 ? "en" : "ja",
+      review: rating >= 3 ? picks.map((x) => x.phrase).join("。") + (picks.length ? "。" : "") : "",
+      feedback: rating <= 2 ? "（サンプル）提供までの待ち時間が長かったです" : "",
+      action: rating <= 2 ? "feedback" : Math.random() < 0.7 ? "google" : "skip",
+      createdAt: d.toISOString(),
+    });
+  }
+  return out.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+}
+
+/* ───────── 状態・ケイパビリティ ───────── */
+const cap = { db: null, user: null, sample: null, downloads: null };
+const state = {
+  stores: [], storesLoaded: false, canAdmin: false, canWrite: true,
+  adminStoreId: null, tab: "dashboard", responses: [], showSample: false, unsubResponses: null,
+};
+const PAGE_URL = "https://claude.ai/artifact/FFXm8BnVFHjFzqPmEqMoX7";
+const surveyLink = (id) => (PAGE_URL.startsWith("http") ? PAGE_URL : "（公開URL）") + "#r-" + id;
+
+function route() {
+  const hash = location.hash.replace(/^#/, "");
+  if (hash === "admin" || (!hash && state.canAdmin)) return { view: "admin" };
+  const m = hash.match(/^r-([a-z0-9]+)$/);
+  return { view: "survey", storeId: m ? m[1] : null };
+}
+
+function renderTopbar(r) {
+  const bar = document.getElementById("topbar");
+  // お客様には切替を見せない。管理できる人だけに表示
+  bar.hidden = !state.canAdmin;
+  document.getElementById("navSurvey").setAttribute("aria-current", r.view === "survey" ? "page" : "false");
+  document.getElementById("navAdmin").setAttribute("aria-current", r.view === "admin" ? "page" : "false");
+  const s = state.stores.find((x) => x.id === state.adminStoreId) || state.stores[0];
+  document.getElementById("navSurvey").href = s ? "#r-" + s.id : "#r";
+  document.getElementById("brandSub").textContent = r.view === "admin" ? "管理画面" : "表示画面";
+}
+
+function render() {
+  const r = route();
+  renderTopbar(r);
+  if (r.view === "admin") renderAdmin();
+  else renderSurveyEntry(r.storeId);
+}
+window.addEventListener("hashchange", () => { survey = null; render(); });
+
+/* ═════════ 表示画面（お客様） ═════════ */
+let survey = null; // 進行中のアンケート状態
+
+function renderSurveyEntry(storeId) {
+  if (!state.storesLoaded) return mount(h("div", { class: "notice" }, h("p", { class: "muted" }, "読み込み中です…")));
+  let store = storeId ? state.stores.find((s) => s.id === storeId) : null;
+  if (!store && !storeId && state.stores.length === 1) store = state.stores[0];
+  if (!store) {
+    if (storeId) return mount(h("div", { class: "notice" }, h("h2", {}, "ページが見つかりません"), h("p", { class: "muted" }, "QRコードをもう一度読み取ってください。")));
+    if (!state.stores.length) {
+      return mount(h("div", { class: "notice stack" },
+        h("h2", {}, "まだ店舗が登録されていません"),
+        h("p", { class: "muted" }, state.canAdmin ? "管理画面で店舗を登録すると、ここにお客様用アンケートが表示されます。" : "準備中です。"),
+        state.canAdmin ? h("a", { class: "btn btn-primary", href: "#admin" }, "管理画面で店舗を登録する") : null));
+    }
+    return mount(h("div", { class: "survey stack" },
+      h("h2", {}, "店舗を選んでください"),
+      h("div", { class: "stack" }, state.stores.map((s) => h("a", { class: "btn", href: "#r-" + s.id }, s.name || "(名称未設定)")))));
+  }
+  if (!survey || survey.storeId !== store.id) {
+    const nav = (navigator.language || "ja").slice(0, 2);
+    const langs = store.languages && store.languages.length ? store.languages : ["ja"];
+    survey = { storeId: store.id, lang: T[nav] && langs.includes(nav) ? nav : "ja", step: "rate", rating: 0, purpose: "", selectedIds: [], comment: "", draft: "", feedback: "", docId: null, copied: false, won: null, err: "" };
+  }
+  renderSurvey(store);
+}
+
+function setSurvey(patch, store) { Object.assign(survey, patch); renderSurvey(store); }
+
+async function saveResponse(store, extra) {
+  if (!cap.db) return;
+  const sel = store.options.filter((x) => survey.selectedIds.includes(x.id));
+  const body = {
+    storeId: store.id, rating: survey.rating, purpose: survey.purpose, selectedIds: survey.selectedIds,
+    categories: [...new Set(sel.map((x) => x.cat))], comment: survey.comment, lang: survey.lang,
+    review: survey.draft || "", feedback: survey.feedback || "", ...extra,
+  };
+  try {
+    if (survey.docId) await cap.db.doc("responses/" + survey.docId).update(body);
+    else {
+      body.createdAt = new Date().toISOString();
+      const ref = cap.db.collection("responses").doc(rid() + rid());
+      await ref.set(body);
+      survey.docId = ref.id;
+    }
+  } catch { /* 保存できなくてもお客様の操作は止めない */ }
+}
+
+function renderSurvey(store) {
+  const t = T[survey.lang];
+  const langs = store.languages && store.languages.length ? store.languages : ["ja"];
+  const optLabel = (x) => (survey.lang === "ja" ? x.label : x.en || x.label);
+  const head = h("div", { class: "survey-head" },
+    h("div", { class: "store-name" }, store.name),
+    langs.length > 1 ? h("select", { id: "lang", "aria-label": "Language", class: "btn", onchange: (e) => setSurvey({ lang: e.target.value }, store) },
+      langs.map((l) => h("option", { value: l, selected: l === survey.lang }, LANGS[l]))) : null);
+  const steps = (n) => h("div", { class: "steps", "aria-hidden": "true" }, [1, 2, 3].map((i) => h("span", { class: i <= n ? "on" : "" })));
+  let card;
+
+  if (survey.step === "rate") {
+    card = h("section", { class: "card" }, steps(1),
+      h("h1", { class: "hello" }, t.hello), h("p", { class: "muted", style: "margin:0" }, t.lead),
+      h("h2", { class: "q" }, t.q1),
+      h("div", { class: "stars", role: "radiogroup", "aria-label": t.q1 }, [1, 2, 3, 4, 5].map((n) =>
+        h("button", { class: "star" + (n <= survey.rating ? " on" : ""), role: "radio", "aria-checked": String(survey.rating === n), "aria-label": "★" + n, onclick: () => setSurvey({ rating: n, err: "" }, store) }, "★"))),
+      h("div", { class: "star-label" }, t.starLabels[survey.rating] || ""),
+      store.purposes.length ? [h("h2", { class: "q" }, t.q2), h("div", { class: "chips" }, store.purposes.map((p) =>
+        h("button", { class: "chip", "aria-pressed": String(survey.purpose === p), onclick: () => setSurvey({ purpose: survey.purpose === p ? "" : p }, store) }, p)))] : null,
+      survey.err ? h("p", { class: "err" }, survey.err) : null,
+      h("button", { class: "btn btn-primary btn-block", onclick: () => survey.rating ? setSurvey({ step: "points", err: "" }, store) : setSurvey({ err: t.rateFirst }, store) }, t.next));
+  }
+
+  if (survey.step === "points") {
+    const ta = h("textarea", { id: "comment", rows: 3, maxLength: 300, placeholder: t.ph, value: survey.comment, oninput: (e) => { survey.comment = e.target.value; } });
+    card = h("section", { class: "card" }, steps(2),
+      h("h2", { class: "q" }, t.q3),
+      h("div", { class: "chips" }, store.options.map((x) =>
+        h("button", { class: "chip", "aria-pressed": String(survey.selectedIds.includes(x.id)), onclick: () => {
+          survey.selectedIds = survey.selectedIds.includes(x.id) ? survey.selectedIds.filter((i) => i !== x.id) : [...survey.selectedIds, x.id];
+          renderSurvey(store);
+        } }, optLabel(x)))),
+      h("h2", { class: "q" }, t.q4), ta,
+      h("div", { class: "row" },
+        h("button", { class: "btn", onclick: () => setSurvey({ step: "rate" }, store) }, t.back),
+        h("span", { class: "spacer" }),
+        h("button", { class: "btn btn-primary", onclick: () => survey.rating <= 2 ? setSurvey({ step: "low" }, store) : makeDraft(store) }, t.next)));
+  }
+
+  if (survey.step === "generating") {
+    card = h("section", { class: "card" }, steps(3),
+      h("div", { class: "thinking" }, h("div", { class: "dots" }, h("i"), h("i"), h("i")), h("p", { class: "muted", id: "genText" }, t.gen)));
+  }
+
+  if (survey.step === "draft") {
+    const hits = () => findNg(survey.draft, store.ngWords);
+    const ngEl = h("p", { class: "err", hidden: true });
+    const postBtn = h("button", { class: "btn btn-google btn-block" }, t.post);
+    const check = () => { const x = hits(); ngEl.hidden = !x.length; ngEl.textContent = t.ng + "：" + x.join("、"); postBtn.disabled = !survey.draft.trim() || x.length > 0; };
+    const ta = h("textarea", { id: "draft", rows: 7, value: survey.draft, oninput: (e) => { survey.draft = e.target.value; check(); } });
+    postBtn.addEventListener("click", async () => {
+      const url = googleUrl(store.googleReviewUrl);
+      await copyText(survey.draft);
+      survey.copied = true;
+      await finish(store, "google");
+      if (!url) { survey.noGoogle = true; renderSurvey(store); }
+    });
+    const link = googleUrl(store.googleReviewUrl);
+    card = h("section", { class: "card" }, steps(3),
+      h("h2", { class: "q" }, t.draftTitle), h("p", { class: "muted", style: "margin:0" }, t.draftNote),
+      h("div", { class: "stars-static" }, "★".repeat(survey.rating) + "☆".repeat(5 - survey.rating)),
+      ta, ngEl,
+      // Googleの投稿画面は新しいタブで開く（クリック時にコピーも行う）
+      link ? h("a", { class: "btn btn-google btn-block", href: link, target: "_blank", rel: "noopener", onclick: async (e) => {
+        if (hits().length || !survey.draft.trim()) { e.preventDefault(); return; }
+        copyText(survey.draft); survey.copied = true; finish(store, "google");
+      } }, t.post) : postBtn,
+      h("div", { class: "row" },
+        h("button", { class: "btn btn-quiet", onclick: () => makeDraft(store, true) }, t.regen),
+        h("span", { class: "spacer" }),
+        h("button", { class: "btn btn-quiet", onclick: () => finish(store, "skip") }, t.skip)));
+    queueMicrotask(check);
+  }
+
+  if (survey.step === "low") {
+    const ta = h("textarea", { id: "feedback", rows: 5, maxLength: 1000, value: survey.feedback, oninput: (e) => { survey.feedback = e.target.value; } });
+    card = h("section", { class: "card" }, steps(3),
+      h("h2", { class: "q" }, t.lowTitle), h("p", { class: "muted", style: "margin:0" }, t.lowLead), ta,
+      survey.err ? h("p", { class: "err" }, survey.err) : null,
+      h("button", { class: "btn btn-primary btn-block", onclick: () => {
+        if (!survey.feedback.trim()) return setSurvey({ err: t.feedbackFirst }, store);
+        finish(store, "feedback");
+      } }, t.send),
+      // 低評価でもGoogleへの導線は残す（レビューゲーティング禁止のため）
+      h("button", { class: "btn btn-quiet btn-block", onclick: () => makeDraft(store) }, t.alsoGoogle));
+  }
+
+  if (survey.step === "done") {
+    const c = store.coupon || {};
+    let coupon = null;
+    if (c.enabled) {
+      const detail = [h("div", { class: "coupon-title" }, c.title), c.body ? h("div", {}, c.body) : null, c.code ? h("div", { class: "coupon-code" }, c.code) : null, h("div", { class: "muted" }, t.show)];
+      coupon = h("div", { class: "coupon" }, h("div", { class: "coupon-label" }, t.reward),
+        c.mode === "lottery" ? (survey.won ? [h("div", { class: "ok" }, t.win), ...detail] : h("div", {}, t.lose)) : detail);
+    }
+    card = h("section", { class: "card center" },
+      h("div", { class: "big-emoji", "aria-hidden": "true" }, "🙏"), h("h2", {}, t.thanks),
+      survey.copied ? h("p", { class: "ok", style: "margin:0" }, t.copied) : null,
+      survey.noGoogle ? h("p", { class: "muted", style: "margin:0" }, t.noGoogle) : null,
+      coupon);
+  }
+
+  mount(h("div", { class: "survey" }, head, card));
+}
+
+async function makeDraft(store, again) {
+  setSurvey({ step: "generating" }, store);
+  const selected = store.options.filter((x) => survey.selectedIds.includes(x.id));
+  const r = await aiReview({ store, rating: survey.rating, purpose: survey.purpose, selected, comment: survey.comment, lang: survey.lang }, (text) => {
+    const el = document.getElementById("genText"); if (el) el.textContent = text;
+  });
+  survey.draft = r.text;
+  if (!again) await saveResponse(store, { action: "drafted", reviewSource: r.source });
+  setSurvey({ step: "draft" }, store);
+}
+
+async function finish(store, action) {
+  if (survey.step === "done") return;
+  await saveResponse(store, { action });
+  const c = store.coupon || {};
+  if (c.enabled && c.mode === "lottery" && survey.won === null) survey.won = Math.random() * 100 < +c.winRate;
+  setSurvey({ step: "done" }, store);
+}
+
+/* ═════════ 管理画面 ═════════ */
+const TABS = [["dashboard", "ダッシュボード"], ["settings", "アンケート設定"], ["qr", "QRコード・POP"], ["responses", "回答一覧"], ["reply", "AI返信"], ["simulator", "評価シミュレーター"]];
+let creating = false;
+
+function currentStore() { return state.stores.find((s) => s.id === state.adminStoreId) || null; }
+
+function subscribeResponses() {
+  if (state.unsubResponses) { state.unsubResponses(); state.unsubResponses = null; }
+  state.responses = [];
+  if (!cap.db || !state.adminStoreId) return;
+  state.unsubResponses = cap.db.collection("responses").where("storeId", "==", state.adminStoreId).onSnapshot((snap) => {
+    state.responses = snap.docs.map((d) => ({ id: d.id, ...d.data() })).sort((a, b) => ((a.createdAt || "") < (b.createdAt || "") ? 1 : -1));
+    if (route().view === "admin" && ["dashboard", "responses", "simulator"].includes(state.tab)) renderAdmin();
+  }, () => {});
+}
+
+function renderAdmin() {
+  if (!state.storesLoaded) return mount(h("div", { class: "notice" }, h("p", { class: "muted" }, "読み込み中です…")));
+  if (!state.canAdmin) {
+    return mount(h("div", { class: "notice stack" }, h("h2", {}, "管理画面"),
+      h("p", { class: "muted" }, "管理画面は、このページの編集権限がある人だけが使えます。"),
+      h("a", { class: "btn", href: "#r" }, "表示画面へ")));
+  }
+  if (!currentStore() && state.stores.length) { state.adminStoreId = state.stores[0].id; subscribeResponses(); }
+  const store = currentStore();
+
+  const bar = h("div", { class: "admin-bar" },
+    state.stores.length ? h("select", { id: "storeSel", "aria-label": "店舗", onchange: (e) => { state.adminStoreId = e.target.value; state.showSample = false; subscribeResponses(); renderAdmin(); } },
+      state.stores.map((s) => h("option", { value: s.id, selected: s.id === state.adminStoreId }, s.name || "(名称未設定)"))) : null,
+    h("span", { class: "spacer" }),
+    h("button", { class: "btn btn-primary", onclick: () => { creating = true; renderAdmin(); } }, "＋ 店舗を追加"));
+
+  const parts = [bar];
+  if (creating) parts.push(createForm());
+  if (!store && !creating) {
+    parts.push(h("section", { class: "panel empty" },
+      h("h2", {}, "お客様の「良かった」を、Googleの口コミに"),
+      h("p", { class: "muted", style: "max-width:52ch" }, "店頭のQRコードから30秒のアンケートに答えてもらい、選んだ内容をもとに口コミ文の下書きを作ります。お客様は内容を確認・編集して、ご自身でGoogleマップに投稿します。"),
+      h("button", { class: "btn btn-primary", onclick: () => { creating = true; renderAdmin(); } }, "最初の店舗を登録する")));
+  }
+  if (store) {
+    parts.push(h("nav", { class: "tabs", role: "tablist" }, TABS.map(([id, label]) =>
+      h("button", { class: "tab", role: "tab", "aria-selected": String(state.tab === id), onclick: () => { state.tab = id; renderAdmin(); } }, label))));
+    const view = { dashboard: dashboard, settings: settings, qr: qrPanel, responses: responsesPanel, reply: replyPanel, simulator: simulator }[state.tab];
+    parts.push(view(store));
+  }
+  mount(h("div", { class: "admin" }, parts));
+  if (store && state.tab === "qr") drawQr(store);
+}
+
+function createForm() {
+  const name = h("input", { id: "newName", placeholder: "例：カフェ365 渋谷店" });
+  const ind = h("select", { id: "newIndustry" }, Object.entries(INDUSTRIES).map(([k, v]) => h("option", { value: k }, v.label)));
+  const msg = h("p", { class: "err", hidden: true });
+  return h("form", { class: "panel form", onsubmit: async (e) => {
+    e.preventDefault();
+    if (!name.value.trim()) { msg.hidden = false; msg.textContent = "店舗名を入力してください"; return; }
+    const s = newStore(ind.value, name.value.trim());
+    try {
+      await cap.db.doc("stores/" + s.id).set(s);
+      creating = false; state.adminStoreId = s.id; state.tab = "settings"; subscribeResponses(); renderAdmin();
+    } catch (err) { msg.hidden = false; msg.textContent = "保存できませんでした（" + (err.code || "error") + "）"; }
+  } },
+    h("h3", {}, "店舗を追加"),
+    h("label", { class: "field" }, "店舗名", name),
+    h("label", { class: "field" }, "業種（アンケート項目のひな形）", ind),
+    msg,
+    h("div", { class: "row" }, h("button", { type: "button", class: "btn", onclick: () => { creating = false; renderAdmin(); } }, "キャンセル"), h("button", { class: "btn btn-primary" }, "作成する")));
+}
+
+function kpi(label, value, sub) { return h("div", { class: "kpi" }, h("div", { class: "kpi-label" }, label), h("div", { class: "kpi-value" }, value), sub ? h("div", { class: "kpi-sub" }, sub) : null); }
+function bar(label, value, max, color) {
+  return h("div", { class: "bar" }, h("span", {}, label),
+    h("span", { class: "bar-track" }, h("span", { class: "bar-fill", style: `display:block;width:${max ? Math.round((value / max) * 100) : 0}%;background:${color}` })),
+    h("span", { class: "bar-val" }, value));
+}
+
+function dashboard(store) {
+  const rs = state.showSample ? sampleResponses(store) : state.responses;
+  if (!rs.length) {
+    return h("section", { class: "panel empty" },
+      h("h3", {}, "まだ回答がありません"),
+      h("p", { class: "muted" }, "「QRコード・POP」タブでQRコードを表示して、店頭に置きましょう。回答が届くとここに集計されます。"),
+      h("button", { class: "btn", onclick: () => { state.showSample = true; renderAdmin(); } }, "サンプルデータで画面を見る"));
+  }
+  const s = summarize(rs, store);
+  const maxD = Math.max(1, ...s.dist), maxC = Math.max(1, ...s.byCat.map((c) => c.count)), maxDay = Math.max(1, ...s.days.map((d) => d.count));
+  return h("div", { class: "stack" },
+    state.showSample ? h("div", { class: "sample-note row" }, "表示中のデータはサンプルです（保存されていません）。", h("span", { class: "spacer" }), h("button", { class: "btn btn-quiet", onclick: () => { state.showSample = false; renderAdmin(); } }, "サンプルを閉じる")) : null,
+    h("div", { class: "kpis" },
+      kpi("アンケート回答数", s.n),
+      kpi("平均満足度", "★" + s.avg.toFixed(2)),
+      kpi("Google投稿へ進んだ数", s.google, "投稿率 " + Math.round(s.rate * 100) + "%"),
+      kpi("お店への改善要望", s.feedback, "回答一覧で確認できます")),
+    h("div", { class: "grid" },
+      h("section", { class: "panel" }, h("h3", {}, "満足度の分布"), [5, 4, 3, 2, 1].map((r) => bar("★" + r, s.dist[r - 1], maxD, r >= 4 ? "var(--good)" : r === 3 ? "var(--warn)" : "var(--bad)"))),
+      h("section", { class: "panel" }, h("h3", {}, "評価されているポイント"), s.byCat.map((c) => bar(c.label, c.count, maxC, c.color))),
+      h("section", { class: "panel" }, h("h3", {}, "よく選ばれた項目"), h("ol", { class: "rank" }, s.top.slice(0, 5).map((x) =>
+        h("li", {}, h("div", {}, h("span", {}, x.label), h("span", { class: "tag" }, catLabel(x.cat)), h("b", {}, x.count)))))),
+      h("section", { class: "panel" }, h("h3", {}, "直近14日の回答数"), h("div", { class: "cols" }, s.days.map((d) =>
+        h("div", { class: "col", title: `${d.label}: ${d.count}件` }, h("span", { class: "col-fill", style: `display:block;height:${(d.count / maxDay) * 100}%` }), h("span", { class: "col-label" }, d.label)))))));
+}
+
+function settings(store) {
+  const f = JSON.parse(JSON.stringify(store));
+  const msg = h("span", { class: "ok", hidden: true });
+  const csv = (arr) => arr.join(", ");
+  const split = (v) => v.split(/[,、]/).map((x) => x.trim()).filter(Boolean);
+
+  const optList = h("div", { class: "opt-list" });
+  const drawOpts = () => optList.replaceChildren(...f.options.map((x) => h("div", { class: "opt" },
+    h("input", { value: x.label, placeholder: "表示名", "aria-label": "表示名", oninput: (e) => { x.label = e.target.value; } }),
+    h("input", { value: x.phrase, placeholder: "口コミでの言い回し", "aria-label": "口コミでの言い回し", oninput: (e) => { x.phrase = e.target.value; } }),
+    h("select", { "aria-label": "カテゴリ", onchange: (e) => { x.cat = e.target.value; } }, CATEGORIES.map((c) => h("option", { value: c.id, selected: c.id === x.cat }, c.label))),
+    h("input", { value: x.en || "", placeholder: "英語表示（任意）", "aria-label": "英語表示", oninput: (e) => { x.en = e.target.value; } }),
+    h("button", { type: "button", class: "btn btn-quiet", "aria-label": "削除", onclick: () => { f.options = f.options.filter((y) => y !== x); drawOpts(); } }, "✕"))));
+  drawOpts();
+
+  const couponBox = h("div", { class: "stack" });
+  const drawCoupon = () => couponBox.replaceChildren(
+    h("label", { class: "check" }, h("input", { type: "checkbox", checked: f.coupon.enabled, onchange: (e) => { f.coupon.enabled = e.target.checked; drawCoupon(); } }), "特典を表示する"),
+    ...(f.coupon.enabled ? [
+      h("label", { class: "field" }, "形式", h("select", { onchange: (e) => { f.coupon.mode = e.target.value; drawCoupon(); } },
+        h("option", { value: "coupon", selected: f.coupon.mode === "coupon" }, "全員にクーポン"), h("option", { value: "lottery", selected: f.coupon.mode === "lottery" }, "抽選"))),
+      f.coupon.mode === "lottery" ? h("label", { class: "field" }, "当選確率（%）", h("input", { type: "number", min: 0, max: 100, value: f.coupon.winRate, oninput: (e) => { f.coupon.winRate = e.target.value; } })) : null,
+      h("label", { class: "field" }, "特典の内容", h("input", { value: f.coupon.title, placeholder: "次回ドリンク1杯無料", oninput: (e) => { f.coupon.title = e.target.value; } })),
+      h("label", { class: "field" }, "説明", h("input", { value: f.coupon.body, placeholder: "次回ご来店時に有効", oninput: (e) => { f.coupon.body = e.target.value; } })),
+      h("label", { class: "field" }, "クーポンコード（任意）", h("input", { value: f.coupon.code, oninput: (e) => { f.coupon.code = e.target.value; } })),
+    ] : []));
+  drawCoupon();
+
+  const confirmBox = h("div", { hidden: true });
+  const askDelete = () => {
+    confirmBox.hidden = false;
+    confirmBox.replaceChildren(h("div", { class: "confirm" }, `「${store.name}」の設定を削除します。回答データは残ります。`, h("span", { class: "spacer" }),
+      h("button", { type: "button", class: "btn", onclick: () => { confirmBox.hidden = true; } }, "やめる"),
+      h("button", { type: "button", class: "btn btn-danger", onclick: async () => { await cap.db.doc("stores/" + store.id).delete(); state.adminStoreId = null; } }, "削除する")));
+  };
+  const indSel = h("select", { onchange: (e) => {
+    const k = e.target.value; f.industry = k; f.options = INDUSTRIES[k].options(); f.purposes = [...INDUSTRIES[k].purposes];
+    purposes.value = csv(f.purposes); drawOpts();
+  } }, Object.entries(INDUSTRIES).map(([k, v]) => h("option", { value: k, selected: k === f.industry }, v.label)));
+  const purposes = h("input", { value: csv(f.purposes), oninput: (e) => { f.purposes = split(e.target.value); } });
+  const gLink = h("a", { href: googleUrl(f.googleReviewUrl) || "#", target: "_blank", rel: "noopener", hidden: !f.googleReviewUrl }, "投稿画面を開いて確認 ↗");
+
+  return h("form", { class: "panel form", onsubmit: async (e) => {
+    e.preventDefault();
+    f.name = f.name.trim();
+    if (!f.name) { msg.hidden = false; msg.className = "err"; msg.textContent = "店舗名を入力してください"; return; }
+    f.options = f.options.filter((x) => x.label.trim()).map((x) => ({ ...x, label: x.label.trim(), phrase: (x.phrase || "").trim() || x.label.trim() }));
+    try { await cap.db.doc("stores/" + f.id).set(f); msg.hidden = false; msg.className = "ok"; msg.textContent = "保存しました"; }
+    catch (err) { msg.hidden = false; msg.className = "err"; msg.textContent = "保存できませんでした（" + (err.code || "error") + "）"; }
+  } },
+    h("h3", {}, "基本情報"),
+    h("label", { class: "field" }, "店舗名", h("input", { id: "sName", value: f.name, oninput: (e) => { f.name = e.target.value; } })),
+    h("label", { class: "field" }, "業種", indSel, h("small", {}, "変えると下のアンケート項目がその業種のひな形に置き換わります（保存するまで反映されません）。")),
+    h("label", { class: "field" }, "Googleの口コミ投稿URL または Place ID",
+      h("input", { id: "sGoogle", value: f.googleReviewUrl, placeholder: "ChIJ… または https://g.page/r/…/review", oninput: (e) => { f.googleReviewUrl = e.target.value; gLink.hidden = !e.target.value.trim(); gLink.href = googleUrl(e.target.value) || "#"; } }),
+      h("small", {}, "Googleビジネスプロフィールの「クチコミを依頼」で表示されるURLを貼り付けてください。 ", gLink)),
+    h("label", { class: "field" }, "口コミ文のトーン", h("select", { onchange: (e) => { f.tone = e.target.value; } },
+      [["friendly", "親しみやすい"], ["polite", "丁寧"], ["casual", "カジュアル"]].map(([k, v]) => h("option", { value: k, selected: f.tone === k }, v)))),
+    h("h3", {}, "アンケート項目（良かった点）"),
+    h("p", { class: "muted", style: "margin:0" }, "表示名はお客様が選ぶボタン、言い回しは口コミ文を作るときの材料です。カテゴリは分析の分類に使います。"),
+    optList,
+    h("div", {}, h("button", { type: "button", class: "btn", onclick: () => { f.options.push({ id: rid(), cat: "quality", label: "", phrase: "", en: "", phraseEn: "" }); drawOpts(); } }, "＋ 項目を追加")),
+    h("label", { class: "field" }, "利用シーンの選択肢（カンマ区切り）", purposes),
+    h("label", { class: "field" }, "NGワード（カンマ区切り）", h("input", { value: csv(f.ngWords), placeholder: "例：激安, 最安, No.1", oninput: (e) => { f.ngWords = split(e.target.value); } }),
+      h("small", {}, "口コミ文や返信文に含まれていると、投稿ボタンが押せなくなります。")),
+    h("h3", {}, "対応言語"),
+    h("div", {}, Object.entries(LANGS).map(([k, v]) => h("label", { class: "check" },
+      h("input", { type: "checkbox", checked: f.languages.includes(k), disabled: k === "ja", onchange: (e) => { f.languages = e.target.checked ? [...f.languages, k] : f.languages.filter((x) => x !== k); } }), v))),
+    h("h3", {}, "回答特典"),
+    h("p", { class: "muted", style: "margin:0" }, "特典はアンケートに答えた全員に表示します。口コミ投稿の見返りにするとGoogleのポリシー違反になるためです。"),
+    couponBox,
+    confirmBox,
+    h("div", { class: "row savebar" }, h("button", { class: "btn btn-primary" }, "保存する"), msg, h("span", { class: "spacer" }), h("button", { type: "button", class: "btn btn-danger", onclick: askDelete }, "店舗を削除")));
+}
+
+function qrPanel(store) {
+  const link = surveyLink(store.id);
+  const copied = h("span", { class: "ok", hidden: true }, "コピーしました");
+  return h("div", { class: "grid" },
+    h("section", { class: "panel stack" },
+      h("h3", {}, "表示画面のURL"),
+      h("div", { class: "url-box" }, h("code", {}, link),
+        h("button", { class: "btn", onclick: async () => { await copyText(link); copied.hidden = false; } }, "コピー")),
+      copied,
+      h("a", { class: "btn", href: "#r-" + store.id }, "この店舗の表示画面を開く"),
+      h("p", { class: "muted", style: "margin:0" }, "QRコードを読んだ人がこのページを開くには、claude.ai へのログインとこのページへのアクセス権が必要です。一般のお客様向けに公開するときは、リポジトリのVercel版をお使いください。")),
+    h("section", { class: "panel stack center" },
+      h("h3", {}, "店頭POP"),
+      h("div", { class: "pop" },
+        h("div", { class: "pop-store" }, store.name),
+        h("div", { class: "pop-catch" }, "ご感想をお聞かせください"),
+        h("div", { style: "font-size:.85rem" }, "30秒のアンケートにご協力ください"),
+        h("div", { class: "pop-qr", id: "qrBox", role: "img", "aria-label": "アンケートのQRコード" }),
+        store.coupon && store.coupon.enabled && store.coupon.title ? h("div", { class: "pop-coupon" }, "回答特典：" + store.coupon.title + (store.coupon.mode === "lottery" ? "（抽選）" : "")) : null,
+        h("div", { style: "font-size:.72rem;color:#5d6762;margin-top:6px" }, "English / 中文 / 한국어 OK")),
+      cap.downloads ? h("div", {}, h("button", { class: "btn btn-primary", onclick: () => saveQr(store) }, "QR画像を保存")) : null));
+}
+function drawQr(store) {
+  const box = document.getElementById("qrBox");
+  if (!box) return;
+  box.replaceChildren();
+  if (typeof QRCode !== "function") { box.append(h("p", { class: "muted" }, "QRコードを表示できませんでした")); return; }
+  new QRCode(box, { text: surveyLink(store.id), width: 512, height: 512, colorDark: "#1c2320", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.M });
+}
+async function saveQr(store) {
+  const canvas = document.querySelector("#qrBox canvas");
+  if (!canvas || !cap.downloads) return;
+  const blob = await new Promise((r) => canvas.toBlob(r, "image/png"));
+  try { await cap.downloads.save({ filename: `qr-${store.name || store.id}.png`, data: blob }); } catch {}
+}
+
+function responsesPanel(store) {
+  const name = (id) => (store.options.find((x) => x.id === id) || {}).label;
+  const ACTION = { google: "Google投稿へ", skip: "投稿せず", feedback: "改善要望", drafted: "下書き作成のみ" };
+  const filter = state.respFilter || "all";
+  const list = state.responses.filter((r) => filter === "low" ? r.rating <= 2 : filter === "google" ? r.action === "google" : true);
+  const toCsv = () => {
+    const esc = (v) => `"${String(v == null ? "" : v).replace(/"/g, '""')}"`;
+    const rows = [["日時", "満足度", "利用シーン", "良かった点", "コメント", "口コミ下書き", "改善要望", "行動", "言語"],
+      ...state.responses.map((r) => [r.createdAt, r.rating, r.purpose, (r.selectedIds || []).map(name).filter(Boolean).join(" / "), r.comment, r.review, r.feedback, ACTION[r.action] || r.action, r.lang])];
+    return "﻿" + rows.map((r) => r.map(esc).join(",")).join("\n");
+  };
+  return h("section", { class: "panel stack" },
+    h("div", { class: "row" },
+      [["all", "すべて"], ["low", "低評価（★1〜2）"], ["google", "Google投稿へ進んだ"]].map(([k, v]) =>
+        h("button", { class: "chip", "aria-pressed": String(filter === k), onclick: () => { state.respFilter = k; renderAdmin(); } }, v)),
+      h("span", { class: "spacer" }),
+      cap.downloads ? h("button", { class: "btn", disabled: !state.responses.length, onclick: async () => {
+        try { await cap.downloads.save({ filename: `${store.name || "responses"}.csv`, data: new Blob([toCsv()], { type: "text/csv" }) }); } catch {}
+      } }, "CSVで保存") : null),
+    list.length ? h("ul", { class: "list" }, list.map((r) => h("li", { class: "item" + (r.rating <= 2 ? " low" : "") },
+      h("div", { class: "row" },
+        h("span", { class: "stars-static" }, "★".repeat(r.rating) + "☆".repeat(5 - r.rating)),
+        h("span", { class: "tag" + (r.action === "google" ? " tag-google" : r.action === "feedback" ? " tag-bad" : "") }, ACTION[r.action] || r.action),
+        r.purpose ? h("span", { class: "tag" }, r.purpose) : null,
+        r.lang && r.lang !== "ja" ? h("span", { class: "tag" }, LANGS[r.lang]) : null,
+        h("span", { class: "spacer" }),
+        h("time", { class: "muted" }, r.createdAt ? new Date(r.createdAt).toLocaleString("ja-JP") : "")),
+      (r.selectedIds || []).length ? h("div", { class: "chips" }, r.selectedIds.map(name).filter(Boolean).map((n) => h("span", { class: "tag" }, n))) : null,
+      r.feedback ? h("p", { class: "feedback" }, "改善要望：" + r.feedback) : null,
+      r.review ? h("p", {}, r.review) : null)))
+      : h("p", { class: "muted" }, state.responses.length ? "該当する回答はありません。" : "まだ回答がありません。"));
+}
+
+function replyPanel(store) {
+  const rating = h("select", { id: "rRating" }, [5, 4, 3, 2, 1].map((n) => h("option", { value: n }, "★" + n)));
+  const review = h("textarea", { id: "rReview", rows: 5, placeholder: "Googleに届いた口コミを貼り付けてください" });
+  const out = h("textarea", { id: "rOut", rows: 8, hidden: true });
+  const note = h("p", { class: "muted", hidden: true, style: "margin:0" });
+  const ngEl = h("p", { class: "err", hidden: true, style: "margin:0" });
+  const copyBtn = h("button", { type: "button", class: "btn", hidden: true, onclick: () => copyText(out.value) }, "コピー");
+  const checkNg = () => { const x = findNg(out.value, store.ngWords); ngEl.hidden = !x.length; ngEl.textContent = "NGワードが含まれています：" + x.join("、"); };
+  out.addEventListener("input", checkNg);
+  const btn = h("button", { class: "btn btn-primary" }, "返信文を作る");
+  return h("form", { class: "panel form", onsubmit: async (e) => {
+    e.preventDefault();
+    btn.disabled = true; btn.textContent = "作成中…"; out.hidden = false; out.value = "考えています…";
+    const r = await aiReply(store, +rating.value, review.value, (t) => { out.value = t; });
+    out.value = r.text; checkNg();
+    note.hidden = false; note.textContent = r.source === "ai" ? "AIが作った案です。内容を確認してからGoogleで返信してください。" : "AIが使えないため、定型文で作成しました。";
+    copyBtn.hidden = false; btn.disabled = false; btn.textContent = "もう一度作る";
+  } },
+    h("h3", {}, "口コミへの返信文を作る"),
+    h("label", { class: "field" }, "口コミの評価", rating),
+    h("label", { class: "field" }, "口コミ本文", review),
+    h("div", {}, btn), out, ngEl, note, h("div", {}, copyBtn));
+}
+
+function simulator(store) {
+  const gs = store.googleStats || {};
+  const rating = h("input", { id: "simRating", type: "number", step: "0.1", min: 1, max: 5, value: gs.rating || "", placeholder: "4.2" });
+  const count = h("input", { id: "simCount", type: "number", min: 0, value: gs.count || "", placeholder: "120" });
+  const target = h("input", { id: "simTarget", type: "number", step: "0.01", min: 1, max: 4.99, placeholder: "4.5" });
+  const out = h("div", { class: "stack" });
+  const monthAgo = Date.now() - 30 * 864e5;
+  const perMonth = state.responses.filter((r) => r.action === "google" && r.rating === 5 && new Date(r.createdAt) > monthAgo).length;
+  const saved = h("span", { class: "ok", hidden: true }, "保存しました");
+  const draw = () => {
+    const a = +rating.value, c = +count.value;
+    if (!(a > 0 && a <= 5) || count.value === "" || !(c >= 0)) { out.replaceChildren(h("p", { class: "muted" }, "現在の評価と件数を入れてください。")); return; }
+    const rows = [0.1, 0.2, 0.3, 0.5].map((d) => Math.round((a + d) * 10) / 10).filter((t) => t < 5);
+    const custom = target.value ? needFive(a, c, target.value) : null;
+    out.replaceChildren(
+      h("div", { class: "table-wrap" }, h("table", {}, h("thead", {}, h("tr", {}, h("th", {}, "目標"), h("th", {}, "必要な★5の件数"), h("th", {}, "到達の目安"))),
+        h("tbody", {}, rows.map((t) => { const n = needFive(a, c, t); return h("tr", {}, h("td", {}, "★" + t.toFixed(1)), h("td", {}, h("b", {}, n), " 件"), h("td", {}, perMonth ? `約${Math.ceil(n / perMonth)}ヶ月` : "—")); })))),
+      custom !== null ? h("p", { class: "result", style: "margin:0" }, `★${(+target.value).toFixed(2)} まで、あと `, h("b", {}, custom), " 件の★5口コミが必要です") : null,
+      h("p", { class: "muted", style: "margin:0" }, `直近30日に★5の回答からGoogle投稿へ進んだのは ${perMonth} 件です。到達の目安はこのペースで計算しています。`));
+  };
+  [rating, count, target].forEach((el) => el.addEventListener("input", draw));
+  queueMicrotask(draw);
+  return h("section", { class: "panel form" },
+    h("h3", {}, "Google評価シミュレーター"),
+    h("p", { class: "muted", style: "margin:0" }, "Googleマップに表示されている今の評価と件数から、目標の評価までに必要な★5口コミの件数を計算します。"),
+    h("div", { class: "row" }, h("label", { class: "field", style: "flex:1;min-width:140px" }, "今の評価", rating), h("label", { class: "field", style: "flex:1;min-width:140px" }, "今の件数", count)),
+    h("div", { class: "row" }, h("button", { type: "button", class: "btn", onclick: async () => {
+      try { await cap.db.doc("stores/" + store.id).update({ googleStats: { rating: rating.value, count: count.value } }); saved.hidden = false; } catch {}
+    } }, "この数値を保存"), saved),
+    h("label", { class: "field" }, "好きな目標評価で計算", target),
+    out);
+}
+
+/* ───────── 起動 ───────── */
+async function start() {
+  render();
+  if (!window.claude || !claude.use) {
+    state.storesLoaded = true;
+    mount(h("div", { class: "notice" }, h("h2", {}, "口コミアシスト"), h("p", { class: "muted" }, "このページは claude.ai 上で開いてください。")));
+    return;
+  }
+  const [db, user, sample, downloads] = await Promise.all(["db", "user", "sample", "downloads"].map((n) => claude.use(n).catch(() => null)));
+  Object.assign(cap, { db, user, sample, downloads });
+  state.canAdmin = user ? await user.canEdit().catch(() => false) : false;
+  if (!db) {
+    state.storesLoaded = true;
+    mount(h("div", { class: "notice" }, h("h2", {}, "口コミアシスト"), h("p", { class: "muted" }, "データを読み込めませんでした。claude.ai にログインしてから開き直してください。")));
+    return;
+  }
+  db.collection("stores").onSnapshot((snap) => {
+    state.stores = snap.docs.map((d) => ({ ...d.data(), id: d.id })).sort((a, b) => ((a.createdAt || "") < (b.createdAt || "") ? -1 : 1));
+    state.storesLoaded = true;
+    const r = route();
+    // 入力中のアンケートや設定フォームを上書きしないよう、必要なときだけ描き直す
+    if (r.view === "survey" && survey && survey.step !== "rate") return;
+    if (r.view === "admin" && state.tab === "settings" && currentStore() && !creating) {
+      const sel = document.getElementById("storeSel");
+      if (sel && sel.options.length === state.stores.length) return;
+    }
+    render();
+  }, () => { state.storesLoaded = true; render(); });
+  subscribeResponses();
+}
+start();
+</script>

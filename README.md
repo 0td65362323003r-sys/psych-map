@@ -12,6 +12,15 @@
 
 店頭のQRコードから30秒アンケートに答えてもらい、選んだ「良かった点」をもとに口コミ文の下書きをAIが作成。お客様は自分で確認・編集してから Google マップに投稿します。
 
+### すぐ使えるWebサイト版（claude.ai）
+
+`site/kuchikomi.html` を claude.ai のページとして公開しています。
+
+- 表示画面（お客様用）: `https://claude.ai/artifact/FFXm8BnVFHjFzqPmEqMoX7#r-<店舗ID>`
+- 管理画面: `https://claude.ai/artifact/FFXm8BnVFHjFzqPmEqMoX7#admin`
+
+データは公開ページ内の共有データベースに保存され、AI生成は閲覧者のClaudeを使います。閲覧には claude.ai へのログインと共有設定（回答を送る人は「コメント可」以上）が必要なため、一般のお客様向けには下のVercel版を使ってください。
+
 ### 機能
 
 - **複数店舗管理**：店舗ごとにアンケート項目・NGワード・特典を設定
