@@ -77,6 +77,8 @@ a { color: var(--accent); }
 }
 .tag-bad { color: var(--bad); border-color: var(--bad); background: var(--bad-soft); }
 .tag-google { color: var(--google); border-color: var(--google); }
+.tag-ok { color: var(--good); border-color: var(--good); }
+.check-item { border-top: 1px solid var(--line); padding-block: 10px; display: flex; flex-direction: column; gap: 4px; }
 
 /* ── 上部バー（画面切替） ── */
 .topbar {
@@ -306,10 +308,10 @@ function newStore(industry, name) {
 
 const LANGS = { ja: "日本語", en: "English", zh: "中文", ko: "한국어" };
 const T = {
-  ja: { hello: "ご来店ありがとうございます", lead: "30秒で終わるアンケートにご協力ください", q1: "今回のご満足度は？", q2: "ご利用シーン", q3: "良かった点を選んでください（いくつでも）", q4: "ひとことあれば（任意）", ph: "例：また来たいです", next: "次へ", back: "戻る", gen: "口コミ文を作成しています…", draftTitle: "口コミ文の下書きができました", draftNote: "ご自身の言葉に自由に書き換えてください。内容に問題なければ、コピーしてGoogleに投稿できます。", post: "コピーしてGoogleで投稿する", copied: "コピーしました。Googleの投稿画面に貼り付けてください。", skip: "投稿せずに終了する", regen: "別の文章にする", lowTitle: "ご期待に沿えず申し訳ありません", lowLead: "改善のため、お気づきの点をお店に直接お伝えいただけますか？", send: "お店に送信する", alsoGoogle: "Googleにも口コミを書く", thanks: "ご協力ありがとうございました", reward: "ご回答特典", win: "当たりです！", lose: "今回ははずれです。またのご来店をお待ちしています。", show: "この画面をスタッフにご提示ください", ng: "使えない言葉が含まれています", rateFirst: "満足度を選んでください", feedbackFirst: "ご意見を入力してください", noGoogle: "このお店はまだGoogleの投稿先が設定されていません。文章はコピーされています。", starLabels: ["", "不満", "やや不満", "ふつう", "満足", "大満足"] },
-  en: { hello: "Thank you for visiting!", lead: "Please take our 30-second survey", q1: "How satisfied were you?", q2: "Occasion", q3: "What did you like? (choose any)", q4: "Any comments? (optional)", ph: "e.g. I'd love to come back", next: "Next", back: "Back", gen: "Writing your review draft…", draftTitle: "Your review draft is ready", draftNote: "Edit it freely in your own words, then copy it and post it on Google.", post: "Copy & post on Google", copied: "Copied. Paste it into the Google review form.", skip: "Finish without posting", regen: "Write another version", lowTitle: "We're sorry we let you down", lowLead: "Could you tell the store directly what we can improve?", send: "Send to the store", alsoGoogle: "Also write a Google review", thanks: "Thank you!", reward: "Your reward", win: "You won!", lose: "Not this time. We hope to see you again.", show: "Please show this screen to our staff", ng: "Contains words that can't be used", rateFirst: "Please choose a rating", feedbackFirst: "Please enter your comment", noGoogle: "This store hasn't set up its Google link yet. Your text has been copied.", starLabels: ["", "Poor", "Fair", "OK", "Good", "Excellent"] },
-  zh: { hello: "感谢您的光临", lead: "请花30秒填写问卷", q1: "您的满意度如何？", q2: "使用场景", q3: "请选择满意的地方（可多选）", q4: "其他意见（可选）", ph: "例：还想再来", next: "下一步", back: "返回", gen: "正在生成评价草稿…", draftTitle: "评价草稿已生成", draftNote: "您可以自由修改，确认后复制并发布到Google。", post: "复制并在Google发布", copied: "已复制，请粘贴到Google评价页面。", skip: "不发布，直接结束", regen: "换一种写法", lowTitle: "很抱歉没能让您满意", lowLead: "能否直接告诉店铺需要改进的地方？", send: "发送给店铺", alsoGoogle: "也在Google写评价", thanks: "感谢您的配合", reward: "回答特典", win: "恭喜中奖！", lose: "很遗憾没有中奖，期待您再次光临。", show: "请向店员出示此画面", ng: "包含不可使用的词语", rateFirst: "请选择满意度", feedbackFirst: "请输入您的意见", noGoogle: "该店铺尚未设置Google链接，文字已复制。", starLabels: ["", "不满意", "较不满意", "一般", "满意", "非常满意"] },
-  ko: { hello: "방문해 주셔서 감사합니다", lead: "30초 설문에 협조 부탁드립니다", q1: "만족도는 어떠셨나요?", q2: "이용 목적", q3: "좋았던 점을 선택해 주세요 (복수 선택)", q4: "한마디 (선택)", ph: "예: 또 오고 싶어요", next: "다음", back: "뒤로", gen: "리뷰 초안 작성 중…", draftTitle: "리뷰 초안이 완성되었습니다", draftNote: "자유롭게 수정한 뒤 복사하여 Google에 게시할 수 있습니다.", post: "복사하고 Google에 게시", copied: "복사했습니다. Google 리뷰 화면에 붙여넣어 주세요.", skip: "게시하지 않고 종료", regen: "다른 문장으로", lowTitle: "기대에 미치지 못해 죄송합니다", lowLead: "개선을 위해 매장에 직접 의견을 보내주시겠어요?", send: "매장에 보내기", alsoGoogle: "Google에도 리뷰 쓰기", thanks: "협조해 주셔서 감사합니다", reward: "응답 특전", win: "당첨입니다!", lose: "아쉽게도 꽝입니다. 또 방문해 주세요.", show: "이 화면을 직원에게 보여주세요", ng: "사용할 수 없는 단어가 포함되어 있습니다", rateFirst: "만족도를 선택해 주세요", feedbackFirst: "의견을 입력해 주세요", noGoogle: "이 매장은 아직 Google 링크를 설정하지 않았습니다. 문장은 복사되었습니다.", starLabels: ["", "불만", "다소 불만", "보통", "만족", "매우 만족"] },
+  ja: { saveFail: "回答をお店に届けられませんでした。お手数ですがスタッフにお知らせください。", hello: "ご来店ありがとうございます", lead: "30秒で終わるアンケートにご協力ください", q1: "今回のご満足度は？", q2: "ご利用シーン", q3: "良かった点を選んでください（いくつでも）", q4: "ひとことあれば（任意）", ph: "例：また来たいです", next: "次へ", back: "戻る", gen: "口コミ文を作成しています…", draftTitle: "口コミ文の下書きができました", draftNote: "ご自身の言葉に自由に書き換えてください。内容に問題なければ、コピーしてGoogleに投稿できます。", post: "コピーしてGoogleで投稿する", copied: "コピーしました。Googleの投稿画面に貼り付けてください。", skip: "投稿せずに終了する", regen: "別の文章にする", lowTitle: "ご期待に沿えず申し訳ありません", lowLead: "改善のため、お気づきの点をお店に直接お伝えいただけますか？", send: "お店に送信する", alsoGoogle: "Googleにも口コミを書く", thanks: "ご協力ありがとうございました", reward: "ご回答特典", win: "当たりです！", lose: "今回ははずれです。またのご来店をお待ちしています。", show: "この画面をスタッフにご提示ください", ng: "使えない言葉が含まれています", rateFirst: "満足度を選んでください", feedbackFirst: "ご意見を入力してください", noGoogle: "このお店はまだGoogleの投稿先が設定されていません。文章はコピーされています。", starLabels: ["", "不満", "やや不満", "ふつう", "満足", "大満足"] },
+  en: { saveFail: "We couldn't send your answers to the store. Please let our staff know.", hello: "Thank you for visiting!", lead: "Please take our 30-second survey", q1: "How satisfied were you?", q2: "Occasion", q3: "What did you like? (choose any)", q4: "Any comments? (optional)", ph: "e.g. I'd love to come back", next: "Next", back: "Back", gen: "Writing your review draft…", draftTitle: "Your review draft is ready", draftNote: "Edit it freely in your own words, then copy it and post it on Google.", post: "Copy & post on Google", copied: "Copied. Paste it into the Google review form.", skip: "Finish without posting", regen: "Write another version", lowTitle: "We're sorry we let you down", lowLead: "Could you tell the store directly what we can improve?", send: "Send to the store", alsoGoogle: "Also write a Google review", thanks: "Thank you!", reward: "Your reward", win: "You won!", lose: "Not this time. We hope to see you again.", show: "Please show this screen to our staff", ng: "Contains words that can't be used", rateFirst: "Please choose a rating", feedbackFirst: "Please enter your comment", noGoogle: "This store hasn't set up its Google link yet. Your text has been copied.", starLabels: ["", "Poor", "Fair", "OK", "Good", "Excellent"] },
+  zh: { saveFail: "未能将您的回答发送给店铺，请告知店员。", hello: "感谢您的光临", lead: "请花30秒填写问卷", q1: "您的满意度如何？", q2: "使用场景", q3: "请选择满意的地方（可多选）", q4: "其他意见（可选）", ph: "例：还想再来", next: "下一步", back: "返回", gen: "正在生成评价草稿…", draftTitle: "评价草稿已生成", draftNote: "您可以自由修改，确认后复制并发布到Google。", post: "复制并在Google发布", copied: "已复制，请粘贴到Google评价页面。", skip: "不发布，直接结束", regen: "换一种写法", lowTitle: "很抱歉没能让您满意", lowLead: "能否直接告诉店铺需要改进的地方？", send: "发送给店铺", alsoGoogle: "也在Google写评价", thanks: "感谢您的配合", reward: "回答特典", win: "恭喜中奖！", lose: "很遗憾没有中奖，期待您再次光临。", show: "请向店员出示此画面", ng: "包含不可使用的词语", rateFirst: "请选择满意度", feedbackFirst: "请输入您的意见", noGoogle: "该店铺尚未设置Google链接，文字已复制。", starLabels: ["", "不满意", "较不满意", "一般", "满意", "非常满意"] },
+  ko: { saveFail: "응답을 매장에 전달하지 못했습니다. 직원에게 알려 주세요.", hello: "방문해 주셔서 감사합니다", lead: "30초 설문에 협조 부탁드립니다", q1: "만족도는 어떠셨나요?", q2: "이용 목적", q3: "좋았던 점을 선택해 주세요 (복수 선택)", q4: "한마디 (선택)", ph: "예: 또 오고 싶어요", next: "다음", back: "뒤로", gen: "리뷰 초안 작성 중…", draftTitle: "리뷰 초안이 완성되었습니다", draftNote: "자유롭게 수정한 뒤 복사하여 Google에 게시할 수 있습니다.", post: "복사하고 Google에 게시", copied: "복사했습니다. Google 리뷰 화면에 붙여넣어 주세요.", skip: "게시하지 않고 종료", regen: "다른 문장으로", lowTitle: "기대에 미치지 못해 죄송합니다", lowLead: "개선을 위해 매장에 직접 의견을 보내주시겠어요?", send: "매장에 보내기", alsoGoogle: "Google에도 리뷰 쓰기", thanks: "협조해 주셔서 감사합니다", reward: "응답 특전", win: "당첨입니다!", lose: "아쉽게도 꽝입니다. 또 방문해 주세요.", show: "이 화면을 직원에게 보여주세요", ng: "사용할 수 없는 단어가 포함되어 있습니다", rateFirst: "만족도를 선택해 주세요", feedbackFirst: "의견을 입력해 주세요", noGoogle: "이 매장은 아직 Google 링크를 설정하지 않았습니다. 문장은 복사되었습니다.", starLabels: ["", "불만", "다소 불만", "보통", "만족", "매우 만족"] },
 };
 
 /* ───────── 小さなDOMヘルパー（共有データはすべて textContent で描画） ───────── */
@@ -547,7 +549,11 @@ async function saveResponse(store, extra) {
       await ref.set(body);
       survey.docId = ref.id;
     }
-  } catch { /* 保存できなくてもお客様の操作は止めない */ }
+    survey.saveFailed = false;
+  } catch {
+    // 保存できなくてもお客様の操作は止めず、完了画面で一言だけ知らせる
+    survey.saveFailed = true;
+  }
 }
 
 function renderSurvey(store) {
@@ -605,8 +611,8 @@ function renderSurvey(store) {
       const url = googleUrl(store.googleReviewUrl);
       await copyText(survey.draft);
       survey.copied = true;
-      await finish(store, "google");
-      if (!url) { survey.noGoogle = true; renderSurvey(store); }
+      if (!url) survey.noGoogle = true;
+      await finish(store, url ? "google" : "copied");
     });
     const link = googleUrl(store.googleReviewUrl);
     card = h("section", { class: "card" }, steps(3),
@@ -650,6 +656,7 @@ function renderSurvey(store) {
       h("div", { class: "big-emoji", "aria-hidden": "true" }, "🙏"), h("h2", {}, t.thanks),
       survey.copied ? h("p", { class: "ok", style: "margin:0" }, t.copied) : null,
       survey.noGoogle ? h("p", { class: "muted", style: "margin:0" }, t.noGoogle) : null,
+      survey.saveFailed ? h("p", { class: "err", style: "margin:0" }, t.saveFail) : null,
       coupon);
   }
 
@@ -676,7 +683,7 @@ async function finish(store, action) {
 }
 
 /* ═════════ 管理画面 ═════════ */
-const TABS = [["dashboard", "ダッシュボード"], ["settings", "アンケート設定"], ["qr", "QRコード・POP"], ["responses", "回答一覧"], ["reply", "AI返信"], ["simulator", "評価シミュレーター"]];
+const TABS = [["dashboard", "ダッシュボード"], ["settings", "アンケート設定"], ["qr", "公開前チェック・QR"], ["responses", "回答一覧"], ["reply", "AI返信"], ["simulator", "評価シミュレーター"]];
 let creating = false;
 
 function currentStore() { return state.stores.find((s) => s.id === state.adminStoreId) || null; }
@@ -687,7 +694,8 @@ function subscribeResponses() {
   if (!cap.db || !state.adminStoreId) return;
   state.unsubResponses = cap.db.collection("responses").where("storeId", "==", state.adminStoreId).onSnapshot((snap) => {
     state.responses = snap.docs.map((d) => ({ id: d.id, ...d.data() })).sort((a, b) => ((a.createdAt || "") < (b.createdAt || "") ? 1 : -1));
-    if (route().view === "admin" && ["dashboard", "responses", "simulator"].includes(state.tab)) renderAdmin();
+    // シミュレーターやAI返信は入力途中を消さないよう描き直さない
+    if (route().view === "admin" && ["dashboard", "responses", "qr"].includes(state.tab)) renderAdmin();
   }, () => {});
 }
 
@@ -753,7 +761,8 @@ function bar(label, value, max, color) {
 }
 
 function dashboard(store) {
-  const rs = state.showSample ? sampleResponses(store) : state.responses;
+  if (state.showSample && (!state.sampleCache || state.sampleCache.storeId !== store.id)) state.sampleCache = { storeId: store.id, rows: sampleResponses(store) };
+  const rs = state.showSample ? state.sampleCache.rows : state.responses;
   if (!rs.length) {
     return h("section", { class: "panel empty" },
       h("h3", {}, "まだ回答がありません"),
@@ -813,9 +822,16 @@ function settings(store) {
       h("button", { type: "button", class: "btn", onclick: () => { confirmBox.hidden = true; } }, "やめる"),
       h("button", { type: "button", class: "btn btn-danger", onclick: async () => { await cap.db.doc("stores/" + store.id).delete(); state.adminStoreId = null; } }, "削除する")));
   };
+  const undoBox = h("div", { hidden: true });
   const indSel = h("select", { onchange: (e) => {
+    const prev = { industry: f.industry, options: f.options, purposes: f.purposes };
     const k = e.target.value; f.industry = k; f.options = INDUSTRIES[k].options(); f.purposes = [...INDUSTRIES[k].purposes];
     purposes.value = csv(f.purposes); drawOpts();
+    undoBox.hidden = false;
+    undoBox.replaceChildren(h("div", { class: "sample-note row" }, `アンケート項目を「${INDUSTRIES[k].label}」のひな形に置き換えました（未保存）。`, h("span", { class: "spacer" }),
+      h("button", { type: "button", class: "btn btn-quiet", onclick: () => {
+        Object.assign(f, prev); indSel.value = prev.industry; purposes.value = csv(f.purposes); drawOpts(); undoBox.hidden = true;
+      } }, "元に戻す")));
   } }, Object.entries(INDUSTRIES).map(([k, v]) => h("option", { value: k, selected: k === f.industry }, v.label)));
   const purposes = h("input", { value: csv(f.purposes), oninput: (e) => { f.purposes = split(e.target.value); } });
   const gLink = h("a", { href: googleUrl(f.googleReviewUrl) || "#", target: "_blank", rel: "noopener", hidden: !f.googleReviewUrl }, "投稿画面を開いて確認 ↗");
@@ -830,7 +846,7 @@ function settings(store) {
   } },
     h("h3", {}, "基本情報"),
     h("label", { class: "field" }, "店舗名", h("input", { id: "sName", value: f.name, oninput: (e) => { f.name = e.target.value; } })),
-    h("label", { class: "field" }, "業種", indSel, h("small", {}, "変えると下のアンケート項目がその業種のひな形に置き換わります（保存するまで反映されません）。")),
+    h("label", { class: "field" }, "業種", indSel, h("small", {}, "変えると下のアンケート項目がその業種のひな形に置き換わります（保存するまで反映されません）。"), undoBox),
     h("label", { class: "field" }, "Googleの口コミ投稿URL または Place ID",
       h("input", { id: "sGoogle", value: f.googleReviewUrl, placeholder: "ChIJ… または https://g.page/r/…/review", oninput: (e) => { f.googleReviewUrl = e.target.value; gLink.hidden = !e.target.value.trim(); gLink.href = googleUrl(e.target.value) || "#"; } }),
       h("small", {}, "Googleビジネスプロフィールの「クチコミを依頼」で表示されるURLを貼り付けてください。 ", gLink)),
@@ -853,10 +869,38 @@ function settings(store) {
     h("div", { class: "row savebar" }, h("button", { class: "btn btn-primary" }, "保存する"), msg, h("span", { class: "spacer" }), h("button", { type: "button", class: "btn btn-danger", onclick: askDelete }, "店舗を削除")));
 }
 
+function checklist(store) {
+  const ok = (b) => h("span", { class: "tag " + (b ? "tag-ok" : "tag-bad") }, b ? "OK" : "要対応");
+  const goSettings = h("button", { class: "btn btn-quiet", onclick: () => { state.tab = "settings"; renderAdmin(); } }, "設定へ");
+  const aiOut = h("p", { class: "muted", style: "margin:0;overflow-wrap:anywhere" }, state.aiCheck ? state.aiCheck.text : "");
+  const aiTag = h("span", {}, state.aiCheck ? ok(state.aiCheck.source === "ai") : h("span", { class: "tag" }, "未確認"));
+  const aiBtn = h("button", { class: "btn", onclick: async () => {
+    aiBtn.disabled = true; aiBtn.textContent = "作成中…"; aiOut.textContent = "考えています…";
+    const selected = store.options.slice(0, 2);
+    const r = await aiReview({ store, rating: 5, purpose: store.purposes[0] || "", selected, comment: "", lang: "ja" }, (t) => { aiOut.textContent = t; });
+    state.aiCheck = { source: r.source, text: (r.source === "ai" ? "AIで作成できました：" : "AIが使えないため定型文になりました：") + r.text };
+    aiOut.textContent = state.aiCheck.text; aiTag.replaceChildren(ok(r.source === "ai"));
+    aiBtn.disabled = false; aiBtn.textContent = "もう一度試す";
+  } }, state.aiCheck ? "もう一度試す" : "AIで試しに1件作る");
+  const google = !!googleUrl(store.googleReviewUrl);
+  const received = state.responses.length;
+  const item = (title, status, desc, action) => h("li", { class: "check-item" },
+    h("div", { class: "row" }, status, h("b", {}, title), h("span", { class: "spacer" }), action || null), desc ? h("div", { class: "muted" }, desc) : null);
+  return h("section", { class: "panel stack" },
+    h("h3", { style: "margin:0" }, "公開前チェック"),
+    h("ul", { class: "list" },
+      item("Googleの投稿先", ok(google), google ? "お客様は下書きをコピーしたあと、Googleの投稿画面に移動します。" : "未設定だとお客様はGoogleの投稿画面に移動できません。", google ? null : goSettings),
+      item("アンケート項目", ok(store.options.length >= 3), `良かった点の選択肢：${store.options.length}件（3件以上がおすすめ）`, store.options.length >= 3 ? null : goSettings),
+      item("AIによる下書き作成", aiTag, "あなたのClaudeで1件だけ試作します。お客様の端末では、お客様ご自身のClaudeが使われます。", aiBtn),
+      h("li", { class: "check-item" }, aiOut),
+      item("お客様の端末から回答が届くか", ok(received > 0), received > 0 ? `この店舗の回答：${received}件` : "スタッフのスマホでQRコードを読み、テスト回答を1件送ってください。届くとここがOKになります。"),
+      item("共有設定", h("span", { class: "tag" }, "手動で確認"), "回答を送る人は、ページ右上の共有メニューで「Contributor（利用者）」以上にしてください。閲覧のみ・コメントのみの人は回答を保存できません。")));
+}
+
 function qrPanel(store) {
   const link = surveyLink(store.id);
   const copied = h("span", { class: "ok", hidden: true }, "コピーしました");
-  return h("div", { class: "grid" },
+  return h("div", { class: "stack" }, checklist(store), h("div", { class: "grid" },
     h("section", { class: "panel stack" },
       h("h3", {}, "表示画面のURL"),
       h("div", { class: "url-box" }, h("code", {}, link),
@@ -873,7 +917,7 @@ function qrPanel(store) {
         h("div", { class: "pop-qr", id: "qrBox", role: "img", "aria-label": "アンケートのQRコード" }),
         store.coupon && store.coupon.enabled && store.coupon.title ? h("div", { class: "pop-coupon" }, "回答特典：" + store.coupon.title + (store.coupon.mode === "lottery" ? "（抽選）" : "")) : null,
         h("div", { style: "font-size:.72rem;color:#5d6762;margin-top:6px" }, "English / 中文 / 한국어 OK")),
-      cap.downloads ? h("div", {}, h("button", { class: "btn btn-primary", onclick: () => saveQr(store) }, "QR画像を保存")) : null));
+      cap.downloads ? h("div", {}, h("button", { class: "btn btn-primary", onclick: () => saveQr(store) }, "QR画像を保存")) : null)));
 }
 function drawQr(store) {
   const box = document.getElementById("qrBox");
@@ -891,7 +935,7 @@ async function saveQr(store) {
 
 function responsesPanel(store) {
   const name = (id) => (store.options.find((x) => x.id === id) || {}).label;
-  const ACTION = { google: "Google投稿へ", skip: "投稿せず", feedback: "改善要望", drafted: "下書き作成のみ" };
+  const ACTION = { google: "Google投稿へ", copied: "コピーのみ（Google未設定）", skip: "投稿せず", feedback: "改善要望", drafted: "下書き作成のみ" };
   const filter = state.respFilter || "all";
   const list = state.responses.filter((r) => filter === "low" ? r.rating <= 2 : filter === "google" ? r.action === "google" : true);
   const toCsv = () => {
@@ -1001,7 +1045,7 @@ async function start() {
     const r = route();
     // 入力中のアンケートや設定フォームを上書きしないよう、必要なときだけ描き直す
     if (r.view === "survey" && survey && survey.step !== "rate") return;
-    if (r.view === "admin" && state.tab === "settings" && currentStore() && !creating) {
+    if (r.view === "admin" && ["settings", "reply", "simulator"].includes(state.tab) && currentStore() && !creating) {
       const sel = document.getElementById("storeSel");
       if (sel && sel.options.length === state.stores.length) return;
     }

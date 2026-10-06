@@ -21,6 +21,13 @@
 
 データは公開ページ内の共有データベースに保存され、AI生成は閲覧者のClaudeを使います。閲覧には claude.ai へのログインと共有設定（回答を送る人は「Contributor（利用者）」以上）が必要なため、一般のお客様向けには下のVercel版を使ってください。
 
+### 一般のお客様向けに公開する手順（Vercel）
+
+1. Supabase でプロジェクトを作り、SQL Editor で `supabase-kuchikomi.sql` を実行
+2. https://vercel.com/new でこのリポジトリをインポート（ブランチは `claude/determined-curie-av7qfy`、またはマージ後の `main`）
+3. Environment Variables に `REACT_APP_SUPABASE_URL` / `REACT_APP_SUPABASE_ANON_KEY` / `ANTHROPIC_API_KEY` を入れて Deploy
+4. `https://<発行されたドメイン>/kuchikomi` を開いて店舗を登録し、QRコードを印刷
+
 ### 機能
 
 - **複数店舗管理**：店舗ごとにアンケート項目・NGワード・特典を設定
