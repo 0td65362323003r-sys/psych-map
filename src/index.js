@@ -1,13 +1,22 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
+import KuchikomiApp, { isKuchikomiPath } from './kuchikomi/KuchikomiApp';
 import reportWebVitals from './reportWebVitals';
+
+// 心理マップ本体は Supabase 必須なので、口コミアシストの画面では読み込まない
+const App = lazy(() => import('./App'));
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    {isKuchikomiPath(window.location.pathname) ? (
+      <KuchikomiApp />
+    ) : (
+      <Suspense fallback={null}>
+        <App />
+      </Suspense>
+    )}
   </React.StrictMode>
 );
 
