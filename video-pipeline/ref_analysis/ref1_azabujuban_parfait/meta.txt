@@ -1,0 +1,7 @@
+codec_type=video
+width=1180
+height=2556
+r_frame_rate=60/1
+codec_type=audio
+r_frame_rate=0/0
+duration=13.655011

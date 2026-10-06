@@ -28,11 +28,15 @@ ffmpeg -v error -y -i "$IN" -lavfi "showspectrumpic=s=1600x500:legend=1:scale=lo
 echo "== 文字起こし（faster-whisper）"
 ffmpeg -v error -y -i "$IN" -vn -ac 1 -ar 16000 "$OUT/audio.wav"
 if python3 -c "import faster_whisper" 2>/dev/null || pip install -q faster-whisper; then
-  python3 - "$OUT/audio.wav" "$OUT/transcript.txt" <<'PY' || echo "文字起こし失敗（モデルのダウンロードがネットワーク設定でブロックされている可能性）"
-import sys
+  python3 - "$OUT/audio.wav" "$OUT/transcript.txt" <<'PY' || echo "文字起こし失敗（上のエラーを確認。モデルのダウンロードがネットワーク設定でブロックされている可能性もあり）"
+import sys, wave
+import numpy as np
 from faster_whisper import WhisperModel
+# PyAV のバージョン差で decode_audio が落ちることがあるので、16kHz mono wav を自前で読んで配列で渡す
+with wave.open(sys.argv[1]) as w:
+    audio = np.frombuffer(w.readframes(w.getnframes()), dtype=np.int16).astype(np.float32) / 32768.0
 model = WhisperModel("small", device="cpu", compute_type="int8")
-segments, info = model.transcribe(sys.argv[1], language="ja", vad_filter=True)
+segments, info = model.transcribe(audio, language="ja", vad_filter=True)
 with open(sys.argv[2], "w") as f:
     for s in segments:
         line = f"[{s.start:6.2f} - {s.end:6.2f}] {s.text.strip()}"
