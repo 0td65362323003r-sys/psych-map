@@ -56,6 +56,8 @@
 ## 試作（焼肉、素材の動画3本）
 - `projects/trial_yakiniku/project.yaml`：9カット・11秒。テロップは映像から書いた仮のもので、店名・本人の感想はまだ入っていない
 - iPhone の動画は HDR（HLG）。そのままだと Instagram で白飛びするので SDR に変換している。変換方法を比べたところ、mobius は肉の赤が飽和したため、hable（基準白 203nit）を採用した
+- 写真だけ版 `projects/trial_yakiniku_photo/project.yaml`：静止画7枚でも作れることを確認。写真は動かないのでカットごとにズーム・パンの向きを変える。持ち上げる・浸すといった「食べる動作」は写真では出せないので、動画を2〜3本混ぜるのが理想
+- iPhone の写真は HEIC 形式・EXIF の回転情報付きのことが多い。ffmpeg は回転を無視して横倒しになるため、Pillow で回転を反映してから使う（HEIC は `pip install pillow-heif` が必要）
 - 日本語フォントは `apt-get install fonts-noto-cjk fonts-noto-cjk-extra` で入れる（GitHub からの直接ダウンロードはネットワーク設定で 403）
 
 ## スクリプト

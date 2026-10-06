@@ -76,6 +76,20 @@ def cut_filter(dur, move, hdr):
     return ",".join(f)
 
 
+def normalize_photo(src, dst):
+    """iPhone の写真を ffmpeg で扱える形にする。HEIC を読み、EXIF の回転を反映（ffmpeg は無視して横倒しになる）"""
+    from PIL import Image, ImageOps
+    try:
+        import pillow_heif
+        pillow_heif.register_heif_opener()
+    except ImportError:
+        if src.suffix.lower() == ".heic":
+            sys.exit("HEIC を読むには pip install pillow-heif が必要")
+    with Image.open(src) as im:
+        ImageOps.exif_transpose(im).convert("RGB").save(dst)
+    return dst
+
+
 def render_cut(i, cut, media, tmp):
     src = media / cut["src"]
     if not src.exists():
@@ -86,6 +100,7 @@ def render_cut(i, cut, media, tmp):
         sys.exit(f"move は {list(MOVES)} のどれか: {move}")
     out = tmp / f"cut_{i:03d}.mp4"
     if src.suffix.lower() in IMAGE_EXT:
+        src = normalize_photo(src, tmp / f"photo_{i:03d}.png")
         inp = ["-loop", "1", "-framerate", str(FPS), "-t", f"{dur}", "-i", str(src)]
     else:
         inp = ["-ss", f"{float(cut.get('start', 0))}", "-t", f"{dur}", "-i", str(src)]
