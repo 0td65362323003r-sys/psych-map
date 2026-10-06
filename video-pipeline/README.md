@@ -49,8 +49,16 @@
 - テロップのフォント・装飾はアカウントごとの個性（ゴシック太字＋黒縁 or 明朝＋影）。テンプレートで切り替えられるようにする
 
 ## 未完了
-- 動画生成スクリプト本体
+- 店名ロゴカード（参考動画1本目の2秒目に出るもの）
+- 口コミとの類似チェック
+- 店舗情報の確認リスト・投稿文・ハッシュタグの自動化（今は会話の中で Claude が作る）
+
+## 試作（焼肉、素材の動画3本）
+- `projects/trial_yakiniku/project.yaml`：9カット・11秒。テロップは映像から書いた仮のもので、店名・本人の感想はまだ入っていない
+- iPhone の動画は HDR（HLG）。そのままだと Instagram で白飛びするので SDR に変換している。変換方法を比べたところ、mobius は肉の赤が飽和したため、hable（基準白 203nit）を採用した
+- 日本語フォントは `apt-get install fonts-noto-cjk fonts-noto-cjk-extra` で入れる（GitHub からの直接ダウンロードはネットワーク設定で 403）
 
 ## スクリプト
 - `analyze_reference.sh <動画ファイル>`：メタ情報、カット検出、コマ切り出し、一覧画像、スペクトログラム、文字起こし（faster-whisper small。初回は huggingface.co からモデルをダウンロード）
+- `make_video.py <project.yaml> --media <素材フォルダ> [--out 出力]`：台本 YAML から動画を作る。カットごとに素材・開始秒・長さ・動き（zoom_in / zoom_out / pan_left / pan_right / none）・テロップを書く。写真（jpg/png）も使える。style は gothic（白太字ゴシック＋黒縁）か mincho（白明朝＋影）。出力は 1080x1920 / 30fps / 約15Mbps / 無音トラック付き
 - `ref_analysis/`：参考動画2本の分析結果（メタ情報・カット秒・音量・文字起こし・コマ一覧画像）。元動画・音声・コマ単体は容量が大きいのでコミットしていない
