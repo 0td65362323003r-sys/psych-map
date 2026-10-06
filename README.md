@@ -19,7 +19,7 @@
 - 表示画面（お客様用）: `https://claude.ai/artifact/FFXm8BnVFHjFzqPmEqMoX7#r-<店舗ID>`
 - 管理画面: `https://claude.ai/artifact/FFXm8BnVFHjFzqPmEqMoX7#admin`
 
-データは公開ページ内の共有データベースに保存され、AI生成は閲覧者のClaudeを使います。閲覧には claude.ai へのログインと共有設定（回答を送る人は「コメント可」以上）が必要なため、一般のお客様向けには下のVercel版を使ってください。
+データは公開ページ内の共有データベースに保存され、AI生成は閲覧者のClaudeを使います。閲覧には claude.ai へのログインと共有設定（回答を送る人は「Contributor（利用者）」以上）が必要なため、一般のお客様向けには下のVercel版を使ってください。
 
 ### 機能
 
