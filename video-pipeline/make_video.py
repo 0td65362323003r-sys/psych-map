@@ -53,14 +53,24 @@ def is_hdr(path):
     return bool(streams) and streams[0].get("color_transfer") in ("arib-std-b67", "smpte2084")
 
 
-def cut_filter(dur, cut, hdr):
-    """カットごとのフィルタ。台本で zoom: [開始, 終了]（倍率の上書き）と focus: [横, 縦]（寄る位置 0〜1）を指定できる"""
-    z0, z1, x0, x1 = MOVES[cut.get("move", "zoom_in")]
+def cut_params(cut):
+    """台本の move / zoom: [開始, 終了]（倍率の上書き）/ focus: [横, 縦]（寄る位置 0〜1）から動きを決める"""
+    move = cut.get("move", "zoom_in")
+    if move not in MOVES:
+        sys.exit(f"move は {list(MOVES)} のどれか: {move}")
+    z0, z1, x0, x1 = MOVES[move]
     if "zoom" in cut:
         z0, z1 = (float(v) for v in cut["zoom"])
     fx, fy = cut.get("focus", [None, 0.5])
     if fx is not None and x0 == x1:  # 横スライド以外は寄る位置を固定
         x0 = x1 = float(fx)
+    if "slide" in cut:  # 横スライドの範囲を上書き（例: [0.2, 0.8] で動きを小さく）
+        x0, x1 = (float(v) for v in cut["slide"])
+    return z0, z1, x0, x1, float(fy)
+
+
+def cut_filter(dur, cut, hdr):
+    z0, z1, x0, x1, fy = cut_params(cut)
     frames = max(1, round(dur * FPS))
     p = f"min(n/{frames - 1 if frames > 1 else 1},1)"  # 0→1 の進み具合
     f = []
@@ -74,7 +84,7 @@ def cut_filter(dur, cut, hdr):
         # 2倍サイズの画面を覆うように拡大（ズーム中は毎フレーム計算）。縦横比は保つので、はみ出した分がスライドの余地になる
         f"scale=w='{W*SS}*{z}':h='{H*SS}*{z}':force_original_aspect_ratio=increase:force_divisible_by=2"
         f":flags=lanczos{':eval=frame' if z0 != z1 else ''}",
-        f"crop={W*SS}:{H*SS}:x='(iw-ow)*({x0}+({x1}-{x0})*{p})':y='(ih-oh)*{float(fy)}'",
+        f"crop={W*SS}:{H*SS}:x='(iw-ow)*({x0}+({x1}-{x0})*{p})':y='(ih-oh)*{fy}'",
         f"scale={W}:{H}:flags=lanczos", "setsar=1", "format=yuv420p",
     ]
     return ",".join(f)
@@ -104,9 +114,6 @@ def render_cut(i, cut, media, tmp):
     if not src.exists():
         sys.exit(f"素材が見つからない: {src}")
     dur = float(cut["dur"])
-    move = cut.get("move", "zoom_in")
-    if move not in MOVES:
-        sys.exit(f"move は {list(MOVES)} のどれか: {move}")
     out = tmp / f"cut_{i:03d}.mp4"
     if src.suffix.lower() in IMAGE_EXT:
         src = normalize_photo(src, tmp / f"photo_{i:03d}.png", cut.get("blur", ()))
@@ -151,11 +158,51 @@ def write_ass(cuts, style_name, path):
     return t
 
 
+def preview(cuts, media, out):
+    """各カットで写真のどこが画面に映るかを1枚の画像にする。緑=カットの始まり、オレンジ=終わり、灰色の帯=テロップの位置"""
+    from PIL import Image, ImageDraw, ImageFont
+    font = ImageFont.truetype("/usr/share/fonts/opentype/noto/NotoSansCJK-Black.ttc", 40)
+    panels = []
+    with tempfile.TemporaryDirectory() as td:
+        for i, c in enumerate(cuts):
+            src = media / c["src"]
+            if src.suffix.lower() in IMAGE_EXT:
+                im = Image.open(normalize_photo(src, Path(td) / f"p{i}.png", c.get("blur", ())))
+            else:
+                run(["ffmpeg", "-v", "error", "-y", "-ss", f"{float(c.get('start', 0))}", "-i", str(src),
+                     "-frames:v", "1", str(Path(td) / f"p{i}.png")])
+                im = Image.open(Path(td) / f"p{i}.png")
+            im = im.convert("RGB")
+            iw, ih = im.size
+            z0, z1, x0, x1, fy = cut_params(c)
+            d = ImageDraw.Draw(im, "RGBA")
+            for z, xf, color in ((z0, x0, (60, 220, 90)), (z1, x1, (255, 150, 0))):
+                s_ = max(W * z / iw, H * z / ih)  # ffmpeg と同じく画面を覆う倍率
+                vw, vh = W / s_, H / s_            # 画面に映る範囲（写真の座標）
+                x, y = (iw - vw) * xf, (ih - vh) * fy
+                lw = max(4, iw // 150)
+                d.rectangle([x, y, x + vw, y + vh], outline=color, width=lw)
+                if c.get("text") and color[0] == 60:
+                    ty = y + vh * STYLES["gothic"]["y"]
+                    d.rectangle([x, ty, x + vw, ty + vh * 0.07], fill=(128, 128, 128, 110))
+            im.thumbnail((600, 800))
+            panel = Image.new("RGB", (620, 880), (24, 24, 24))
+            panel.paste(im, ((620 - im.width) // 2, 70))
+            ImageDraw.Draw(panel).text((20, 10), f"{i + 1}  {c.get('move', 'zoom_in')}", font=font, fill="white")
+            panels.append(panel)
+    sheet = Image.new("RGB", (620 * len(panels), 880))
+    for i, pn in enumerate(panels):
+        sheet.paste(pn, (620 * i, 0))
+    sheet.save(out, quality=90)
+    print(f"プレビュー: {out}")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("project")
     ap.add_argument("--media", help="素材フォルダ（省略時は project.yaml の media_dir、なければ yaml と同じ場所）")
     ap.add_argument("--out")
+    ap.add_argument("--preview", help="動画は作らず、各カットの映る範囲を描いた確認用画像をここに書き出す")
     a = ap.parse_args()
 
     proj_path = Path(a.project).resolve()
@@ -166,6 +213,8 @@ def main():
     if style not in STYLES:
         sys.exit(f"style は {list(STYLES)} のどれか: {style}")
     cuts = proj["cuts"]
+    if a.preview:
+        return preview(cuts, media, Path(a.preview))
 
     with tempfile.TemporaryDirectory() as td:
         tmp = Path(td)
