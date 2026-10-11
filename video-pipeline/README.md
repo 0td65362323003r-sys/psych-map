@@ -58,6 +58,8 @@
 - iPhone の動画は HDR（HLG）。そのままだと Instagram で白飛びするので SDR に変換している。変換方法を比べたところ、mobius は肉の赤が飽和したため、hable（基準白 203nit）を採用した
 - 写真だけ版 `projects/trial_yakiniku_photo/project.yaml`：静止画7枚でも作れることを確認。写真は動かないのでカットごとにズーム・パンの向きを変える。持ち上げる・浸すといった「食べる動作」は写真では出せないので、動画を2〜3本混ぜるのが理想
 - iPhone の写真は HEIC 形式・EXIF の回転情報付きのことが多い。ffmpeg は回転を無視して横倒しになるため、Pillow で回転を反映してから使う（HEIC は `pip install pillow-heif` が必要）
+- カフェ紹介 `projects/cafe_roasted/project.yaml`：写真5枚・9秒。横スライドは写真の横幅を端から端まで使う（縦3:4の写真は9:16より横に余る）。ドリンクだけ `zoom: [1.0, 1.3]` と `focus` でグラスに寄る
+- 写真に写り込んだ他のお客さん・店員さんの顔や、Wi-Fi のパスワードは `blur: [[x, y, 幅, 高さ], ...]` でぼかしてから使う
 - 日本語フォントは `apt-get install fonts-noto-cjk fonts-noto-cjk-extra` で入れる（GitHub からの直接ダウンロードはネットワーク設定で 403）
 
 ## スクリプト

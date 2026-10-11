@@ -32,8 +32,10 @@ MOVES = {  # (開始ズーム, 終了ズーム, 横位置 開始→終了 0=左�
     "none": (1.0, 1.0, 0.5, 0.5),
     "zoom_in": (1.0, 1.08, 0.5, 0.5),
     "zoom_out": (1.08, 1.0, 0.5, 0.5),
-    "pan_left": (1.10, 1.10, 0.8, 0.2),
-    "pan_right": (1.10, 1.10, 0.2, 0.8),
+    # 横スライド。素材を画面いっぱいに拡大した上で、はみ出した横幅を端から端まで使う
+    # （縦3:4の写真は9:16より横に余るので、そのぶん大きく動く）
+    "pan_left": (1.10, 1.10, 1.0, 0.0),
+    "pan_right": (1.10, 1.10, 0.0, 1.0),
 }
 
 
@@ -51,8 +53,14 @@ def is_hdr(path):
     return bool(streams) and streams[0].get("color_transfer") in ("arib-std-b67", "smpte2084")
 
 
-def cut_filter(dur, move, hdr):
-    z0, z1, x0, x1 = MOVES[move]
+def cut_filter(dur, cut, hdr):
+    """カットごとのフィルタ。台本で zoom: [開始, 終了]（倍率の上書き）と focus: [横, 縦]（寄る位置 0〜1）を指定できる"""
+    z0, z1, x0, x1 = MOVES[cut.get("move", "zoom_in")]
+    if "zoom" in cut:
+        z0, z1 = (float(v) for v in cut["zoom"])
+    fx, fy = cut.get("focus", [None, 0.5])
+    if fx is not None and x0 == x1:  # 横スライド以外は寄る位置を固定
+        x0 = x1 = float(fx)
     frames = max(1, round(dur * FPS))
     p = f"min(n/{frames - 1 if frames > 1 else 1},1)"  # 0→1 の進み具合
     f = []
@@ -60,25 +68,22 @@ def cut_filter(dur, move, hdr):
         # npl=203（HDRの基準白）＋hable が肉の霜降りやビールの色を一番自然に残した（mobius は赤が飽和した）
         f.append("zscale=t=linear:npl=203,format=gbrpf32le,zscale=p=bt709,"
                  "tonemap=tonemap=hable:desat=2,zscale=t=bt709:m=bt709:r=tv,format=yuv420p")
+    z = f"({z0}+({z1}-{z0})*{p})" if z0 != z1 else f"{z0}"
     f += [
         f"fps={FPS}",
-        # 画面いっぱいに拡大して中央で切り抜き（2倍サイズ）
-        f"scale={W*SS}:{H*SS}:force_original_aspect_ratio=increase:flags=lanczos",
-        f"crop={W*SS}:{H*SS}",
+        # 2倍サイズの画面を覆うように拡大（ズーム中は毎フレーム計算）。縦横比は保つので、はみ出した分がスライドの余地になる
+        f"scale=w='{W*SS}*{z}':h='{H*SS}*{z}':force_original_aspect_ratio=increase:force_divisible_by=2"
+        f":flags=lanczos{':eval=frame' if z0 != z1 else ''}",
+        f"crop={W*SS}:{H*SS}:x='(iw-ow)*({x0}+({x1}-{x0})*{p})':y='(ih-oh)*{float(fy)}'",
+        f"scale={W}:{H}:flags=lanczos", "setsar=1", "format=yuv420p",
     ]
-    if move != "none":
-        z = f"({z0}+({z1}-{z0})*{p})"
-        f += [
-            f"scale=w='trunc({W*SS}*{z}/2)*2':h='trunc({H*SS}*{z}/2)*2':eval=frame:flags=bicubic",
-            f"crop={W*SS}:{H*SS}:x='(iw-ow)*({x0}+({x1}-{x0})*{p})':y='(ih-oh)/2'",
-        ]
-    f += [f"scale={W}:{H}:flags=lanczos", "setsar=1", "format=yuv420p"]
     return ",".join(f)
 
 
-def normalize_photo(src, dst):
-    """iPhone の写真を ffmpeg で扱える形にする。HEIC を読み、EXIF の回転を反映（ffmpeg は無視して横倒しになる）"""
-    from PIL import Image, ImageOps
+def normalize_photo(src, dst, blur=()):
+    """iPhone の写真を ffmpeg で扱える形にする。HEIC を読み、EXIF の回転を反映（ffmpeg は無視して横倒しになる）。
+    blur: [[x, y, 幅, 高さ], ...]（回転後の写真のピクセル座標）をぼかす。他のお客さんの顔や Wi-Fi のパスワードなど"""
+    from PIL import Image, ImageFilter, ImageOps
     try:
         import pillow_heif
         pillow_heif.register_heif_opener()
@@ -86,7 +91,11 @@ def normalize_photo(src, dst):
         if src.suffix.lower() == ".heic":
             sys.exit("HEIC を読むには pip install pillow-heif が必要")
     with Image.open(src) as im:
-        ImageOps.exif_transpose(im).convert("RGB").save(dst)
+        im = ImageOps.exif_transpose(im).convert("RGB")
+    for x, y, w, h in blur:
+        box = (int(x), int(y), int(x + w), int(y + h))
+        im.paste(im.crop(box).filter(ImageFilter.GaussianBlur(max(w, h) / 6)), box)
+    im.save(dst)
     return dst
 
 
@@ -100,12 +109,12 @@ def render_cut(i, cut, media, tmp):
         sys.exit(f"move は {list(MOVES)} のどれか: {move}")
     out = tmp / f"cut_{i:03d}.mp4"
     if src.suffix.lower() in IMAGE_EXT:
-        src = normalize_photo(src, tmp / f"photo_{i:03d}.png")
+        src = normalize_photo(src, tmp / f"photo_{i:03d}.png", cut.get("blur", ()))
         inp = ["-loop", "1", "-framerate", str(FPS), "-t", f"{dur}", "-i", str(src)]
     else:
         inp = ["-ss", f"{float(cut.get('start', 0))}", "-t", f"{dur}", "-i", str(src)]
     run(["ffmpeg", "-v", "error", "-y", *inp,
-         "-vf", cut_filter(dur, move, is_hdr(src)),
+         "-vf", cut_filter(dur, cut, is_hdr(src)),
          "-frames:v", str(round(dur * FPS)), "-an",
          "-c:v", "libx264", "-preset", "medium", "-crf", "12", str(out)])
     return out
