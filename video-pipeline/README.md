@@ -63,6 +63,9 @@
 - 写真に写り込んだ他のお客さん・店員さんの顔や、Wi-Fi のパスワードは `blur: [[x, y, 幅, 高さ], ...]` でぼかしてから使う
 - 日本語フォントは `apt-get install fonts-noto-cjk fonts-noto-cjk-extra` で入れる（GitHub からの直接ダウンロードはネットワーク設定で 403）
 
+## 依頼ガイド
+- `依頼ガイド.md`：動画を頼むときに送るもの、撮影のコツ、AI拡張する場合のサイズとプロンプト、調整の頼み方、依頼テンプレート、新しいセッションでの準備
+
 ## スクリプト
 - `analyze_reference.sh <動画ファイル>`：メタ情報、カット検出、コマ切り出し、一覧画像、スペクトログラム、文字起こし（faster-whisper small。初回は huggingface.co からモデルをダウンロード）
 - `make_video.py <project.yaml> --media <素材フォルダ> [--out 出力]`：台本 YAML から動画を作る。カットごとに素材・開始秒・長さ・動き（zoom_in / zoom_out / pan_left / pan_right / none）・テロップを書く。写真（jpg/png）も使える。style は gothic（白太字ゴシック＋黒縁）か mincho（白明朝＋影）。出力は 1080x1920 / 30fps / 約15Mbps / 無音トラック付き
