@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { TASTES } from "./ShishaHearing";
-import { FLAVORS, RATINGS, TYPES, getPair, getFlavor, ratioHint, bridgeCandidates } from "./pairingData";
+import { FLAVORS, RATINGS, TYPES, BASIS, getPair, getFlavor, ratioHint, bridgeCandidates } from "./pairingData";
+import { CLAIMS, BACKGROUND } from "./pairingSources";
+import FlavorCatalog from "./FlavorCatalog";
 import "./ShishaHearing.css";
 import "./ShishaPairing.css";
 
 const TABS = [
   { id: "search", label: "フレーバーから探す" },
   { id: "matrix", label: "対応表" },
+  { id: "catalog", label: "フレーバー一覧" },
   { id: "guide", label: "型の説明" },
 ];
 
@@ -38,6 +41,40 @@ function RatingMark({ rating }) {
   return <span className={`sp-mark r${rating}`}>{RATINGS[rating].mark}</span>;
 }
 
+const VERDICTS = {
+  supported: "裏付けあり",
+  partial: "条件つき",
+  not_found: "裏付けなし",
+};
+
+function BasisTag({ basis }) {
+  return <span className={`sp-basis b-${basis}`}>{BASIS[basis].label}</span>;
+}
+
+function SourceList({ sources }) {
+  return (
+    <ul className="sp-sources">
+      {sources.map((s) => (
+        <li key={s.url}>
+          <a href={s.url} target="_blank" rel="noreferrer">{s.title}</a>
+          {(s.by || s.year) && <span className="sp-source-meta">{[s.by, s.year].filter(Boolean).join("・")}</span>}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function Evidence({ claim }) {
+  const c = CLAIMS[claim];
+  return (
+    <div className="sp-evidence">
+      <p className="sp-evidence-head">文献の確認：<span className={`sp-verdict v-${c.verdict}`}>{VERDICTS[c.verdict]}</span></p>
+      <p className="sp-evidence-summary">{c.summary}</p>
+      <SourceList sources={c.sources} />
+    </div>
+  );
+}
+
 function PairDetail({ a, b }) {
   const pair = getPair(a, b);
   const fa = getFlavor(a);
@@ -61,6 +98,8 @@ function PairDetail({ a, b }) {
             {pair.reason}
           </p>
           {pair.rating > 0 && <p className="sp-detail-ratio">配合の目安：{ratioHint(a, b)}</p>}
+          <p className="sp-detail-basis">根拠：<BasisTag basis={pair.basis} /></p>
+          {pair.claim && <Evidence claim={pair.claim} />}
         </>
       ) : (
         <p className="sp-detail-reason muted">まだ登録されていない組み合わせです</p>
@@ -92,7 +131,10 @@ function PartnerList({ id }) {
                   <span className={`sp-type t-${pair.type}`}>{TYPES[pair.type].label}</span>
                 </div>
                 <p className="sp-partner-reason">{pair.reason}</p>
-                {rating > 0 && <p className="sp-partner-ratio">配合の目安：{ratioHint(id, flavor.id)}</p>}
+                <p className="sp-partner-ratio">
+                  <BasisTag basis={pair.basis} />
+                  {rating > 0 && <>配合の目安：{ratioHint(id, flavor.id)}</>}
+                </p>
               </div>
             ))}
           </section>
@@ -128,9 +170,8 @@ function BridgeList({ a, b }) {
   );
 }
 
-function SearchView() {
+function SearchView({ selected, setSelected }) {
   const [cat, setCat] = useState("all");
-  const [selected, setSelected] = useState([]);
   const flavors = FLAVORS.filter((f) => cat === "all" || f.cat === cat);
 
   // 2つまで選べる。3つ目を選ぶと古い方を外す
@@ -141,7 +182,7 @@ function SearchView() {
   return (
     <>
       <CategoryFilter value={cat} onChange={setCat} />
-      <p className="sp-hint-small">1つ選ぶと相性のいい相手、2つ選ぶと2つの相性とつなぎ役が出ます</p>
+      <p className="sp-hint-small">1つ選ぶと相性のいい相手、2つ選ぶと2つの相性・根拠・つなぎ役が出ます</p>
       <div className="sp-flavors">
         {flavors.map((f) => (
           <button
@@ -244,10 +285,33 @@ function GuideView() {
       </section>
 
       <section className="sp-group">
+        <h3 className="sp-group-title">根拠の種類</h3>
+        {Object.keys(BASIS).map((b) => (
+          <div key={b} className="sp-partner">
+            <BasisTag basis={b} />
+            <p className="sp-partner-reason">{BASIS[b].desc}</p>
+          </div>
+        ))}
+        <p className="sp-note">
+          ◎○△×の評価そのものは、どの組み合わせも作成者の判断です。実際に吸って確かめたデータではありません
+        </p>
+      </section>
+
+      <section className="sp-group">
+        <h3 className="sp-group-title">食材ペアリングの研究とシーシャでの注意点</h3>
+        {Object.entries(BACKGROUND).map(([id, bg]) => (
+          <div key={id} className="sp-partner">
+            <p className="sp-partner-reason">{bg.summary}</p>
+            <SourceList sources={bg.sources} />
+          </div>
+        ))}
+      </section>
+
+      <section className="sp-group">
         <h3 className="sp-group-title">配合の目安</h3>
         <p className="sp-partner-reason">
           香りの主張が強いフレーバー（ミント・ローズ・スパイス系など）は少なめにして、控えめな方を多めにします。
-          3種類で組むなら「メイン6：サブ3：アクセント1」が基本です。
+          3種類で組むなら「メイン6：サブ3：アクセント1」が基本です。主張の強さと比率は作成者が仮に決めた目安です。
         </p>
       </section>
     </div>
@@ -256,6 +320,14 @@ function GuideView() {
 
 export default function ShishaPairing({ onBack }) {
   const [tab, setTab] = useState("search");
+  const [selected, setSelected] = useState([]);
+
+  // フレーバー一覧の風味タグから、相性表のそのフレーバーを開く
+  function openFlavor(id) {
+    setSelected([id]);
+    setTab("search");
+    window.scrollTo(0, 0);
+  }
 
   return (
     <div className="app sh-page sp-page">
@@ -274,8 +346,9 @@ export default function ShishaPairing({ onBack }) {
       </div>
 
       <div className="sh-card sp-card">
-        {tab === "search" && <SearchView />}
+        {tab === "search" && <SearchView selected={selected} setSelected={setSelected} />}
         {tab === "matrix" && <MatrixView />}
+        {tab === "catalog" && <FlavorCatalog onOpenFlavor={openFlavor} />}
         {tab === "guide" && <GuideView />}
       </div>
     </div>

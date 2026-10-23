@@ -38,7 +38,7 @@ export const RATINGS = {
 };
 
 export const TYPES = {
-  same: { label: "同調", desc: "香り成分が共通する同士。自然に馴染んで、香りに厚みが出る" },
+  same: { label: "同調", desc: "香りの方向が近い同士。自然に馴染んで、香りに厚みが出る。成分が共通するかは「根拠」で確認" },
   contrast: { label: "対比", desc: "違う味をぶつけてお互いを引き立てる。甘さの輪郭がはっきりする" },
   classic: { label: "定番", desc: "料理・飲み物・香水で定番の組み合わせ。初めての人でも想像しやすい" },
   clash: { label: "衝突", desc: "片方が潰れたり、濁ったりしやすい組み合わせ" },
@@ -48,13 +48,13 @@ export const TYPES = {
 // 載っていない組み合わせは「未登録」として扱う
 export const PAIRS = [
   // ピーチ
-  ["peach", "jasmine", 3, "same", "ラクトン系の甘い香りが共通。ジャスミンピーチティーの組み合わせ"],
+  ["peach", "jasmine", 2, "same", "ジャスミンラクトンが両方に含まれる。ただしジャスミンでは微量で、主役はリナロールなど"],
   ["peach", "whitetea", 3, "classic", "ピーチティーの定番。お茶の渋みが桃の甘さを上品にまとめる"],
   ["peach", "berry", 3, "classic", "ピーチメルバ（桃×ラズベリー）の組み合わせ"],
   ["peach", "mango", 2, "same", "どちらもラクトン系の甘さで、南国寄りにまとまる"],
   ["peach", "coconut", 2, "same", "ラクトン（ココナッツや桃の甘い香りの成分）が共通"],
-  ["peach", "rose", 2, "same", "どちらもバラ科。花の香りが桃の甘さに馴染む"],
-  ["peach", "vanilla", 2, "classic", "ピーチ×バニラアイスのデザート系"],
+  ["peach", "rose", 2, "same", "どちらもバラ科。ただし同じ科だからといって香り成分が共通するとは限らない"],
+  ["peach", "vanilla", 2, "classic", "ピーチメルバ（桃×ラズベリーソース×バニラアイス）の組み合わせ"],
   ["peach", "lemon", 2, "contrast", "レモンの酸味で桃の甘さの輪郭が出る"],
   ["peach", "grapefruit", 2, "contrast", "ほろ苦さが甘さを締めて、大人っぽくなる"],
   ["peach", "mint", 2, "contrast", "冷感が甘さを引き締める"],
@@ -65,11 +65,11 @@ export const PAIRS = [
 
   // マンゴー
   ["mango", "mint", 3, "contrast", "甘さを冷感で切る、シーシャの定番"],
-  ["mango", "pineapple", 3, "same", "南国系の甘い果実香が共通。トロピカルにまとまる"],
+  ["mango", "pineapple", 3, "same", "エチル2-メチルブタノエート（フルーティーなエステル）が両方の鍵になる香り成分"],
   ["mango", "coconut", 3, "classic", "マンゴー×ココナッツ。タイのマンゴースティッキーライスの組み合わせ"],
-  ["mango", "cardamom", 3, "classic", "マンゴーラッシーにカルダモンはインドの定番"],
+  ["mango", "cardamom", 2, "classic", "甘いラッシーはカルダモンで香りづけされることがあり、マンゴーラッシーはその仲間"],
   ["mango", "lime", 2, "contrast", "酸味で甘さが軽くなる"],
-  ["mango", "orange", 2, "same", "どちらも柑橘系の香り成分（テルペン）を含む"],
+  ["mango", "orange", 2, "same", "リモネンやミルセンなどのテルペンが共通（マンゴーは品種で差が大きい）"],
   ["mango", "ginger", 2, "contrast", "スパイシーさが濃い甘さを締める"],
   ["mango", "vanilla", 2, "classic", "マンゴークリームのデザート系"],
 
@@ -89,7 +89,7 @@ export const PAIRS = [
   // グレープ
   ["grape", "mint", 3, "contrast", "グレープミント。シーシャの定番"],
   ["grape", "berry", 3, "same", "ベリー系の甘酸っぱい果実香が共通"],
-  ["grape", "jasmine", 2, "same", "アントラニル酸メチル（ぶどうらしい香りの成分）がジャスミンにも含まれる"],
+  ["grape", "jasmine", 2, "same", "アントラニル酸メチル（コンコード系ぶどうの香りの主役）がジャスミンにも含まれる"],
   ["grape", "rose", 2, "same", "マスカット系のゲラニオール（バラの香り成分）が共通"],
   ["grape", "lychee", 2, "same", "ゲラニオールが共通で、華やかな果実香になる"],
   ["grape", "lemon", 2, "contrast", "酸味で後味が軽くなる"],
@@ -111,7 +111,7 @@ export const PAIRS = [
   ["berry", "vanilla", 3, "classic", "ベリー×バニラのデザート系"],
   ["berry", "chocolate", 3, "classic", "ベリー×チョコのデザート系"],
   ["berry", "rose", 3, "classic", "イスパハン（ローズ×ライチ×ラズベリー）の組み合わせ"],
-  ["berry", "caramel", 2, "same", "フラネオール（甘く焦げたような香り成分）が共通"],
+  ["berry", "caramel", 2, "same", "フラネオール（甘く焦げたような香り成分）が共通。特にイチゴ。ラズベリーでは主役ではない"],
   ["berry", "lavender", 2, "classic", "ブルーベリー×ラベンダーは製菓の定番"],
   ["berry", "mint", 2, "contrast", "冷感で甘酸っぱさが際立つ"],
   ["berry", "lemon", 2, "contrast", "酸味が重なって、フレッシュさが増す"],
@@ -127,7 +127,7 @@ export const PAIRS = [
   ["pineapple", "ginger", 2, "contrast", "ピリッとしたアクセントで甘さが締まる"],
 
   // ココナッツ
-  ["coconut", "vanilla", 3, "same", "どちらもクリーミーな甘い香り（ラクトン、バニリン）"],
+  ["coconut", "vanilla", 2, "same", "共通する香り成分の裏付けは見つからなかった。甘くクリーミーな印象が近い"],
   ["coconut", "chocolate", 2, "classic", "ココナッツチョコのお菓子の組み合わせ"],
   ["coconut", "lime", 2, "contrast", "酸味で乳っぽさが軽くなる"],
   ["coconut", "chai", 2, "classic", "ココナッツミルクチャイ"],
@@ -151,7 +151,7 @@ export const PAIRS = [
   // チョコ
   ["chocolate", "mint", 3, "classic", "チョコミントの組み合わせ"],
   ["chocolate", "orange", 3, "classic", "オランジェット（オレンジピール×チョコ）の組み合わせ"],
-  ["chocolate", "caramel", 3, "classic", "チョコ×キャラメルのお菓子の組み合わせ"],
+  ["chocolate", "caramel", 3, "classic", "フラネオール（カラメルのような香り）がココアの鍵になる香り成分の1つ。お菓子でも定番"],
   ["chocolate", "cinnamon", 2, "classic", "メキシカンチョコの組み合わせ"],
   ["chocolate", "cardamom", 2, "contrast", "清涼感のあるスパイスで重さが抜ける"],
   ["chocolate", "chai", 2, "classic", "チョコチャイ"],
@@ -173,16 +173,16 @@ export const PAIRS = [
   ["mint", "grapefruit", 2, "contrast", "ほろ苦さと冷感で、キレのある味になる"],
   ["mint", "orange", 2, "contrast", "甘い柑橘を冷感で引き締める"],
   ["mint", "ginger", 2, "contrast", "冷感とピリッとした刺激が重なる"],
-  ["mint", "cardamom", 2, "same", "シネオール（スーッとする香り成分）が共通"],
+  ["mint", "cardamom", 2, "same", "1,8-シネオール（スーッとする香り成分）が共通。ミント側では少量"],
   ["mint", "whitetea", 2, "classic", "ミントティーの組み合わせ"],
   ["mint", "chai", 1, "contrast", "冷感でスパイスの温かみが消えやすい"],
   ["mint", "rose", 1, "contrast", "どちらも強く、ミントが勝ちやすい。ごく少量で"],
-  ["mint", "lavender", 1, "same", "ハーブ同士で強く、草っぽくなりやすい"],
+  ["mint", "lavender", 1, "same", "1,8-シネオールとリナロールが共通するが、どちらも片方では微量。ハーブ同士で草っぽくなりやすい"],
   ["mint", "cinnamon", 1, "contrast", "冷感と温感が打ち消し合いやすい"],
   ["mint", "musk", 1, "contrast", "冷感がムスクの柔らかさを消しやすい"],
 
   // レモン
-  ["lemon", "ginger", 3, "same", "シトラール（レモンらしい香り成分）がジンジャーにも含まれる"],
+  ["lemon", "ginger", 3, "same", "シトラール（レモンらしい香り成分）が共通。ただしジンジャーのシトラール量は品種・産地で大きく違う"],
   ["lemon", "whitetea", 3, "classic", "レモンティーの組み合わせ"],
   ["lemon", "lime", 2, "same", "柑橘同士。リモネン（柑橘の香り成分）が共通"],
   ["lemon", "grapefruit", 2, "same", "柑橘同士。リモネンが共通"],
@@ -204,7 +204,7 @@ export const PAIRS = [
 
   // オレンジ
   ["orange", "cinnamon", 3, "classic", "ホットワインやオレンジ×シナモンのお菓子の組み合わせ"],
-  ["orange", "cardamom", 2, "same", "カルダモンの柑橘っぽい香りが馴染む"],
+  ["orange", "cardamom", 2, "same", "リモネンとリナロールが共通。ただしカルダモンでは少量"],
   ["orange", "ginger", 2, "contrast", "ピリッとした刺激で甘い柑橘が締まる"],
   ["orange", "bergamot", 2, "same", "柑橘同士。リモネンが共通"],
   ["orange", "lavender", 2, "same", "リナロール（花のような香り成分）が共通"],
@@ -216,8 +216,8 @@ export const PAIRS = [
   ["chai", "ginger", 3, "same", "チャイを作るスパイスの1つ。ピリッと締まる"],
 
   // シナモン
-  ["cinnamon", "cardamom", 2, "same", "温かいスパイス同士。どちらも強いので少なめに"],
-  ["cinnamon", "ginger", 2, "same", "温かいスパイス同士"],
+  ["cinnamon", "cardamom", 2, "same", "共通する香り成分はシナモン側で1〜2%と少ない。温かいスパイス同士で、どちらも強いので少なめに"],
+  ["cinnamon", "ginger", 2, "same", "共通する香り成分はシナモン側で1〜2%と少ない。温かいスパイス同士"],
   ["cinnamon", "rose", 1, "contrast", "スパイスの主張で花の香りが潰れやすい"],
 
   // カルダモン
@@ -247,16 +247,81 @@ export const PAIRS = [
   ["musk", "bergamot", 2, "classic", "香水の定番。トップとラストの組み合わせ"],
 
   // ベルガモット
-  ["bergamot", "whitetea", 3, "same", "リナロールが共通。要はアールグレイ"],
+  ["bergamot", "whitetea", 3, "same", "リナロールが共通（紅茶での研究）。アールグレイはベルガモットで香りづけした紅茶"],
   ["bergamot", "vanilla", 2, "classic", "アールグレイ×バニラのお菓子の組み合わせ"],
+];
+
+// 根拠の種類。ペアごとの根拠は EVIDENCE で上書きし、ないものは型から決める
+export const BASIS = {
+  compound: { label: "成分・文献あり", desc: "共通する香り成分を文献で確認した" },
+  classic: { label: "定番・出典あり", desc: "料理や飲み物の定番であることを出典で確認した" },
+  common: { label: "定番・出典未確認", desc: "一般によく知られる組み合わせだが、出典はまだつけていない" },
+  opinion: { label: "主観・未検証", desc: "作成者の判断。実際に吸って確かめる必要がある" },
+};
+
+// [フレーバーA, フレーバーB, 根拠の種類, 文献確認の id（pairingSources.js の CLAIMS）]
+const EVIDENCE = [
+  ["peach", "jasmine", "compound", "c1"],
+  ["peach", "coconut", "compound", "c2"],
+  ["peach", "rose", "opinion", "c3"],
+  ["apple", "rose", "compound", "c4"],
+  ["grape", "jasmine", "compound", "c5"],
+  ["grape", "rose", "compound", "c6"],
+  ["grape", "lychee", "compound", "c7"],
+  ["lychee", "rose", "compound", "c8"],
+  ["lychee", "jasmine", "compound", "c9"],
+  ["berry", "caramel", "compound", "c10"],
+  ["pineapple", "caramel", "compound", "c11"],
+  ["coconut", "vanilla", "opinion", "c12"],
+  ["mango", "orange", "compound", "c13"],
+  ["mango", "pineapple", "compound", "c14"],
+  ["mint", "cardamom", "compound", "c15"],
+  ["mint", "lavender", "compound", "c16"],
+  ["lemon", "ginger", "compound", "c17"],
+  ["lemon", "lime", "compound", "c18"],
+  ["lemon", "grapefruit", "compound", "c18"],
+  ["lemon", "orange", "compound", "c18"],
+  ["lemon", "bergamot", "compound", "c18"],
+  ["lime", "grapefruit", "compound", "c18"],
+  ["grapefruit", "orange", "compound", "c18"],
+  ["grapefruit", "bergamot", "compound", "c18"],
+  ["orange", "bergamot", "compound", "c18"],
+  ["orange", "lavender", "compound", "c19"],
+  ["orange", "cardamom", "compound", "c20"],
+  ["jasmine", "bergamot", "compound", "c21"],
+  ["lavender", "bergamot", "compound", "c22"],
+  ["bergamot", "whitetea", "compound", "c23"],
+  ["cinnamon", "cardamom", "compound", "c24"],
+  ["cinnamon", "ginger", "compound", "c24"],
+  ["chocolate", "caramel", "compound", "c25"],
+  ["lychee", "berry", "classic", "c26"],
+  ["berry", "rose", "classic", "c26"],
+  ["peach", "berry", "classic", "c27"],
+  ["peach", "vanilla", "classic", "c27"],
+  ["pineapple", "coconut", "classic", "c28"],
+  ["mint", "lime", "classic", "c29"],
+  ["lime", "ginger", "classic", "c29"],
+  ["chocolate", "orange", "classic", "c30"],
+  ["mango", "coconut", "classic", "c31"],
+  ["mango", "cardamom", "classic", "c31"],
+  ["chocolate", "cinnamon", "classic", "c32"],
+  ["cardamom", "rose", "classic", "c33"],
+  ["chai", "cinnamon", "classic", "c34"],
+  ["chai", "cardamom", "classic", "c34"],
+  ["chai", "ginger", "classic", "c34"],
 ];
 
 function pairKey(a, b) {
   return a < b ? `${a}|${b}` : `${b}|${a}`;
 }
 
+const EVIDENCE_MAP = new Map(EVIDENCE.map(([a, b, basis, claim]) => [pairKey(a, b), { basis, claim }]));
+
 const PAIR_MAP = new Map(
-  PAIRS.map(([a, b, rating, type, reason]) => [pairKey(a, b), { a, b, rating, type, reason }])
+  PAIRS.map(([a, b, rating, type, reason]) => {
+    const evidence = EVIDENCE_MAP.get(pairKey(a, b)) || { basis: type === "classic" ? "common" : "opinion", claim: null };
+    return [pairKey(a, b), { a, b, rating, type, reason, ...evidence }];
+  })
 );
 
 export function getPair(a, b) {

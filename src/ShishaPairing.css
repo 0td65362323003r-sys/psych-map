@@ -286,3 +286,143 @@
   flex-direction: column;
   gap: 1.25rem;
 }
+
+.sp-basis {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  border-radius: 6px;
+  padding: 0.05rem 0.4rem;
+  margin-right: 0.4rem;
+  border: 1px solid currentColor;
+}
+
+.sp-basis.b-compound { color: #86efac; }
+.sp-basis.b-classic { color: #c084fc; }
+.sp-basis.b-common { color: #a78bfa; border-style: dashed; }
+.sp-basis.b-opinion { color: #888; border-style: dashed; }
+
+.sp-detail-basis {
+  font-size: 0.75rem;
+  color: #777;
+  margin-top: 0.4rem;
+}
+
+.sp-evidence {
+  margin-top: 0.6rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid #2a2a38;
+}
+
+.sp-evidence-head {
+  font-size: 0.75rem;
+  color: #888;
+}
+
+.sp-verdict {
+  font-weight: 700;
+}
+
+.sp-verdict.v-supported { color: #86efac; }
+.sp-verdict.v-partial { color: #fcd34d; }
+.sp-verdict.v-not_found { color: #fda4af; }
+
+.sp-evidence-summary {
+  font-size: 0.8rem;
+  color: #aaa;
+  line-height: 1.6;
+  margin-top: 0.3rem;
+}
+
+.sp-sources {
+  list-style: none;
+  margin-top: 0.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.sp-sources li {
+  font-size: 0.72rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.sp-sources a {
+  color: #67e8f9;
+}
+
+.sp-source-meta {
+  color: #666;
+  margin-left: 0.4rem;
+}
+
+.sp-tabs {
+  flex-wrap: wrap;
+}
+
+.sp-tab {
+  min-width: calc(50% - 0.2rem);
+}
+
+.sp-search {
+  width: 100%;
+  background: #1c1c28;
+  border: 1px solid #2a2a38;
+  border-radius: 12px;
+  padding: 0.7rem 0.9rem;
+  color: #e8e8f0;
+  font-family: inherit;
+  font-size: 0.95rem;
+  margin-bottom: 0.75rem;
+}
+
+.sp-search:focus {
+  outline: none;
+  border-color: #c084fc;
+}
+
+.sp-catalog {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sp-brand {
+  font-size: 0.72rem;
+  color: #888;
+}
+
+.sp-notes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.45rem;
+}
+
+.sp-note-tag {
+  font-size: 0.7rem;
+  border-radius: 999px;
+  padding: 0.1rem 0.5rem;
+  background: #22222e;
+  color: #999;
+  border: 1px solid transparent;
+  font-family: inherit;
+}
+
+.sp-note-tag.linked {
+  color: #e8e8f0;
+  border-color: #7c3aed;
+  cursor: pointer;
+}
+
+.sp-note-tag.cool-light { color: #67e8f9; }
+.sp-note-tag.cool-strong { color: #0d0d14; background: #67e8f9; }
+
+.sp-source-link {
+  display: inline-block;
+  font-size: 0.7rem;
+  color: #67e8f9;
+  margin-top: 0.4rem;
+}
