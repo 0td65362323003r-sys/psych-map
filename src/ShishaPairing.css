@@ -1,0 +1,288 @@
+/* Shisha Pairing */
+.sp-card {
+  max-width: 720px;
+}
+
+.sp-tabs {
+  display: flex;
+  gap: 0.4rem;
+  max-width: 720px;
+  margin: 0 auto 1rem;
+}
+
+.sp-tab {
+  flex: 1;
+  padding: 0.65rem 0.5rem;
+  border-radius: 10px;
+  border: 1px solid #2a2a38;
+  background: #16161f;
+  color: #888;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.sp-tab.selected {
+  color: #e8e8f0;
+  border-color: #c084fc;
+  background: #231a33;
+}
+
+.sp-filter,
+.sp-flavors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.sp-filter {
+  margin-bottom: 0.75rem;
+}
+
+.sp-chip,
+.sp-flavor {
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid #2a2a38;
+  background: #1c1c28;
+  color: #bbb;
+  font-family: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.sp-flavor {
+  color: #e8e8f0;
+  font-weight: 700;
+}
+
+.sp-chip.selected,
+.sp-flavor.selected {
+  border-color: #c084fc;
+  background: #231a33;
+  color: #e8e8f0;
+}
+
+.sp-hint-small {
+  color: #777;
+  font-size: 0.78rem;
+  margin: 0.25rem 0 0.75rem;
+}
+
+.sp-note {
+  color: #666;
+  font-size: 0.8rem;
+}
+
+.sp-partners {
+  margin-top: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.sp-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sp-group-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.sp-partner {
+  background: #1c1c28;
+  border: 1px solid #2a2a38;
+  border-radius: 12px;
+  padding: 0.7rem 0.9rem;
+}
+
+.sp-partner-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.sp-partner-name {
+  font-weight: 700;
+}
+
+.sp-partner-reason {
+  font-size: 0.82rem;
+  color: #aaa;
+  margin-top: 0.3rem;
+  line-height: 1.6;
+}
+
+.sp-partner-ratio,
+.sp-detail-ratio {
+  font-size: 0.75rem;
+  color: #777;
+  margin-top: 0.25rem;
+}
+
+.sp-type {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border-radius: 6px;
+  padding: 0.1rem 0.45rem;
+  color: #0d0d14;
+  margin-right: 0.4rem;
+}
+
+.sp-type.t-same { background: #67e8f9; }
+.sp-type.t-contrast { background: #fcd34d; }
+.sp-type.t-classic { background: #c084fc; }
+.sp-type.t-bridge { background: #86efac; }
+.sp-type.t-clash { background: #fda4af; }
+
+.sp-mark {
+  display: inline-block;
+  min-width: 1.2em;
+  text-align: center;
+  font-weight: 800;
+}
+
+.r3 { color: #86efac; }
+.r2 { color: #67e8f9; }
+.r1 { color: #fcd34d; }
+.r0 { color: #fda4af; }
+.sp-mark.none { color: #3a3a4a; }
+
+.sp-rating {
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.sp-detail {
+  background: #1c1c28;
+  border: 1px solid #c084fc;
+  border-radius: 12px;
+  padding: 0.8rem 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.sp-detail-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.sp-detail-names {
+  font-weight: 800;
+}
+
+.sp-detail-reason {
+  font-size: 0.85rem;
+  color: #bbb;
+  margin-top: 0.4rem;
+  line-height: 1.6;
+}
+
+.sp-detail-reason.muted {
+  color: #666;
+}
+
+.sp-bridge-marks {
+  font-size: 0.75rem;
+  color: #888;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.sp-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  font-size: 0.78rem;
+  color: #999;
+  margin-bottom: 0.75rem;
+}
+
+.sp-matrix-wrap {
+  overflow: auto;
+  max-height: 70vh;
+  border: 1px solid #22222e;
+  border-radius: 12px;
+}
+
+.sp-matrix {
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.78rem;
+}
+
+.sp-matrix th,
+.sp-matrix td {
+  border-bottom: 1px solid #22222e;
+  border-right: 1px solid #22222e;
+  background: #16161f;
+}
+
+.sp-matrix thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.sp-corner {
+  left: 0;
+  z-index: 3 !important;
+}
+
+.sp-col-head {
+  vertical-align: bottom;
+  padding: 0.4rem 0;
+  height: 7.5rem;
+}
+
+.sp-col-head span {
+  writing-mode: vertical-rl;
+  display: inline-block;
+  color: #bbb;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.sp-row-head {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  text-align: left;
+  padding: 0 0.6rem;
+  white-space: nowrap;
+  font-weight: 700;
+}
+
+.sp-matrix td.sp-self {
+  background: #0d0d14;
+}
+
+.sp-matrix td.active {
+  background: #231a33;
+}
+
+.sp-cell {
+  width: 2rem;
+  height: 2rem;
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.sp-guide {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}

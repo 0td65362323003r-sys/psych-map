@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./ShishaHearing.css";
 
-const TASTES = [
+export const TASTES = [
   { id: "sweet", label: "甘め", icon: "🍑", examples: "ピーチ・マンゴー・バニラ・チョコ・キャラメル" },
   { id: "fresh", label: "さっぱりめ", icon: "🍋", examples: "ミント・レモン・ライム・グレープフルーツ" },
   { id: "spice", label: "スパイス", icon: "🌶️", examples: "チャイ・シナモン・カルダモン・ジンジャー" },

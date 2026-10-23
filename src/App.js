@@ -2,6 +2,7 @@ import { useState, useEffect, Fragment } from "react";
 import { supabase } from "./supabaseClient";
 import { defaultData, defaultJobData } from "./data";
 import ShishaHearing from "./ShishaHearing";
+import ShishaPairing from "./ShishaPairing";
 import "./App.css";
 
 const PRESET_COLORS = [
@@ -41,6 +42,11 @@ function HomePage({ onSelect }) {
           <span className="category-icon">💨</span>
           <span className="category-title">シーシャ ヒアリング</span>
           <span className="category-desc">好みのフレーバーを4問で整理</span>
+        </button>
+        <button className="category-card" onClick={() => onSelect("pairing")}>
+          <span className="category-icon">🧪</span>
+          <span className="category-title">フレーバー相性表</span>
+          <span className="category-desc">ミックスの相性を食材ペアリングで探す</span>
         </button>
       </div>
     </div>
@@ -500,6 +506,10 @@ export default function App() {
 
   if (page === "shisha") {
     return <ShishaHearing onBack={() => setPage("home")} />;
+  }
+
+  if (page === "pairing") {
+    return <ShishaPairing onBack={() => setPage("home")} />;
   }
 
   return (
