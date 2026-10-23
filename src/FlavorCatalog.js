@@ -21,6 +21,7 @@ const NOTE_LABELS = {
   pastry: "焼き菓子", basil: "バジル", pine: "松", ice: "アイス（冷感）", betel: "キンマ（パーン）",
   sandalwood: "サンダルウッド", saffron: "サフラン", herbal: "ハーブ", spice: "スパイス",
   fruit: "フルーツ", flower: "花", sage: "セージ",
+  papaya: "パパイヤ", jackfruit: "ジャックフルーツ", mangosteen: "マンゴスチン", thyme: "タイム", herb: "ハーブ",
 };
 
 // 相性表のフレーバーに寄せられるタグ
