@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { TASTES } from "./ShishaHearing";
-import { FLAVORS, RATINGS, TYPES, BASIS, getPair, getFlavor, ratioHint, bridgeCandidates } from "./pairingData";
+import { FLAVORS, CATEGORIES, RATINGS, TYPES, BASIS, getPair, marketProducts, getFlavor, ratioHint, bridgeCandidates } from "./pairingData";
 import { CLAIMS, BACKGROUND } from "./pairingSources";
 import FlavorCatalog from "./FlavorCatalog";
 import "./ShishaHearing.css";
@@ -14,7 +13,7 @@ const TABS = [
 ];
 
 function catIcon(cat) {
-  return TASTES.find((t) => t.id === cat).icon;
+  return CATEGORIES.find((t) => t.id === cat).icon;
 }
 
 function CategoryFilter({ value, onChange }) {
@@ -23,7 +22,7 @@ function CategoryFilter({ value, onChange }) {
       <button className={`sp-chip ${value === "all" ? "selected" : ""}`} onClick={() => onChange("all")}>
         すべて
       </button>
-      {TASTES.map((t) => (
+      {CATEGORIES.map((t) => (
         <button
           key={t.id}
           className={`sp-chip ${value === t.id ? "selected" : ""}`}
@@ -75,6 +74,19 @@ function Evidence({ claim }) {
   );
 }
 
+function MarketList({ a, b }) {
+  const products = marketProducts(a, b);
+  if (products.length === 0) return null;
+  return (
+    <div className="sp-evidence">
+      <p className="sp-evidence-head">この2つを組み合わせた市販品：{products.length}件</p>
+      <p className="sp-evidence-summary">
+        {products.map((p) => `${p.brand} ${p.name}`).join("、")}
+      </p>
+    </div>
+  );
+}
+
 function PairDetail({ a, b }) {
   const pair = getPair(a, b);
   const fa = getFlavor(a);
@@ -102,8 +114,9 @@ function PairDetail({ a, b }) {
           {pair.claim && <Evidence claim={pair.claim} />}
         </>
       ) : (
-        <p className="sp-detail-reason muted">まだ登録されていない組み合わせです</p>
+        <p className="sp-detail-reason muted">まだ評価していない組み合わせです</p>
       )}
+      <MarketList a={a} b={b} />
     </div>
   );
 }
@@ -220,6 +233,7 @@ function MatrixView() {
           <span key={r}><RatingMark rating={r} /> {RATINGS[r].label}</span>
         ))}
         <span><RatingMark /> 未登録</span>
+        <span><span className="sp-mark market">●</span> 未評価・市販品あり</span>
       </div>
 
       {cell && <PairDetail a={cell[0]} b={cell[1]} />}
@@ -247,7 +261,11 @@ function MatrixView() {
                   return (
                     <td key={c.id} className={active ? "active" : ""}>
                       <button className="sp-cell" onClick={() => setCell([r.id, c.id])}>
-                        <RatingMark rating={pair?.rating} />
+                        {!pair && marketProducts(r.id, c.id).length > 0 ? (
+                          <span className="sp-mark market">●</span>
+                        ) : (
+                          <RatingMark rating={pair?.rating} />
+                        )}
                       </button>
                     </td>
                   );

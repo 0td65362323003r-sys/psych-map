@@ -1,9 +1,6 @@
 import { useState } from "react";
-import { TASTES } from "./ShishaHearing";
-import { FLAVORS } from "./pairingData";
+import { FLAVORS, CATEGORIES, NOTE_TO_FLAVOR } from "./pairingData";
 import { CATALOG } from "./catalogData";
-
-const CATEGORIES = [...TASTES, { id: "other", label: "その他", icon: "🥤" }];
 
 const COOLING = { none: null, light: "清涼感 弱", strong: "清涼感 強" };
 
@@ -22,13 +19,6 @@ const NOTE_LABELS = {
   sandalwood: "サンダルウッド", saffron: "サフラン", herbal: "ハーブ", spice: "スパイス",
   fruit: "フルーツ", flower: "花", sage: "セージ",
   papaya: "パパイヤ", jackfruit: "ジャックフルーツ", mangosteen: "マンゴスチン", thyme: "タイム", herb: "ハーブ",
-};
-
-// 相性表のフレーバーに寄せられるタグ
-const NOTE_TO_FLAVOR = {
-  ...Object.fromEntries(FLAVORS.map((f) => [f.id, f.id])),
-  strawberry: "berry", blueberry: "berry", raspberry: "berry", blackcurrant: "berry", cranberry: "berry",
-  tangerine: "orange",
 };
 
 const BRANDS = [...new Set(CATALOG.map((c) => c[0]))];

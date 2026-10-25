@@ -1,3 +1,6 @@
+import { TASTES } from "./ShishaHearing";
+import { CATALOG } from "./catalogData";
+
 // フレーバー相性表のデータ
 // cat はヒアリングフォームの TASTES の id と同じ分類
 // power は香りの主張の強さ（1:控えめ 〜 3:強い）。配合比の目安に使う
@@ -28,7 +31,25 @@ export const FLAVORS = [
   { id: "musk", label: "ムスク", cat: "perfume", power: 2 },
   { id: "bergamot", label: "ベルガモット", cat: "perfume", power: 2 },
   { id: "whitetea", label: "ホワイトティー", cat: "perfume", power: 1 },
+  { id: "watermelon", label: "スイカ", cat: "sweet", power: 1 },
+  { id: "melon", label: "メロン", cat: "sweet", power: 1 },
+  { id: "cherry", label: "チェリー", cat: "sweet", power: 2 },
+  { id: "kiwi", label: "キウイ", cat: "sweet", power: 1 },
+  { id: "passionfruit", label: "パッションフルーツ", cat: "sweet", power: 2 },
+  { id: "pear", label: "洋ナシ", cat: "sweet", power: 1 },
+  { id: "guava", label: "グァバ", cat: "sweet", power: 1 },
+  { id: "banana", label: "バナナ", cat: "sweet", power: 2 },
+  { id: "cactus", label: "サボテン", cat: "sweet", power: 1 },
+  { id: "milk", label: "ミルク・クリーム", cat: "sweet", power: 1 },
+  { id: "anise", label: "アニス", cat: "spice", power: 3 },
+  { id: "blacktea", label: "紅茶", cat: "perfume", power: 1 },
+  { id: "cola", label: "コーラ", cat: "other", power: 2 },
+  { id: "candy", label: "キャンディ・ガム", cat: "other", power: 2 },
+  { id: "coffee", label: "コーヒー", cat: "other", power: 3 },
 ];
+
+// ヒアリングの5分類に、相性表とフレーバー一覧で使う「その他」を足したもの
+export const CATEGORIES = [...TASTES, { id: "other", label: "その他", icon: "🥤" }];
 
 export const RATINGS = {
   3: { mark: "◎", label: "鉄板" },
@@ -249,12 +270,171 @@ export const PAIRS = [
   // ベルガモット
   ["bergamot", "whitetea", 3, "same", "リナロールが共通（紅茶での研究）。アールグレイはベルガモットで香りづけした紅茶"],
   ["bergamot", "vanilla", 2, "classic", "アールグレイ×バニラのお菓子の組み合わせ"],
+
+  // スイカ
+  ["watermelon", "mint", 3, "contrast", "冷感で瑞々しさが際立つ。シーシャでよく売られている組み合わせ"],
+  ["watermelon", "melon", 3, "same", "どちらもウリ科で、青っぽく瑞々しい香りの方向が近い"],
+  ["watermelon", "berry", 2, "same", "甘酸っぱい赤い果実同士で馴染む"],
+  ["watermelon", "lime", 2, "contrast", "酸味で瑞々しさがくっきりする"],
+  ["watermelon", "lemon", 2, "contrast", "酸味で甘さが締まる"],
+  ["watermelon", "candy", 2, "classic", "スイカ味のキャンディやガムの組み合わせ"],
+  ["watermelon", "passionfruit", 2, "contrast", "パッションフルーツの酸味と香りで、薄い甘さに輪郭が出る"],
+  ["watermelon", "peach", 2, "same", "瑞々しく柔らかい果実同士"],
+  ["watermelon", "cactus", 2, "same", "どちらも淡く瑞々しい甘さ"],
+  ["watermelon", "chocolate", 0, "clash", "瑞々しさがカカオの重さに埋もれる"],
+  ["watermelon", "cinnamon", 0, "clash", "淡い甘さがスパイスに潰される"],
+
+  // メロン
+  ["melon", "mint", 2, "contrast", "冷感で甘さが軽くなる"],
+  ["melon", "berry", 2, "same", "イチゴ×メロンのような甘い果実同士"],
+  ["melon", "lime", 2, "contrast", "酸味で甘さが締まる"],
+  ["melon", "milk", 2, "classic", "メロン×クリーム（クリームソーダ、メロンパフェ）の組み合わせ"],
+  ["melon", "passionfruit", 2, "contrast", "酸味と南国の香りで、甘さに変化が出る"],
+  ["melon", "mango", 2, "same", "甘く熟した果実同士"],
+  ["melon", "chocolate", 0, "clash", "瑞々しさがカカオの重さに埋もれる"],
+  ["melon", "cinnamon", 0, "clash", "淡い甘さがスパイスに潰される"],
+
+  // チェリー
+  ["cherry", "cola", 3, "classic", "チェリーコーラの組み合わせ"],
+  ["cherry", "chocolate", 3, "classic", "黒い森のケーキ（チョコ×チェリー×クリーム）の組み合わせ"],
+  ["cherry", "vanilla", 2, "classic", "チェリー×バニラのお菓子や飲み物の組み合わせ"],
+  ["cherry", "berry", 2, "same", "赤い果実同士で甘酸っぱくまとまる"],
+  ["cherry", "candy", 2, "classic", "チェリー味のキャンディやグミの組み合わせ"],
+  ["cherry", "mint", 2, "contrast", "冷感で甘さが軽くなる"],
+  ["cherry", "lime", 2, "contrast", "酸味で甘さがすっきりする"],
+  ["cherry", "lemon", 2, "contrast", "酸味で甘さがすっきりする"],
+  ["cherry", "cardamom", 2, "contrast", "清涼感のあるスパイスで甘さが締まる"],
+  ["cherry", "cinnamon", 2, "classic", "チェリーパイ風の温かい甘さ"],
+
+  // キウイ
+  ["kiwi", "berry", 2, "classic", "キウイ×ストロベリーのジュースやスムージーの組み合わせ"],
+  ["kiwi", "mint", 2, "contrast", "冷感で青っぽい酸味が際立つ"],
+  ["kiwi", "apple", 2, "same", "どちらも青っぽく爽やかな果実香"],
+  ["kiwi", "lime", 2, "same", "青い酸味同士で、すっきりまとまる"],
+  ["kiwi", "banana", 2, "classic", "トロピカルスムージーでよくある組み合わせ"],
+  ["kiwi", "pineapple", 2, "same", "酸味のある南国系の果実同士"],
+  ["kiwi", "grapefruit", 2, "contrast", "ほろ苦さで酸味に深みが出る"],
+
+  // パッションフルーツ
+  ["passionfruit", "mango", 3, "same", "南国系の果実同士。ジュースやデザートでも定番"],
+  ["passionfruit", "orange", 2, "classic", "トロピカルジュースでよくある組み合わせ"],
+  ["passionfruit", "pineapple", 2, "same", "酸味のある南国系の果実同士"],
+  ["passionfruit", "mint", 2, "contrast", "冷感で酸味が際立つ"],
+  ["passionfruit", "lime", 2, "contrast", "酸味が重なって、爽やかさが増す"],
+  ["passionfruit", "peach", 2, "contrast", "酸味で桃の甘さが引き立つ"],
+  ["passionfruit", "vanilla", 2, "classic", "ポルノスターマティーニ（バニラ×パッションフルーツ）の組み合わせ"],
+  ["passionfruit", "coconut", 2, "same", "南国系同士で、酸味とクリーミーさが補い合う"],
+
+  // 洋ナシ
+  ["pear", "vanilla", 2, "classic", "ポワール・ベル・エレーヌ（洋ナシ×バニラアイス×チョコ）の組み合わせ"],
+  ["pear", "chocolate", 2, "classic", "ポワール・ベル・エレーヌ（洋ナシ×バニラアイス×チョコ）の組み合わせ"],
+  ["pear", "apple", 2, "same", "どちらもバラ科の果実で、フルーティーな香りの方向が近い"],
+  ["pear", "cinnamon", 2, "classic", "洋ナシのコンポートにシナモンの組み合わせ"],
+  ["pear", "caramel", 2, "classic", "洋ナシのキャラメリゼの組み合わせ"],
+  ["pear", "ginger", 2, "contrast", "ピリッとした刺激で淡い甘さが締まる"],
+  ["pear", "lemon", 2, "contrast", "酸味で淡い甘さに輪郭が出る"],
+
+  // グァバ
+  ["guava", "orange", 2, "classic", "POGジュース（パッションフルーツ×オレンジ×グァバ）の組み合わせ"],
+  ["guava", "passionfruit", 2, "classic", "POGジュース（パッションフルーツ×オレンジ×グァバ）の組み合わせ"],
+  ["guava", "mango", 2, "same", "南国系の甘い果実同士"],
+  ["guava", "pineapple", 2, "same", "南国系の果実同士"],
+  ["guava", "lime", 2, "contrast", "酸味で甘さがすっきりする"],
+
+  // バナナ
+  ["banana", "chocolate", 3, "classic", "チョコバナナの組み合わせ"],
+  ["banana", "caramel", 3, "classic", "バナナフォスター（バナナ×キャラメル×シナモン×ラム）の組み合わせ"],
+  ["banana", "milk", 3, "classic", "バナナミルク・バナナシェイクの組み合わせ"],
+  ["banana", "vanilla", 2, "classic", "バナナプディングなど、バナナ×バニラのお菓子の組み合わせ"],
+  ["banana", "berry", 2, "classic", "ストロベリーバナナ（スムージー）の組み合わせ"],
+  ["banana", "cinnamon", 2, "classic", "バナナブレッドやバナナフォスターでよく合わせる"],
+  ["banana", "coconut", 2, "same", "南国系でまろやかな甘さ同士"],
+  ["banana", "pineapple", 2, "same", "南国系の果実同士"],
+  ["banana", "lime", 2, "classic", "バナナダイキリ（ラム×バナナ×ライム）の組み合わせ"],
+  ["banana", "mint", 2, "contrast", "冷感でねっとりした甘さが軽くなる"],
+
+  // サボテン
+  ["cactus", "lime", 2, "contrast", "酸味で淡い甘さに輪郭が出る"],
+  ["cactus", "berry", 2, "same", "赤い果実系の甘酸っぱさが馴染む"],
+  ["cactus", "mint", 2, "contrast", "冷感で瑞々しさが際立つ"],
+  ["cactus", "lemon", 2, "contrast", "酸味で淡い甘さに輪郭が出る"],
+
+  // ミルク・クリーム
+  ["milk", "chai", 3, "classic", "チャイは紅茶をミルクとスパイスで煮出す飲み物"],
+  ["milk", "coffee", 3, "classic", "カフェラテ・カプチーノの組み合わせ"],
+  ["milk", "vanilla", 3, "classic", "バニラアイスやミルクセーキの組み合わせ"],
+  ["milk", "caramel", 3, "classic", "ドゥルセ・デ・レチェ（ミルクを煮詰めたキャラメル）の組み合わせ"],
+  ["milk", "blacktea", 3, "classic", "ミルクティーの組み合わせ"],
+  ["milk", "chocolate", 2, "classic", "ミルクチョコやココアの組み合わせ"],
+  ["milk", "berry", 2, "classic", "ストロベリーミルクの組み合わせ"],
+  ["milk", "mango", 2, "classic", "マンゴーラッシー（マンゴー×ヨーグルト）の組み合わせ"],
+  ["milk", "orange", 2, "classic", "オレンジ×クリーム（クリームソーダ系）の組み合わせ"],
+  ["milk", "cinnamon", 2, "classic", "オルチャータ（シナモン風味の米の飲み物）の組み合わせ"],
+  ["milk", "rose", 2, "classic", "ファルーダ（ローズシロップ×ミルク）の組み合わせ"],
+  ["milk", "coconut", 2, "same", "どちらもクリーミーでまろやか"],
+  ["milk", "cardamom", 2, "classic", "チャイやラッシーでよく合わせる"],
+  ["milk", "lemon", 0, "clash", "レモンの酸でミルク感が分離しやすい"],
+  ["milk", "grapefruit", 0, "clash", "酸味と苦味でミルク感が分離しやすい"],
+
+  // 紅茶
+  ["blacktea", "bergamot", 3, "classic", "アールグレイ（ベルガモットで香りづけした紅茶）"],
+  ["blacktea", "lemon", 3, "classic", "レモンティーの組み合わせ"],
+  ["blacktea", "peach", 3, "classic", "ピーチティーの組み合わせ"],
+  ["blacktea", "chai", 3, "same", "チャイは紅茶にスパイスとミルクを加えたもの"],
+  ["blacktea", "apple", 2, "classic", "アップルティーの組み合わせ"],
+  ["blacktea", "orange", 2, "classic", "オレンジティーの組み合わせ"],
+  ["blacktea", "rose", 2, "classic", "ローズティーの組み合わせ"],
+  ["blacktea", "lychee", 2, "classic", "ライチ紅茶の組み合わせ"],
+  ["blacktea", "cardamom", 2, "classic", "チャイで使うスパイス"],
+  ["blacktea", "cinnamon", 2, "classic", "シナモンティーの組み合わせ"],
+  ["blacktea", "vanilla", 2, "classic", "バニラティーの組み合わせ"],
+  ["blacktea", "lime", 2, "contrast", "酸味で渋みが軽くなる"],
+
+  // コーヒー
+  ["coffee", "chocolate", 3, "classic", "カフェモカの組み合わせ"],
+  ["coffee", "caramel", 3, "classic", "キャラメルマキアートの組み合わせ"],
+  ["coffee", "vanilla", 3, "classic", "バニララテの組み合わせ"],
+  ["coffee", "cinnamon", 2, "classic", "シナモンコーヒー（カフェ・デ・オジャなど）の組み合わせ"],
+  ["coffee", "cardamom", 2, "classic", "アラビアコーヒーはカルダモンで香りづけする"],
+  ["coffee", "coconut", 2, "same", "ローストした香りとココナッツのまろやかさが合う"],
+
+  // コーラ
+  ["cola", "lime", 3, "classic", "クバ・リブレ（ラム×コーラ×ライム）の組み合わせ"],
+  ["cola", "lemon", 2, "classic", "コーラにレモンを添える組み合わせ"],
+  ["cola", "vanilla", 2, "classic", "バニラコーラの組み合わせ"],
+  ["cola", "cinnamon", 2, "same", "コーラの香りづけにはシナモンなどのスパイスが使われることが多い"],
+  ["cola", "caramel", 2, "same", "コーラはカラメル色素で色づけされ、甘く焦げた印象が近い"],
+
+  // キャンディ・ガム
+  ["candy", "mint", 3, "classic", "ミントガムの組み合わせ。シーシャでも多い"],
+  ["candy", "berry", 2, "classic", "ベリー味のキャンディやグミの組み合わせ"],
+  ["candy", "pineapple", 2, "classic", "ホワイトグミベア系（パイン寄りのグミ味）の組み合わせ"],
+  ["candy", "cinnamon", 2, "classic", "シナモンガムの組み合わせ"],
+  ["candy", "grape", 2, "classic", "グレープ味のガムやキャンディの組み合わせ"],
+
+  // アニス
+  ["anise", "apple", 3, "classic", "ダブルアップル（2種類のリンゴ×アニス）はシーシャの定番"],
+  ["anise", "mint", 2, "contrast", "アニスの甘い清涼感とミントの冷感が重なる"],
+  ["anise", "cinnamon", 2, "same", "チャイやホットワインで一緒に使われるスパイス同士"],
+  ["anise", "chai", 2, "same", "スターアニスはチャイのスパイスとしても使われる"],
+  ["anise", "orange", 2, "classic", "ホットワインでよく合わせる組み合わせ"],
+
+  // 市販品で2件以上組み合わされている組
+  ["berry", "orange", 2, "contrast", "甘酸っぱいベリーに柑橘の明るさが加わる"],
+  ["berry", "lime", 2, "contrast", "酸味が重なって、フレッシュさが増す"],
+  ["berry", "grapefruit", 2, "contrast", "ほろ苦さで甘酸っぱさが締まる"],
+  ["lemon", "pineapple", 2, "contrast", "酸味で南国の甘さがすっきりする"],
+  ["lime", "orange", 2, "same", "柑橘同士。リモネンが共通"],
+  ["mango", "grapefruit", 2, "contrast", "ほろ苦さで濃い甘さが締まる"],
+  ["orange", "peach", 2, "contrast", "柑橘の明るさで桃の甘さが軽くなる"],
+  ["orange", "pineapple", 2, "same", "明るい酸味のある果実同士。トロピカルジュースでもよくある"],
 ];
 
 // 根拠の種類。ペアごとの根拠は EVIDENCE で上書きし、ないものは型から決める
 export const BASIS = {
   compound: { label: "成分・文献あり", desc: "共通する香り成分を文献で確認した" },
   classic: { label: "定番・出典あり", desc: "料理や飲み物の定番であることを出典で確認した" },
+  market: { label: "市販品あり", desc: "メーカーが1つの商品の中でこの2つを組み合わせて売っている（フレーバー一覧で確認）" },
   common: { label: "定番・出典未確認", desc: "一般によく知られる組み合わせだが、出典はまだつけていない" },
   opinion: { label: "主観・未検証", desc: "作成者の判断。実際に吸って確かめる必要がある" },
 };
@@ -286,6 +466,7 @@ const EVIDENCE = [
   ["grapefruit", "orange", "compound", "c18"],
   ["grapefruit", "bergamot", "compound", "c18"],
   ["orange", "bergamot", "compound", "c18"],
+  ["lime", "orange", "compound", "c18"],
   ["orange", "lavender", "compound", "c19"],
   ["orange", "cardamom", "compound", "c20"],
   ["jasmine", "bergamot", "compound", "c21"],
@@ -315,11 +496,42 @@ function pairKey(a, b) {
   return a < b ? `${a}|${b}` : `${b}|${a}`;
 }
 
+// フレーバー一覧の風味タグを、相性表のフレーバーに寄せる
+export const NOTE_TO_FLAVOR = {
+  ...Object.fromEntries(FLAVORS.map((f) => [f.id, f.id])),
+  strawberry: "berry", blueberry: "berry", raspberry: "berry", blackcurrant: "berry", cranberry: "berry",
+  tangerine: "orange", cream: "milk", yogurt: "milk", bubblegum: "candy", licorice: "anise",
+  greentea: "whitetea",
+};
+
+// 1つの商品の中で組み合わされているフレーバーの組（メーカーが実際に売っている組み合わせ）
+const MARKET_MAP = new Map();
+for (const [brand, name, , notes] of CATALOG) {
+  const ids = [...new Set(notes.map((n) => NOTE_TO_FLAVOR[n]).filter(Boolean))];
+  for (let i = 0; i < ids.length; i++) {
+    for (let j = i + 1; j < ids.length; j++) {
+      const key = pairKey(ids[i], ids[j]);
+      if (!MARKET_MAP.has(key)) MARKET_MAP.set(key, []);
+      MARKET_MAP.get(key).push({ brand, name });
+    }
+  }
+}
+
+export function marketProducts(a, b) {
+  return MARKET_MAP.get(pairKey(a, b)) || [];
+}
+
 const EVIDENCE_MAP = new Map(EVIDENCE.map(([a, b, basis, claim]) => [pairKey(a, b), { basis, claim }]));
+
+// 文献の根拠がなければ、市販品 → 定番（出典未確認）→ 主観の順で決める
+function defaultBasis(a, b, type) {
+  if (marketProducts(a, b).length > 0) return "market";
+  return type === "classic" ? "common" : "opinion";
+}
 
 const PAIR_MAP = new Map(
   PAIRS.map(([a, b, rating, type, reason]) => {
-    const evidence = EVIDENCE_MAP.get(pairKey(a, b)) || { basis: type === "classic" ? "common" : "opinion", claim: null };
+    const evidence = EVIDENCE_MAP.get(pairKey(a, b)) || { basis: defaultBasis(a, b, type), claim: null };
     return [pairKey(a, b), { a, b, rating, type, reason, ...evidence }];
   })
 );
