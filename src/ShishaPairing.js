@@ -2,6 +2,7 @@ import { useState } from "react";
 import { FLAVORS, CATEGORIES, RATINGS, TYPES, BASIS, getPair, marketProducts, getFlavor, ratioHint, bridgeCandidates } from "./pairingData";
 import { CLAIMS, BACKGROUND } from "./pairingSources";
 import FlavorCatalog from "./FlavorCatalog";
+import TastingLog, { TastingContext, TastingSummary, useTastings, emptyDraft } from "./TastingLog";
 import "./ShishaHearing.css";
 import "./ShishaPairing.css";
 
@@ -9,6 +10,7 @@ const TABS = [
   { id: "search", label: "フレーバーから探す" },
   { id: "matrix", label: "対応表" },
   { id: "catalog", label: "フレーバー一覧" },
+  { id: "tasting", label: "試飲記録" },
   { id: "guide", label: "型の説明" },
 ];
 
@@ -117,6 +119,7 @@ function PairDetail({ a, b }) {
         <p className="sp-detail-reason muted">まだ評価していない組み合わせです</p>
       )}
       <MarketList a={a} b={b} />
+      <TastingSummary a={a} b={b} />
     </div>
   );
 }
@@ -311,7 +314,7 @@ function GuideView() {
           </div>
         ))}
         <p className="sp-note">
-          ◎○△×の評価そのものは、どの組み合わせも作成者の判断です。実際に吸って確かめたデータではありません
+          ◎○△×の評価そのものは、どの組み合わせも作成者の判断です。実際に吸った評価は「試飲記録」にたまっていきます
         </p>
       </section>
 
@@ -339,6 +342,15 @@ function GuideView() {
 export default function ShishaPairing({ onBack }) {
   const [tab, setTab] = useState("search");
   const [selected, setSelected] = useState([]);
+  const [draft, setDraft] = useState(() => emptyDraft());
+  const tastings = useTastings();
+
+  // 相性の詳細から、その組み合わせを試飲記録のフォームに入れて開く
+  function startRecord(a, b) {
+    setDraft((d) => ({ ...d, a, b }));
+    setTab("tasting");
+    window.scrollTo(0, 0);
+  }
 
   // フレーバー一覧の風味タグから、相性表のそのフレーバーを開く
   function openFlavor(id) {
@@ -348,6 +360,7 @@ export default function ShishaPairing({ onBack }) {
   }
 
   return (
+    <TastingContext.Provider value={{ ...tastings, startRecord }}>
     <div className="app sh-page sp-page">
       <header className="app-header">
         <button className="back-btn" onClick={onBack}>← ホームへ</button>
@@ -367,8 +380,10 @@ export default function ShishaPairing({ onBack }) {
         {tab === "search" && <SearchView selected={selected} setSelected={setSelected} />}
         {tab === "matrix" && <MatrixView />}
         {tab === "catalog" && <FlavorCatalog onOpenFlavor={openFlavor} />}
+        {tab === "tasting" && <TastingLog draft={draft} setDraft={setDraft} />}
         {tab === "guide" && <GuideView />}
       </div>
     </div>
+    </TastingContext.Provider>
   );
 }

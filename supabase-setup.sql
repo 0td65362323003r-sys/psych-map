@@ -19,3 +19,23 @@ alter table patterns enable row level security;
 
 create policy "Public read"   on patterns for select using (true);
 create policy "Public insert" on patterns for insert with check (true);
+
+-- ─── シーシャの試飲記録（フレーバー相性表の「試飲記録」タブ） ───
+create table if not exists tastings (
+  id          uuid        default gen_random_uuid() primary key,
+  flavor_a    text        not null,
+  flavor_b    text        not null,
+  score       smallint    not null check (score between 1 and 5),
+  ratio       text        default '',
+  products    text        default '',
+  taster      text        default '',
+  blind       boolean     default false,
+  note        text        default '',
+  created_at  timestamptz default now()
+);
+
+alter table tastings enable row level security;
+
+create policy "Public read"   on tastings for select using (true);
+create policy "Public insert" on tastings for insert with check (true);
+create policy "Public delete" on tastings for delete using (true);
