@@ -660,6 +660,372 @@ export const CLAIMS = {
         "url": "https://en.wikipedia.org/wiki/Masala_chai"
       }
     ]
+  },
+  "c35": {
+    "verdict": "partial",
+    "summary": "スイカ果汁の主要香気はC6・C9のアルデヒド/アルコールで、(Z)-6-ノネナールや(E,Z)-2,6-ノナジエナール、(Z)-6-ノネノールがOAV/AEDAで重要とされる。メロンでも(Z)-6-ノネナールや(Z,Z)-3,6-ノナジエノール等のC9化合物が特徴的だが、Schieberleら(1990)のAEDAではマスクメロンの最重要香気はエステル類とC6アルデヒドであり、C9化合物の「共通キー香気」という表現は品種・手法依存の注意付き。",
+    "sources": [
+      {
+        "title": "Evaluation of Potent Odorants in Cucumbers (Cucumis sativus) and Muskmelons (Cucumis melo) by Aroma Extract Dilution Analysis",
+        "by": "Schieberle P., Ofner S., Grosch W. (Journal of Food Science)",
+        "year": 1990,
+        "url": "https://portal.fis.leibniz-lsb.tum.de/en/publications/evaluation-of-potent-odorants-in-cucumbers-cucumis-sativus-and-mu-3/"
+      },
+      {
+        "title": "Comparison of SPME Versus SAFE Processes for the Analysis of Flavor Compounds in Watermelon Juice",
+        "by": "AGRIS record (Food Analytical Methods)",
+        "year": 2018,
+        "url": "https://agris.fao.org/search/en/records/65df07f76eef00c2cea1aee7"
+      },
+      {
+        "title": "6-Nonenal",
+        "by": "Wikipedia",
+        "year": 2024,
+        "url": "https://en.wikipedia.org/wiki/6-Nonenal"
+      }
+    ]
+  },
+  "c36": {
+    "verdict": "partial",
+    "summary": "リンゴ(Malus)とナシ(Pyrus)はいずれもバラ科Maleae族Malinae亜族の仁果類で分類面は確実。リンゴではヘキシルアセテート・ブチルアセテート・2-メチル酪酸エチルが重要香気で、ナシでもヘキシルアセテートやブチルアセテートが主要エステルだが、洋ナシ特有の香りは2,4-デカジエン酸エチルが担っており、共通エステルは『重なりがある』程度の主張に留めるべき。",
+    "sources": [
+      {
+        "title": "Maleae",
+        "by": "Wikipedia",
+        "year": 2024,
+        "url": "https://en.wikipedia.org/wiki/Maleae"
+      },
+      {
+        "title": "Characteristic Volatiles and Cultivar Classification in 35 Apple Varieties: A Case Study of Two Harvest Years",
+        "by": "PMC (Foods)",
+        "year": 2022,
+        "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8909895/"
+      },
+      {
+        "title": "Aroma active compounds in Bartlett pears and their changes during ...",
+        "by": "Leibniz-LSB@TUM publication portal",
+        "year": 2016,
+        "url": "https://portal.fis.leibniz-lsb.tum.de/en/publications/aroma-active-compounds-in-bartlett-pears-and-their-changes-during-3/"
+      }
+    ]
+  },
+  "c37": {
+    "verdict": "supported",
+    "summary": "ココア入りスポンジにサクランボ、キルシュ、ホイップクリームを重ね、ダークチョコで飾るケーキと説明されている。ドイツでは名称使用にキルシュヴァッサーが必須とされる。",
+    "sources": [
+      {
+        "title": "Black Forest gateau",
+        "by": "Wikipedia",
+        "year": 2024,
+        "url": "https://en.wikipedia.org/wiki/Black_Forest_gateau"
+      },
+      {
+        "title": "Black Forest Gateau",
+        "by": "MasterClass",
+        "year": 2021,
+        "url": "https://www.masterclass.com/articles/black-forest-gateau"
+      }
+    ]
+  },
+  "c38": {
+    "verdict": "supported",
+    "summary": "コカ・コーラ社は1985年2月にCherry Cokeを発売し、同社初のフレーバー付きコーラとなった。現在はCoca-Cola Cherryとして販売が続く。",
+    "sources": [
+      {
+        "title": "Coca-Cola Cherry",
+        "by": "Wikipedia",
+        "year": 2024,
+        "url": "https://en.wikipedia.org/wiki/Coca-Cola_Cherry"
+      },
+      {
+        "title": "Three decades of the timeless taste of Cherry Coke",
+        "by": "Coca-Cola (Coke Solutions)",
+        "year": 2015,
+        "url": "https://www.cokesolutions.com/products/articles/three-decades-of-the-timeless-taste-of-cherry-coke"
+      }
+    ]
+  },
+  "c39": {
+    "verdict": "supported",
+    "summary": "IBA公式レシピはホワイトラム50ml、コーラ120ml、フレッシュライムジュース10mlをハイボールグラスで作り、ライムを飾る。",
+    "sources": [
+      {
+        "title": "Cuba Libre",
+        "by": "International Bartenders Association",
+        "year": 2024,
+        "url": "https://iba-world.com/cocktails/cuba-libre/"
+      }
+    ]
+  },
+  "c40": {
+    "verdict": "partial",
+    "summary": "OpenColaの配合は柑橘油(オレンジ・ライム・レモン)、ナツメグ、コリアンダー、ネロリ、ラベンダーに加えカシア油(シナモン近縁種)を含む。厳密には「シナモン」ではなくカシアで、バニラはこの配合に含まれない点が注意。",
+    "sources": [
+      {
+        "title": "OpenCola (drink)",
+        "by": "Wikipedia",
+        "year": 2024,
+        "url": "https://en.wikipedia.org/wiki/OpenCola_(drink)"
+      },
+      {
+        "title": "Cola: The Secret Formula",
+        "by": "Art of Drink",
+        "year": 2009,
+        "url": "https://www.artofdrink.com/blog/cola-the-secret-formula"
+      }
+    ]
+  },
+  "c41": {
+    "verdict": "supported",
+    "summary": "砂糖シロップで煮た洋ナシにバニラアイスとチョコレートソースを添えるデザートで、エスコフィエ考案とされる。",
+    "sources": [
+      {
+        "title": "Poire belle Hélène",
+        "by": "Wikipedia",
+        "year": 2024,
+        "url": "https://en.wikipedia.org/wiki/Poire_belle_H%C3%A9l%C3%A8ne"
+      }
+    ]
+  },
+  "c42": {
+    "verdict": "supported",
+    "summary": "ブレナンズ(ニューオーリンズ、1951年)のレシピはバター、ブラウンシュガー、シナモン、バナナリキュール、バナナ、ラムでフランベし、バニラアイスに掛ける。",
+    "sources": [
+      {
+        "title": "Bananas Foster (Recipe courtesy of Brennan's Restaurant)",
+        "by": "Food Network",
+        "year": null,
+        "url": "https://www.foodnetwork.com/recipes/bananas-foster-recipe8-1925623.amp"
+      },
+      {
+        "title": "Bananas Foster",
+        "by": "Edible New Orleans",
+        "year": null,
+        "url": "https://edibleneworleans.ediblecommunities.com/recipes/bananas-foster"
+      }
+    ]
+  },
+  "c43": {
+    "verdict": "supported",
+    "summary": "ラム、生バナナ、ライムジュース、甘味料(シロップ等)を氷とブレンドするフローズン形式のダイキリ派生として各レシピで一致。バナナリキュールを加える版もある。",
+    "sources": [
+      {
+        "title": "Banana Daiquiri",
+        "by": "Punch",
+        "year": null,
+        "url": "https://punchdrink.com/recipes/banana-daiquiri/"
+      }
+    ]
+  },
+  "c44": {
+    "verdict": "supported",
+    "summary": "POGはパッションフルーツ・オレンジ・グァバの頭文字で、1971年にマウイ島のHaleakala Dairy向けに考案されたハワイのジュース。",
+    "sources": [
+      {
+        "title": "Pog (drink)",
+        "by": "Wikipedia",
+        "year": 2024,
+        "url": "https://en.wikipedia.org/wiki/Pog_(drink)"
+      },
+      {
+        "title": "POG Juice: Hawaii's Passion-Orange-Guava Drink",
+        "by": "Hawaii Guide",
+        "year": null,
+        "url": "https://www.hawaii-guide.com/pog-juice"
+      }
+    ]
+  },
+  "c45": {
+    "verdict": "supported",
+    "summary": "牛乳と砂糖を数時間かけて加熱し、カラメル化とメイラード反応で褐色・濃厚になる菓子と説明されている。",
+    "sources": [
+      {
+        "title": "Dulce de leche",
+        "by": "Wikipedia",
+        "year": 2024,
+        "url": "https://en.wikipedia.org/wiki/Dulce_de_leche"
+      },
+      {
+        "title": "Dulce de Leche",
+        "by": "America's Test Kitchen",
+        "year": null,
+        "url": "https://www.americastestkitchen.com/recipes/14327-dulce-de-leche"
+      }
+    ]
+  },
+  "c46": {
+    "verdict": "supported",
+    "summary": "メキシコのオルチャータは米・シナモン・砂糖が基本で、牛乳やバニラが加えられることもある。スペインのものはタイガーナッツ製で別物。",
+    "sources": [
+      {
+        "title": "Horchata",
+        "by": "Wikipedia",
+        "year": 2024,
+        "url": "https://en.wikipedia.org/wiki/Horchata"
+      },
+      {
+        "title": "Horchata de Arroz con Almendras",
+        "by": "Saveur",
+        "year": null,
+        "url": "https://www.saveur.com/article/Recipes/Horchata-de-Arroz-con-Almendras/"
+      }
+    ]
+  },
+  "c47": {
+    "verdict": "supported",
+    "summary": "ローズシロップ、バーミセリ、スイートバジルシード(サブジャ)を牛乳と合わせ、クルフィやアイスを載せる南アジアの冷菓/飲料。",
+    "sources": [
+      {
+        "title": "Falooda",
+        "by": "Wikipedia",
+        "year": 2024,
+        "url": "https://en.wikipedia.org/wiki/Falooda"
+      }
+    ]
+  },
+  "c48": {
+    "verdict": "supported",
+    "summary": "アラビアコーヒーは焙煎豆をカルダモン(時にサフラン)と煮出すのが一般的で、カルダモンが最も典型的な香辛料。2015年にUNESCO無形文化遺産に登録。",
+    "sources": [
+      {
+        "title": "Arabic coffee",
+        "by": "Wikipedia",
+        "year": 2024,
+        "url": "https://en.wikipedia.org/wiki/Arabic_coffee"
+      },
+      {
+        "title": "Qahwa",
+        "by": "National Museum of Qatar",
+        "year": null,
+        "url": "https://nmoq.org.qa/en/calendar/stories-of-coffee-in-qatar-and-indonesia/qahwa/"
+      }
+    ]
+  },
+  "c49": {
+    "verdict": "supported",
+    "summary": "紅茶を牛乳と水で煮出し、カルダモン・シナモン・生姜等のスパイスと砂糖を加えるインドの飲料。",
+    "sources": [
+      {
+        "title": "Masala chai",
+        "by": "Wikipedia",
+        "year": 2024,
+        "url": "https://en.wikipedia.org/wiki/Masala_chai"
+      },
+      {
+        "title": "Spiced Tea with Milk (Masala Chai)",
+        "by": "America's Test Kitchen",
+        "year": null,
+        "url": "https://www.americastestkitchen.com/recipes/5194-spiced-tea-with-milk-masala-chai"
+      }
+    ]
+  },
+  "c50": {
+    "verdict": "partial",
+    "summary": "考案者Douglas Ankrahのレシピはバニラウォッカ、パッソア、パッションフルーツピューレ、バニラシュガーで、シャンパンのショットを添える。ライムは一部の派生レシピのみで、プロセッコは代用として一般化したもの。",
+    "sources": [
+      {
+        "title": "Pornstar Martini",
+        "by": "Punch",
+        "year": null,
+        "url": "https://punchdrink.com/recipes/pornstar-martini/"
+      },
+      {
+        "title": "Pornstar Martini recipe",
+        "by": "VinePair",
+        "year": null,
+        "url": "https://vinepair.com/cocktail-recipe/pornstar-martini"
+      },
+      {
+        "title": "Cocktail of the Week: The Pornstar Martini",
+        "by": "Master of Malt",
+        "year": null,
+        "url": "https://www.masterofmalt.com/blog/post/cocktail-of-the-week-the-pornstar-martini/"
+      }
+    ]
+  },
+  "c51": {
+    "verdict": "partial",
+    "summary": "マンゴーではAEDA/OAVで酪酸エチルや2-メチル酪酸エチル等のエステルが主要香気とされ、パッションフルーツでも酪酸エチル・ヘキサン酸エチルが主要な果実香成分。両者を直接比較した研究は見当たらず、個別研究の重なりからの推論である(パッションフルーツ特有の香りは硫黄化合物も寄与)。",
+    "sources": [
+      {
+        "title": "Insights into the key aroma compounds in mango (Mangifera indica L. 'Haden') fruits by stable isotope dilution quantitation and aroma simulation experiments",
+        "by": "Leibniz-LSB@TUM publication portal (J. Agric. Food Chem.)",
+        "year": 2016,
+        "url": "https://portal.fis.leibniz-lsb.tum.de/en/publications/insights-into-the-key-aroma-compounds-in-mango-mangifera-indica-l-4/"
+      },
+      {
+        "title": "Volatile compounds from organic and conventional passion fruit (Passiflora edulis F. Flavicarpa) pulp",
+        "by": "Food Science and Technology (SciELO)",
+        "year": null,
+        "url": "https://scielo.br/j/cta/a/kZqs6BRLd9dCkVWvbK6wMKN/abstract/?lang=en"
+      }
+    ]
+  },
+  "c52": {
+    "verdict": "supported",
+    "summary": "キュウリのAEDAでは(E,Z)-2,6-ノナジエナールが最重要香気で、スイカ果汁でも同化合物が主要C9成分として報告されており、ウリ科共通の『グリーン/キュウリ様』ノートの根拠となる。",
+    "sources": [
+      {
+        "title": "Evaluation of Potent Odorants in Cucumbers (Cucumis sativus) and Muskmelons (Cucumis melo) by Aroma Extract Dilution Analysis",
+        "by": "Schieberle P., Ofner S., Grosch W. (Journal of Food Science)",
+        "year": 1990,
+        "url": "https://portal.fis.leibniz-lsb.tum.de/en/publications/evaluation-of-potent-odorants-in-cucumbers-cucumis-sativus-and-mu-3/"
+      },
+      {
+        "title": "Watermelon juice aroma review (PMC7074304)",
+        "by": "PubMed Central",
+        "year": null,
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7074304"
+      }
+    ]
+  },
+  "c53": {
+    "verdict": "partial",
+    "summary": "キウイでは酪酸エチルと(E)-2-ヘキセナール等のC6アルデヒドが中核香気とされ(ヘイワードのAEDAでは(Z)-3-ヘキセナールが最重要)、グラニースミスでもヘキサナールと(E)-2-ヘキセナールが多い。共通性はあるが、品種・異性体によって重要度が異なる。",
+    "sources": [
+      {
+        "title": "Aroma-active compounds in the fruit of the hardy kiwi (Actinidia arguta) cultivars Ananasnaya, Bojnice, and Dumbarton Oaks in comparison to kiwifruit (Actinidia deliciosa)",
+        "by": "Lindhorst A.C., Steinhaus M. (Leibniz-LSB@TUM portal)",
+        "year": 2016,
+        "url": "https://portal.fis.leibniz-lsb.tum.de/en/publications/aroma-active-compounds-in-the-fruit-of-the-hardy-kiwi-actinidia-a-4/"
+      },
+      {
+        "title": "Volatile profiles of 23 kiwifruit cultivars (Foods)",
+        "by": "Lan et al., Foods (PMC)",
+        "year": 2021,
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8306980"
+      },
+      {
+        "title": "Aroma compounds in Granny Smith apple peel, pulp and core (HS-SPME-GC-MS)",
+        "by": "Food Science (食品科学)",
+        "year": 2010,
+        "url": "https://www.spkx.net.cn/CN/Y2010/V31/I18/262"
+      }
+    ]
+  },
+  "c54": {
+    "verdict": "partial",
+    "summary": "酢酸イソアミルはバナナの代表的香気で、香調はバナナ/洋ナシ様とされ『ペアオイル』とも呼ばれる。リンゴでも富士・ジョナゴールド等で主要成分として報告されるが、35品種研究のキー香気には含まれず、洋ナシでの重要性も一次研究では確認できなかった。",
+    "sources": [
+      {
+        "title": "Isoamyl acetate",
+        "by": "Wikipedia",
+        "year": 2024,
+        "url": "https://en.wikipedia.org/wiki/Isoamyl_acetate"
+      },
+      {
+        "title": "Aroma components of apple cultivars (Fuji, Jonagold, etc.)",
+        "by": "Scientia Agricultura Sinica",
+        "year": 2006,
+        "url": "https://www.chinaagrisci.com/EN/Y2006/V39/I03/641"
+      },
+      {
+        "title": "Characteristic Volatiles and Cultivar Classification in 35 Apple Varieties: A Case Study of Two Harvest Years",
+        "by": "PMC (Foods)",
+        "year": 2022,
+        "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8909895/"
+      }
+    ]
   }
 };
 
