@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #111111;
+    --card: #1b1b1b;
+    --line: #333333;
+    --text: #f2efe8;
+    --sub: #a8a297;
+    --gold: #d4af37;
+    --gold-soft: rgba(212, 175, 55, 0.14);
+    --error: #ff8a80;
+    --rainbow: linear-gradient(90deg, #e57373, #ffb74d, #fff176, #81c784, #64b5f6, #9575cd);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Noto Serif JP", "Hiragino Mincho ProN", serif;
+    line-height: 1.7;
+  }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 32px 16px 64px; }
+  .brand { text-align: center; letter-spacing: 0.3em; color: var(--gold); font-size: 13px; margin-bottom: 4px; }
+  .title { text-align: center; font-size: 18px; margin: 0 0 24px; font-weight: 600; }
+
+  .progress-text { display: flex; justify-content: space-between; font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+  .progress-text strong { color: var(--gold); font-size: 15px; }
+  .progress { height: 4px; background: var(--line); border-radius: 2px; overflow: hidden; margin-bottom: 24px; }
+  .progress-bar { height: 100%; background: var(--rainbow); transition: width 0.3s; }
+
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 24px 20px; }
+  .section { font-size: 12px; color: var(--gold); letter-spacing: 0.1em; margin-bottom: 8px; }
+  .question { font-size: 17px; font-weight: 600; margin: 0 0 8px; }
+  .hint { font-size: 13px; color: var(--sub); margin: 0 0 16px; }
+
+  textarea, input[type="text"] {
+    width: 100%;
+    background: #0d0d0d;
+    color: var(--text);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 12px;
+    font: inherit;
+    font-size: 16px;
+  }
+  textarea { min-height: 160px; resize: vertical; }
+  textarea:focus, input[type="text"]:focus { outline: none; border-color: var(--gold); }
+  .field-label { font-size: 13px; color: var(--sub); margin: 16px 0 6px; }
+  .field-label.required::after { content: "（必須）"; color: var(--gold); }
+
+  .choices { display: flex; flex-direction: column; gap: 10px; }
+  .choice {
+    display: flex; align-items: center; gap: 12px;
+    width: 100%; text-align: left;
+    background: #0d0d0d; color: var(--text);
+    border: 1px solid var(--line); border-radius: 8px;
+    padding: 14px 16px; font: inherit; font-size: 15px; cursor: pointer;
+  }
+  .choice .mark { width: 18px; height: 18px; border: 1px solid var(--sub); flex-shrink: 0; }
+  .choice.single .mark { border-radius: 50%; }
+  .choice.multi .mark { border-radius: 4px; }
+  .choice.selected { border-color: var(--gold); background: var(--gold-soft); }
+  .choice.selected .mark { border-color: var(--gold); background: var(--gold); box-shadow: inset 0 0 0 3px #0d0d0d; }
+
+  .error { color: var(--error); font-size: 13px; min-height: 20px; margin-top: 12px; }
+  .actions { display: flex; gap: 12px; margin-top: 8px; }
+  .btn {
+    flex: 1; padding: 14px; border-radius: 8px; font: inherit; font-size: 15px; cursor: pointer;
+    border: 1px solid var(--line); background: transparent; color: var(--text);
+  }
+  .btn.primary { flex: 2; background: var(--gold); border-color: var(--gold); color: #111; font-weight: 600; }
+  .btn:disabled { opacity: 0.5; cursor: default; }
+  .saved-note { text-align: center; font-size: 12px; color: var(--sub); margin-top: 16px; }
+
+  .done { text-align: center; }
+  .done h2 { color: var(--gold); font-size: 20px; margin: 8px 0 12px; }
+  .review { margin-top: 24px; text-align: left; border-top: 1px solid var(--line); }
+  .review-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+  .review-item .num { color: var(--gold); width: 36px; flex-shrink: 0; }
+  .review-item .q { flex: 1; }
+  .review-item button { background: none; border: 1px solid var(--line); color: var(--sub); border-radius: 6px; padding: 4px 10px; font: inherit; font-size: 12px; cursor: pointer; }
+  .loading { text-align: center; color: var(--sub); padding: 48px 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">KURUMI</div>
+  <h1 class="title">ブランドサイト ヒアリング</h1>
+  <div id="app"><div class="loading">読み込み中…</div></div>
+</div>
+
+<script>
+  var state = { questions: [], saved: {}, index: 0, input: null };
+  var app = document.getElementById('app');
+
+  // 書きかけの文章はブラウザに一時保存し、閉じても消えないようにする
+  function draftKey(no) { return 'kurumi-hearing-draft-' + no; }
+  function loadDraft(no) {
+    try { var d = localStorage.getItem(draftKey(no)); return d ? JSON.parse(d) : null; } catch (e) { return null; }
+  }
+  function saveDraft() {
+    try { localStorage.setItem(draftKey(current().no), JSON.stringify(state.input)); } catch (e) {}
+  }
+  function clearDraft(no) {
+    try { localStorage.removeItem(draftKey(no)); } catch (e) {}
+  }
+
+  function current() { return state.questions[state.index]; }
+  function answeredCount() { return Object.keys(state.saved).length; }
+  function firstUnanswered() {
+    for (var i = 0; i < state.questions.length; i++) {
+      if (!state.saved[state.questions[i].no]) return i;
+    }
+    return -1;
+  }
+
+  function el(tag, attrs, children) {
+    var node = document.createElement(tag);
+    Object.keys(attrs || {}).forEach(function (k) {
+      if (k === 'class') node.className = attrs[k];
+      else if (k === 'text') node.textContent = attrs[k];
+      else if (k.indexOf('on') === 0) node.addEventListener(k.slice(2), attrs[k]);
+      else node.setAttribute(k, attrs[k]);
+    });
+    (children || []).forEach(function (c) { if (c) node.appendChild(c); });
+    return node;
+  }
+
+  function emptyInput(q) {
+    if (q.type === 'text' || q.type === 'textarea') return { text: '' };
+    return { choices: [], other: '', note: '' };
+  }
+
+  function startQuestion(index) {
+    state.index = index;
+    var q = current();
+    state.input = loadDraft(q.no) || state.saved[q.no] || emptyInput(q);
+    render();
+  }
+
+  function validate(q, input) {
+    if (q.type === 'text' || q.type === 'textarea') {
+      return input.text.trim() ? '' : '回答を入力してください';
+    }
+    if (!input.choices.length) return '選択肢を選んでください';
+    if (input.choices.indexOf('その他') !== -1 && !input.other.trim()) return '「その他」の内容を入力してください';
+    return '';
+  }
+
+  function render() {
+    var q = current();
+    var total = state.questions.length;
+    var input = state.input;
+    app.innerHTML = '';
+
+    var errorBox = el('div', { class: 'error' });
+    var submitBtn;
+
+    var body = [];
+    if (q.type === 'text' || q.type === 'textarea') {
+      var field = el(q.type === 'text' ? 'input' : 'textarea', {
+        placeholder: q.placeholder || '',
+        oninput: function (e) { input.text = e.target.value; saveDraft(); },
+      });
+      if (q.type === 'text') field.type = 'text';
+      field.value = input.text;
+      body.push(field);
+    } else {
+      var options = q.options.concat(q.other ? ['その他'] : []);
+      var multi = q.type === 'multi';
+      var otherWrap = el('div', {});
+
+      function renderOther() {
+        otherWrap.innerHTML = '';
+        if (input.choices.indexOf('その他') === -1) return;
+        var f = el('input', {
+          type: 'text', placeholder: 'その他の内容',
+          oninput: function (e) { input.other = e.target.value; saveDraft(); },
+        });
+        f.value = input.other;
+        otherWrap.appendChild(el('div', { class: 'field-label required', text: 'その他の内容' }));
+        otherWrap.appendChild(f);
+      }
+
+      var list = el('div', { class: 'choices' }, options.map(function (opt) {
+        var btn = el('button', {
+          type: 'button',
+          class: 'choice ' + (multi ? 'multi' : 'single') + (input.choices.indexOf(opt) !== -1 ? ' selected' : ''),
+          onclick: function () {
+            var i = input.choices.indexOf(opt);
+            if (multi) {
+              if (i === -1) input.choices.push(opt); else input.choices.splice(i, 1);
+            } else {
+              input.choices = [opt];
+            }
+            Array.prototype.forEach.call(list.children, function (b, j) {
+              b.classList.toggle('selected', input.choices.indexOf(options[j]) !== -1);
+            });
+            renderOther();
+            saveDraft();
+          },
+        }, [el('span', { class: 'mark' }), el('span', { text: opt })]);
+        return btn;
+      }));
+      body.push(list, otherWrap);
+      renderOther();
+
+      if (q.note) {
+        var note = el('textarea', {
+          placeholder: q.note,
+          oninput: function (e) { input.note = e.target.value; saveDraft(); },
+        });
+        note.style.minHeight = '96px';
+        note.value = input.note;
+        body.push(el('div', { class: 'field-label', text: q.note }), note);
+      }
+    }
+
+    function submit() {
+      var msg = validate(q, input);
+      errorBox.textContent = msg;
+      if (msg) return;
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = '保存中…';
+      google.script.run
+        .withSuccessHandler(function () {
+          state.saved[q.no] = JSON.parse(JSON.stringify(input));
+          clearDraft(q.no);
+          var next = firstUnanswered();
+          if (next === -1) renderDone(); else startQuestion(next);
+          window.scrollTo(0, 0);
+        })
+        .withFailureHandler(function () {
+          submitBtn.disabled = false;
+          submitBtn.textContent = '送信して次へ';
+          errorBox.textContent = '保存できませんでした。通信環境を確認して、もう一度送信してください。';
+        })
+        .saveAnswer(q.no, input);
+    }
+
+    submitBtn = el('button', { type: 'button', class: 'btn primary', text: '送信して次へ', onclick: submit });
+    var backBtn = el('button', {
+      type: 'button', class: 'btn', text: '前の質問',
+      onclick: function () { startQuestion(state.index - 1); window.scrollTo(0, 0); },
+    });
+    if (state.index === 0) backBtn.disabled = true;
+
+    app.appendChild(el('div', { class: 'progress-text' }, [
+      el('span', {}, [el('strong', { text: total + '問中 ' + q.no + '問目' })]),
+      el('span', { text: '回答済み ' + answeredCount() + ' / ' + total }),
+    ]));
+    var bar = el('div', { class: 'progress-bar' });
+    bar.style.width = (answeredCount() / total * 100) + '%';
+    app.appendChild(el('div', { class: 'progress' }, [bar]));
+
+    app.appendChild(el('div', { class: 'card' }, [
+      el('div', { class: 'section', text: q.section }),
+      el('h2', { class: 'question', text: q.q }),
+      q.hint ? el('p', { class: 'hint', text: q.hint }) : null,
+    ].concat(body).concat([
+      errorBox,
+      el('div', { class: 'actions' }, [backBtn, submitBtn]),
+    ])));
+    app.appendChild(el('div', { class: 'saved-note', text: '「送信して次へ」を押すと回答が保存されます。途中で閉じても、次に開いたときに続きから再開できます。' }));
+  }
+
+  function renderDone() {
+    app.innerHTML = '';
+    var total = state.questions.length;
+    app.appendChild(el('div', { class: 'card done' }, [
+      el('h2', { text: 'すべての回答が完了しました' }),
+      el('p', { class: 'hint', text: 'ご協力ありがとうございました。内容を修正したい場合は、下の一覧から選んでください。' }),
+      el('div', { class: 'review' }, state.questions.map(function (q, i) {
+        return el('div', { class: 'review-item' }, [
+          el('span', { class: 'num', text: 'Q' + q.no }),
+          el('span', { class: 'q', text: q.q }),
+          el('button', { type: 'button', text: '修正', onclick: function () { startQuestion(i); window.scrollTo(0, 0); } }),
+        ]);
+      })),
+    ]));
+    app.appendChild(el('div', { class: 'saved-note', text: '回答済み ' + answeredCount() + ' / ' + total }));
+  }
+
+  google.script.run
+    .withSuccessHandler(function (res) {
+      state.questions = res.questions;
+      state.saved = res.saved;
+      var next = firstUnanswered();
+      if (next === -1) renderDone(); else startQuestion(next);
+    })
+    .withFailureHandler(function (err) {
+      app.innerHTML = '';
+      app.appendChild(el('div', { class: 'card' }, [
+        el('p', { class: 'error', text: '読み込みに失敗しました：' + (err && err.message ? err.message : err) }),
+      ]));
+    })
+    .getState();
+</script>
+</body>
+</html>
