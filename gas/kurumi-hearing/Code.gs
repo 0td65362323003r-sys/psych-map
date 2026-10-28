@@ -1,6 +1,9 @@
 // くるみ ブランドサイト ヒアリングフォーム
 // 1問ずつ回答 → 「送信」でスプレッドシートの「回答」シートに自動保存する
 
+// スプレッドシートのIDを入れると、単体のスクリプトからでもそのシートに保存する
+// 空のままなら、このスクリプトを開いたスプレッドシートに保存する
+const SPREADSHEET_ID = '';
 const SHEET_NAME = '回答';
 const HEADERS = ['No', 'セクション', '質問', '回答', '状態', '最終更新', '入力データ'];
 const COL = { no: 1, section: 2, question: 3, answer: 4, status: 5, updated: 6, raw: 7 };
@@ -75,7 +78,7 @@ function doGet() {
 
 // 最初に1回だけ実行する。「回答」シートを作って質問を並べる（既存の回答は消さない）
 function setup() {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const ss = spreadsheet_();
   const sheet = ss.getSheetByName(SHEET_NAME) || ss.insertSheet(SHEET_NAME);
 
   sheet.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS])
@@ -133,8 +136,12 @@ function saveAnswer(no, data) {
   return true;
 }
 
+function spreadsheet_() {
+  return SPREADSHEET_ID ? SpreadsheetApp.openById(SPREADSHEET_ID) : SpreadsheetApp.getActiveSpreadsheet();
+}
+
 function getSheet_() {
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
+  const sheet = spreadsheet_().getSheetByName(SHEET_NAME);
   if (!sheet) throw new Error('「回答」シートがありません。先に setup を実行してください。');
   return sheet;
 }
