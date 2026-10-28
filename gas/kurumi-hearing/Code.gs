@@ -141,9 +141,9 @@ function spreadsheet_() {
 }
 
 function getSheet_() {
-  const sheet = spreadsheet_().getSheetByName(SHEET_NAME);
-  if (!sheet) throw new Error('「回答」シートがありません。先に setup を実行してください。');
-  return sheet;
+  // 「回答」シートがまだなければ、初回アクセス時に自動で作る
+  if (!spreadsheet_().getSheetByName(SHEET_NAME)) setup();
+  return spreadsheet_().getSheetByName(SHEET_NAME);
 }
 
 // スプレッドシートで読みやすい形にする
