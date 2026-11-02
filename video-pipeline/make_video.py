@@ -1,0 +1,241 @@
+#!/usr/bin/env python3
+"""台本（YAML）と素材（写真・短い動画）から Instagram リール用の縦型動画を作る。
+
+使い方:
+  python3 make_video.py <project.yaml> [--media 素材フォルダ] [--out 出力ファイル]
+
+- 出力: 1080x1920 / 30fps / H.264 高ビットレート / 無音トラック付き（BGMは Instagram アプリで付ける）
+- iPhone の HDR（HLG/PQ）動画は自動で SDR に変換する（そのままだと Instagram で白飛び・色あせする）
+- ズーム・パンは 2倍に拡大してから動かし、最後に縮小する（ガタつき防止）
+- テロップは ASS 字幕で焼き込む。スタイルは gothic（白太字ゴシック＋黒縁）/ mincho（白明朝＋影）
+"""
+import argparse
+import json
+import subprocess
+import sys
+import tempfile
+from pathlib import Path
+
+import yaml
+
+W, H, FPS = 1080, 1920, 30
+SS = 2  # 動きをつけるときの拡大倍率
+IMAGE_EXT = {".jpg", ".jpeg", ".png", ".heic", ".webp"}
+
+# 参考動画1本目: 白太字ゴシック＋黒縁、上から3〜4割 / 2本目: 白明朝＋影、上から約半分
+STYLES = {
+    "gothic": dict(font="Noto Sans CJK JP Black", size=84, outline=7, shadow=0, y=0.36),
+    "mincho": dict(font="Noto Serif CJK JP", size=66, outline=0, shadow=4, y=0.47, bold=True),
+}
+
+MOVES = {  # (開始ズーム, 終了ズーム, 横位置 開始→終了 0=左端 1=右端)
+    "none": (1.0, 1.0, 0.5, 0.5),
+    "zoom_in": (1.0, 1.08, 0.5, 0.5),
+    "zoom_out": (1.08, 1.0, 0.5, 0.5),
+    # 横スライド。素材を画面いっぱいに拡大した上で、はみ出した横幅を端から端まで使う
+    # （縦3:4の写真は9:16より横に余るので、そのぶん大きく動く）
+    "pan_left": (1.10, 1.10, 1.0, 0.0),
+    "pan_right": (1.10, 1.10, 0.0, 1.0),
+}
+
+
+def run(cmd):
+    r = subprocess.run(cmd, capture_output=True, text=True)
+    if r.returncode != 0:
+        sys.exit(f"失敗: {' '.join(map(str, cmd))}\n{r.stderr[-3000:]}")
+    return r.stdout
+
+
+def is_hdr(path):
+    out = run(["ffprobe", "-v", "error", "-select_streams", "v:0",
+               "-show_entries", "stream=color_transfer", "-of", "json", str(path)])
+    streams = json.loads(out).get("streams", [])
+    return bool(streams) and streams[0].get("color_transfer") in ("arib-std-b67", "smpte2084")
+
+
+def cut_params(cut):
+    """台本の move / zoom: [開始, 終了]（倍率の上書き）/ focus: [横, 縦]（寄る位置 0〜1）から動きを決める"""
+    move = cut.get("move", "zoom_in")
+    if move not in MOVES:
+        sys.exit(f"move は {list(MOVES)} のどれか: {move}")
+    z0, z1, x0, x1 = MOVES[move]
+    if "zoom" in cut:
+        z0, z1 = (float(v) for v in cut["zoom"])
+    fx, fy = cut.get("focus", [None, 0.5])
+    if fx is not None and x0 == x1:  # 横スライド以外は寄る位置を固定
+        x0 = x1 = float(fx)
+    if "slide" in cut:  # 横スライドの範囲を上書き（例: [0.2, 0.8] で動きを小さく）
+        x0, x1 = (float(v) for v in cut["slide"])
+    return z0, z1, x0, x1, float(fy)
+
+
+def cut_filter(dur, cut, hdr):
+    z0, z1, x0, x1, fy = cut_params(cut)
+    frames = max(1, round(dur * FPS))
+    p = f"min(n/{frames - 1 if frames > 1 else 1},1)"  # 0→1 の進み具合
+    f = []
+    if hdr:
+        # npl=203（HDRの基準白）＋hable が肉の霜降りやビールの色を一番自然に残した（mobius は赤が飽和した）
+        f.append("zscale=t=linear:npl=203,format=gbrpf32le,zscale=p=bt709,"
+                 "tonemap=tonemap=hable:desat=2,zscale=t=bt709:m=bt709:r=tv,format=yuv420p")
+    z = f"({z0}+({z1}-{z0})*{p})" if z0 != z1 else f"{z0}"
+    f += [
+        f"fps={FPS}",
+        # 2倍サイズの画面を覆うように拡大（ズーム中は毎フレーム計算）。縦横比は保つので、はみ出した分がスライドの余地になる
+        f"scale=w='{W*SS}*{z}':h='{H*SS}*{z}':force_original_aspect_ratio=increase:force_divisible_by=2"
+        f":flags=lanczos{':eval=frame' if z0 != z1 else ''}",
+        f"crop={W*SS}:{H*SS}:x='(iw-ow)*({x0}+({x1}-{x0})*{p})':y='(ih-oh)*{fy}'",
+        f"scale={W}:{H}:flags=lanczos", "setsar=1", "format=yuv420p",
+    ]
+    return ",".join(f)
+
+
+def normalize_photo(src, dst, blur=()):
+    """iPhone の写真を ffmpeg で扱える形にする。HEIC を読み、EXIF の回転を反映（ffmpeg は無視して横倒しになる）。
+    blur: [[x, y, 幅, 高さ], ...]（回転後の写真のピクセル座標）をぼかす。他のお客さんの顔や Wi-Fi のパスワードなど"""
+    from PIL import Image, ImageFilter, ImageOps
+    try:
+        import pillow_heif
+        pillow_heif.register_heif_opener()
+    except ImportError:
+        if src.suffix.lower() == ".heic":
+            sys.exit("HEIC を読むには pip install pillow-heif が必要")
+    with Image.open(src) as im:
+        im = ImageOps.exif_transpose(im).convert("RGB")
+    for x, y, w, h in blur:
+        box = (int(x), int(y), int(x + w), int(y + h))
+        im.paste(im.crop(box).filter(ImageFilter.GaussianBlur(max(w, h) / 6)), box)
+    im.save(dst)
+    return dst
+
+
+def render_cut(i, cut, media, tmp):
+    src = media / cut["src"]
+    if not src.exists():
+        sys.exit(f"素材が見つからない: {src}")
+    dur = float(cut["dur"])
+    out = tmp / f"cut_{i:03d}.mp4"
+    if src.suffix.lower() in IMAGE_EXT:
+        src = normalize_photo(src, tmp / f"photo_{i:03d}.png", cut.get("blur", ()))
+        inp = ["-loop", "1", "-framerate", str(FPS), "-t", f"{dur}", "-i", str(src)]
+    else:
+        inp = ["-ss", f"{float(cut.get('start', 0))}", "-t", f"{dur}", "-i", str(src)]
+    run(["ffmpeg", "-v", "error", "-y", *inp,
+         "-vf", cut_filter(dur, cut, is_hdr(src)),
+         "-frames:v", str(round(dur * FPS)), "-an",
+         "-c:v", "libx264", "-preset", "medium", "-crf", "12", str(out)])
+    return out
+
+
+def ass_time(t):
+    cs = round(t * 100)
+    return f"{cs // 360000}:{cs // 6000 % 60:02d}:{cs // 100 % 60:02d}.{cs % 100:02d}"
+
+
+def write_ass(cuts, style_name, path):
+    s = STYLES[style_name]
+    margin_v = round(H * s["y"])  # Alignment=8（上中央）で上からの位置を指定
+    lines = [
+        "[Script Info]", "ScriptType: v4.00+", f"PlayResX: {W}", f"PlayResY: {H}",
+        "WrapStyle: 2", "",
+        "[V4+ Styles]",
+        "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, "
+        "Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, "
+        "Alignment, MarginL, MarginR, MarginV, Encoding",
+        f"Style: T,{s['font']},{s['size']},&H00FFFFFF,&H00FFFFFF,&H00000000,&H80000000,"
+        f"{-1 if s.get('bold') else 0},0,0,0,100,100,2,0,1,{s['outline']},{s['shadow']},8,60,60,{margin_v},1",
+        "", "[Events]",
+        "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text",
+    ]
+    t = 0.0
+    for c in cuts:
+        d = float(c["dur"])
+        if c.get("text"):
+            text = str(c["text"]).replace("\n", "\\N")
+            lines.append(f"Dialogue: 0,{ass_time(t)},{ass_time(t + d)},T,,0,0,0,,{text}")
+        t += d
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    return t
+
+
+def preview(cuts, media, out):
+    """各カットで写真のどこが画面に映るかを1枚の画像にする。緑=カットの始まり、オレンジ=終わり、灰色の帯=テロップの位置"""
+    from PIL import Image, ImageDraw, ImageFont
+    font = ImageFont.truetype("/usr/share/fonts/opentype/noto/NotoSansCJK-Black.ttc", 40)
+    panels = []
+    with tempfile.TemporaryDirectory() as td:
+        for i, c in enumerate(cuts):
+            src = media / c["src"]
+            if src.suffix.lower() in IMAGE_EXT:
+                im = Image.open(normalize_photo(src, Path(td) / f"p{i}.png", c.get("blur", ())))
+            else:
+                run(["ffmpeg", "-v", "error", "-y", "-ss", f"{float(c.get('start', 0))}", "-i", str(src),
+                     "-frames:v", "1", str(Path(td) / f"p{i}.png")])
+                im = Image.open(Path(td) / f"p{i}.png")
+            im = im.convert("RGB")
+            iw, ih = im.size
+            z0, z1, x0, x1, fy = cut_params(c)
+            d = ImageDraw.Draw(im, "RGBA")
+            for z, xf, color in ((z0, x0, (60, 220, 90)), (z1, x1, (255, 150, 0))):
+                s_ = max(W * z / iw, H * z / ih)  # ffmpeg と同じく画面を覆う倍率
+                vw, vh = W / s_, H / s_            # 画面に映る範囲（写真の座標）
+                x, y = (iw - vw) * xf, (ih - vh) * fy
+                lw = max(4, iw // 150)
+                d.rectangle([x, y, x + vw, y + vh], outline=color, width=lw)
+                if c.get("text") and color[0] == 60:
+                    ty = y + vh * STYLES["gothic"]["y"]
+                    d.rectangle([x, ty, x + vw, ty + vh * 0.07], fill=(128, 128, 128, 110))
+            im.thumbnail((600, 800))
+            panel = Image.new("RGB", (620, 880), (24, 24, 24))
+            panel.paste(im, ((620 - im.width) // 2, 70))
+            ImageDraw.Draw(panel).text((20, 10), f"{i + 1}  {c.get('move', 'zoom_in')}", font=font, fill="white")
+            panels.append(panel)
+    sheet = Image.new("RGB", (620 * len(panels), 880))
+    for i, pn in enumerate(panels):
+        sheet.paste(pn, (620 * i, 0))
+    sheet.save(out, quality=90)
+    print(f"プレビュー: {out}")
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("project")
+    ap.add_argument("--media", help="素材フォルダ（省略時は project.yaml の media_dir、なければ yaml と同じ場所）")
+    ap.add_argument("--out")
+    ap.add_argument("--preview", help="動画は作らず、各カットの映る範囲を描いた確認用画像をここに書き出す")
+    a = ap.parse_args()
+
+    proj_path = Path(a.project).resolve()
+    proj = yaml.safe_load(proj_path.read_text(encoding="utf-8"))
+    media = Path(a.media or proj.get("media_dir") or proj_path.parent).expanduser().resolve()
+    out = Path(a.out or proj.get("output") or proj_path.with_suffix(".mp4")).resolve()
+    style = proj.get("style", "gothic")
+    if style not in STYLES:
+        sys.exit(f"style は {list(STYLES)} のどれか: {style}")
+    cuts = proj["cuts"]
+    if a.preview:
+        return preview(cuts, media, Path(a.preview))
+
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td)
+        parts = []
+        for i, c in enumerate(cuts):
+            print(f"[{i + 1}/{len(cuts)}] {c['src']} {c.get('start', 0)}s +{c['dur']}s  {c.get('text', '')!r}")
+            parts.append(render_cut(i, c, media, tmp))
+        (tmp / "list.txt").write_text("".join(f"file '{p}'\n" for p in parts))
+        run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", str(tmp / "list.txt"),
+             "-c", "copy", str(tmp / "timeline.mp4")])
+        total = write_ass(cuts, style, tmp / "telop.ass")
+        run(["ffmpeg", "-v", "error", "-y", "-i", str(tmp / "timeline.mp4"),
+             "-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo",
+             "-vf", f"ass={tmp / 'telop.ass'}",
+             "-map", "0:v", "-map", "1:a", "-t", f"{total}",
+             "-c:v", "libx264", "-preset", "slow", "-crf", "16", "-profile:v", "high", "-level", "4.2",
+             "-pix_fmt", "yuv420p", "-r", str(FPS),
+             "-color_primaries", "bt709", "-color_trc", "bt709", "-colorspace", "bt709",
+             "-c:a", "aac", "-b:a", "128k", "-movflags", "+faststart", str(out)])
+    print(f"完了: {out}（{total:.1f}秒）")
+
+
+if __name__ == "__main__":
+    main()

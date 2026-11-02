@@ -1,0 +1,19 @@
+# カフェ紹介: Roasted COFFEE LABORATORY（店内の看板・ロゴから。「渋谷」は Wi-Fi ID の roasted-shibuya から推定、要確認）
+# 写真5枚・送られてきた順番どおり。基本は横スライド、ドリンクだけ寄る
+# テロップは写真から読み取れることだけで書いた仮のもの（本人の感想が入ったら差し替える）
+style: gothic
+output: cafe_roasted.mp4
+
+cuts:
+  - {src: cafe_1.jpg, dur: 1.7, move: pan_right, text: "渋谷でひと休みするなら"}
+  - {src: cafe_2.jpg, dur: 1.5, move: pan_left,  text: "Roasted COFFEE\nLABORATORY"}
+  # Wi-Fi のパスワードをぼかす
+  - {src: cafe_3.jpg, dur: 1.7, move: pan_right, text: "ボリューム満点の\nサンドに、",
+     blur: [[1440, 780, 270, 85]]}
+  # 他のお客さん・店員さんの顔をぼかす
+  - {src: cafe_4.jpg, dur: 1.7, move: pan_left,  text: "ゆったり過ごせる店内。",
+     blur: [[320, 905, 110, 145], [705, 1035, 140, 175], [1105, 1135, 90, 95],
+            [1205, 1145, 95, 105], [1485, 1185, 140, 160], [1735, 1215, 160, 175]]}
+  # ドリンクだけアップ（グラスに向かって 1.0→1.3倍）
+  - {src: cafe_5.jpg, dur: 2.4, move: zoom_in, zoom: [1.0, 1.3], focus: [0.3, 0.55],
+     text: "窓際の一杯で\nほっと一息。"}

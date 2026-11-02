@@ -1,0 +1,15 @@
+# 試作: 写真だけで作る版（焼肉の動画から切り出した静止画7枚。うち1枚は HEIC、1枚は EXIF 回転付き JPEG）
+# 写真は動かないので、カットごとに動き（ズーム・パン）を変えて単調にならないようにする
+style: gothic
+output: trial_yakiniku_photo.mp4
+
+cuts:
+  - {src: photo_1.jpg,  dur: 1.3, move: zoom_in,   text: "焼肉でこれが\n出てきたら、"}
+  - {src: photo_2.jpg,  dur: 1.1, move: pan_right, text: "テンション\n上がらない人いる？"}
+  - {src: photo_3.jpg,  dur: 1.2, move: zoom_out,  text: "お肉で作った\nバラの花に、"}
+  - {src: photo_1.jpg,  dur: 1.1, move: pan_left,  text: "霜降りがずらり。"}
+  - {src: photo_4.heic, dur: 1.2, move: zoom_in,   text: "ネギたっぷりの"}
+  - {src: photo_5.jpg,  dur: 1.2, move: pan_right, text: "タン塩も\n外せないし、"}
+  - {src: photo_6.jpg,  dur: 1.2, move: zoom_in,   text: "箸休めのキムチまで"}
+  - {src: photo_7.jpg,  dur: 1.2, move: zoom_out,  text: "抜かりなし。"}
+  - {src: photo_3.jpg,  dur: 1.4, move: zoom_in,   text: "ビール片手に\n全部いきたい。"}
