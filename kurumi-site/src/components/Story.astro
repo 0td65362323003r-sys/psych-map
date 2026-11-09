@@ -1,0 +1,98 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import { t, localePath, type Lang } from '../i18n/ui';
+import { works } from '../data/works';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const ui = t(lang);
+const s = ui.story;
+const milanPhoto = works.find((w) => w.id === 'look-08')!.images[2];
+---
+
+<Base lang={lang} path="story/" title={ui.seo.story.title} description={ui.seo.story.desc}>
+  <header class="page-head wrap">
+    <p class="eyebrow">Story</p>
+    <h1>{s.title}</h1>
+    <p class="sub">{ui.philosophy}</p>
+  </header>
+
+  {
+    s.sections.map((sec) => (
+      <section class="section">
+        <div class="wrap narrow">
+          <h2>{sec.h}</h2>
+          {sec.p.map((p) => <p>{p}</p>)}
+        </div>
+      </section>
+    ))
+  }
+
+  <section class="section">
+    <div class="wrap narrow">
+      <h2>{s.valuesTitle}</h2>
+      <dl class="values">
+        {s.values.map((v) => <div><dt>{v.h}</dt><dd>{v.p}</dd></div>)}
+      </dl>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap milan">
+      <Image src={milanPhoto} alt="" widths={[480, 800]} sizes="(max-width: 800px) 100vw, 40vw" />
+      <div>
+        <h2>{s.milanTitle}</h2>
+        {s.milan.map((p) => <p>{p}</p>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap narrow">
+      <h2>{s.futureTitle}</h2>
+      {s.future.map((p) => <p>{p}</p>)}
+      <a class="btn" href={localePath(lang, 'contact/')}>{ui.cta}</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .narrow {
+    max-width: 720px;
+  }
+  .values {
+    display: grid;
+    gap: 24px;
+    margin: 0;
+  }
+  .values dt {
+    color: var(--gold);
+    font-size: 18px;
+  }
+  .values dd {
+    margin: 4px 0 0;
+  }
+  .milan {
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    gap: 56px;
+    align-items: center;
+  }
+  .milan :global(img) {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+  }
+  .btn {
+    margin-top: 24px;
+  }
+  @media (max-width: 800px) {
+    .milan {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+  }
+</style>

@@ -1,0 +1,104 @@
+---
+import Base from '../layouts/Base.astro';
+import WorkCard from './WorkCard.astro';
+import { t, type Lang } from '../i18n/ui';
+import { works, type Category } from '../data/works';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const ui = t(lang);
+const c = ui.collection;
+const cats = [...new Set(works.map((w) => w.category))] as Category[];
+---
+
+<Base lang={lang} path="collection/" title={ui.seo.collection.title} description={ui.seo.collection.desc}>
+  <header class="page-head wrap">
+    <p class="eyebrow">Collection</p>
+    <h1>{c.title}</h1>
+    <p class="lead">{c.lead}</p>
+  </header>
+
+  <section class="wrap">
+    <div class="filters" role="group">
+      <button type="button" data-cat="all" aria-pressed="true">{c.all}</button>
+      {cats.map((cat) => <button type="button" data-cat={cat} aria-pressed="false">{ui.categories[cat]}</button>)}
+    </div>
+    <ul class="grid">
+      {works.map((w) => <li data-cat={w.category}><WorkCard work={w} lang={lang} /></li>)}
+    </ul>
+  </section>
+
+  <section class="section glossary">
+    <div class="wrap">
+      <h2>{c.materialGlossaryTitle}</h2>
+      <dl>
+        {c.glossary.map((g) => <div><dt>{g.h}</dt><dd>{g.p}</dd></div>)}
+      </dl>
+    </div>
+  </section>
+</Base>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('.filters button');
+  const items = document.querySelectorAll<HTMLLIElement>('.grid li');
+  buttons.forEach((b) =>
+    b.addEventListener('click', () => {
+      buttons.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      items.forEach((li) => (li.hidden = b.dataset.cat !== 'all' && li.dataset.cat !== b.dataset.cat));
+    }),
+  );
+</script>
+
+<style>
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 32px;
+  }
+  .filters button {
+    background: none;
+    border: 1px solid var(--line);
+    color: var(--text-sub);
+    font: inherit;
+    font-size: 13px;
+    padding: 6px 16px;
+    cursor: pointer;
+  }
+  .filters button[aria-pressed='true'] {
+    border-color: var(--gold);
+    color: var(--text);
+  }
+  .grid {
+    list-style: none;
+    margin: 0 0 96px;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px 24px;
+  }
+  .glossary dl {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    margin: 0;
+  }
+  .glossary dt {
+    color: var(--gold);
+  }
+  .glossary dd {
+    margin: 4px 0 0;
+    font-size: 14px;
+  }
+  @media (max-width: 800px) {
+    .grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px 12px;
+    }
+    .glossary dl {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

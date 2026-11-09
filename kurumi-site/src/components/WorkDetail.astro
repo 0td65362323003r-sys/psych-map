@@ -1,0 +1,99 @@
+---
+import { Image, getImage } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import { t, localePath, type Lang } from '../i18n/ui';
+import type { Work } from '../data/works';
+
+interface Props {
+  lang: Lang;
+  work: Work;
+}
+const { lang, work } = Astro.props;
+const ui = t(lang);
+const c = ui.collection;
+const name = work.name[lang];
+const og = await getImage({ src: work.images[0], width: 1200, format: 'jpg' });
+---
+
+<Base
+  lang={lang}
+  path={`collection/${work.id}/`}
+  title={`${name}${lang === 'ja' ? '｜KURUMI' : ' – KURUMI'}`}
+  description={work.note?.[lang] ?? ui.seo.collection.desc}
+  image={og.src}
+>
+  <article class="wrap work">
+    <div class="photos">
+      {
+        work.images.map((img, i) => (
+          <Image src={img} alt={`${name} ${i + 1}`} widths={[480, 900, 1300]} sizes="(max-width: 900px) 100vw, 60vw" loading={i === 0 ? 'eager' : 'lazy'} />
+        ))
+      }
+    </div>
+    <div class="info">
+      <p class="eyebrow">{ui.categories[work.category]}</p>
+      <h1>{name}</h1>
+      <dl>
+        <dt>{c.materials}</dt>
+        <dd>{work.materials?.[lang] ?? c.materialsTbc}</dd>
+      </dl>
+      {work.note && <p>{work.note[lang]}</p>}
+      <a class="btn" href={`${localePath(lang, 'contact/')}?ref=${work.id}`}>{c.orderFromThis}</a>
+      <a class="more" href={localePath(lang, 'collection/')}>{c.back}</a>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .work {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 56px;
+    padding-top: 120px;
+    padding-bottom: 96px;
+  }
+  .photos {
+    display: grid;
+    gap: 16px;
+  }
+  .photos :global(img) {
+    width: 100%;
+  }
+  .info {
+    position: sticky;
+    top: 120px;
+    align-self: start;
+  }
+  .info h1 {
+    font-weight: 500;
+    font-size: clamp(22px, 3vw, 30px);
+    margin: 8px 0 24px;
+  }
+  dl {
+    margin: 0 0 24px;
+  }
+  dt {
+    color: var(--text-sub);
+    font-size: 13px;
+  }
+  dd {
+    margin: 0;
+  }
+  .btn {
+    margin: 8px 0 24px;
+  }
+  .more {
+    display: block;
+    width: fit-content;
+  }
+  @media (max-width: 900px) {
+    .work {
+      grid-template-columns: 1fr;
+      gap: 32px;
+      padding-top: 88px;
+    }
+    .info {
+      position: static;
+    }
+  }
+</style>

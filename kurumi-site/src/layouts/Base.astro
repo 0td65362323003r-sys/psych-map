@@ -1,0 +1,327 @@
+---
+import '../styles/global.css';
+import { t, localePath, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  // 言語を除いたページのパス（例：'story/'）。言語切り替えとhreflangに使う
+  path: string;
+  title: string;
+  description: string;
+  image?: string;
+}
+
+const { lang, path, title, description, image } = Astro.props;
+const ui = t(lang);
+const other: Lang = lang === 'ja' ? 'en' : 'ja';
+const canonical = new URL(localePath(lang, path), Astro.site);
+const ogImage = image ? new URL(image, Astro.site).href : undefined;
+const current = Astro.url.pathname;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'KURUMI',
+  legalName: lang === 'ja' ? '合同会社Kurumi&Co.' : 'Kurumi&Co. LLC',
+  url: new URL('/', Astro.site).href,
+  founder: { '@type': 'Person', name: lang === 'ja' ? '横山胡桃' : 'Kurumi Yokoyama', jobTitle: 'Designer' },
+  sameAs: ['https://www.instagram.com/kurumi_official_japan/', 'https://www.youtube.com/@kurumi_jp'],
+};
+---
+
+<!doctype html>
+<html lang={lang} data-palette="black">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="ja" href={new URL(localePath('ja', path), Astro.site)} />
+    <link rel="alternate" hreflang="en" href={new URL(localePath('en', path), Astro.site)} />
+    <link rel="alternate" hreflang="x-default" href={new URL(localePath('ja', path), Astro.site)} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="KURUMI" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={lang === 'ja' ? 'ja_JP' : 'en_US'} />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=Noto+Serif+JP:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <script is:inline>
+      // 配色の比較用（?palette=brown で茶×金）。デザイン確定後に削除する
+      try {
+        const p = new URLSearchParams(location.search).get('palette') || sessionStorage.getItem('palette');
+        if (p === 'brown' || p === 'black') {
+          document.documentElement.dataset.palette = p;
+          sessionStorage.setItem('palette', p);
+        }
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <header class="header">
+      <div class="header-inner">
+        <a class="logo" href={localePath(lang)}>KURUMI</a>
+        <nav class="nav" id="nav" aria-label={ui.menu}>
+          <ul>
+            {
+              ui.nav.map((item) => {
+                const href = localePath(lang, item.href);
+                return (
+                  <li>
+                    <a href={href} aria-current={current.startsWith(href) ? 'page' : undefined}>
+                      <span class="nav-label">{item.label}</span>
+                      <span class="nav-sub">{item.sub}</span>
+                    </a>
+                  </li>
+                );
+              })
+            }
+          </ul>
+          <a class="lang" href={localePath(other, path)} hreflang={other} lang={other}>{ui.langSwitch}</a>
+        </nav>
+        <button class="menu-btn" type="button" aria-controls="nav" aria-expanded="false">
+          <span class="menu-open">{ui.menu}</span><span class="menu-close">{ui.close}</span>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="footer">
+      <div class="wrap footer-inner">
+        <div>
+          <a class="logo" href={localePath(lang)}>KURUMI</a>
+          <p class="sub footer-philosophy">{ui.philosophy}</p>
+        </div>
+        <ul class="footer-links">
+          <li><a href="https://www.instagram.com/kurumi_official_japan/" rel="noopener" target="_blank">Instagram</a></li>
+          <li><a href="https://www.youtube.com/@kurumi_jp" rel="noopener" target="_blank">YouTube</a></li>
+          <li><a href={localePath(lang, 'company/')}>{ui.footer.company}</a></li>
+          <li><a href={localePath(lang, 'privacy/')}>{ui.footer.privacy}</a></li>
+          <li><a href={localePath(other, path)} hreflang={other} lang={other}>{ui.langSwitch}</a></li>
+        </ul>
+      </div>
+      <p class="wrap copyright sub">{ui.footer.copyright}</p>
+    </footer>
+
+    <div class="palette-switch" role="group" aria-label="配色の比較（デザイン確認用）">
+      <span>配色</span>
+      <button type="button" data-set="black">黒×金</button>
+      <button type="button" data-set="brown">茶×金</button>
+    </div>
+
+    <script>
+      const btn = document.querySelector<HTMLButtonElement>('.menu-btn')!;
+      btn.addEventListener('click', () => {
+        const open = document.body.classList.toggle('nav-open');
+        btn.setAttribute('aria-expanded', String(open));
+      });
+
+      const header = document.querySelector('.header')!;
+      const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 40);
+      onScroll();
+      window.addEventListener('scroll', onScroll, { passive: true });
+
+      document.querySelectorAll<HTMLButtonElement>('.palette-switch button').forEach((b) => {
+        b.addEventListener('click', () => {
+          document.documentElement.dataset.palette = b.dataset.set;
+          try {
+            sessionStorage.setItem('palette', b.dataset.set!);
+          } catch (e) {}
+        });
+      });
+    </script>
+  </body>
+</html>
+
+<style>
+  .header {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 20;
+    transition: background 0.3s;
+  }
+  .header.scrolled,
+  :global(body.nav-open) .header {
+    background: color-mix(in srgb, var(--bg) 92%, transparent);
+    border-bottom: 1px solid var(--line);
+  }
+  .header-inner {
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 16px var(--gutter);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo {
+    font-family: var(--serif-en);
+    font-size: 24px;
+    letter-spacing: 0.35em;
+    text-decoration: none;
+    color: var(--text);
+  }
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+  .nav ul {
+    display: flex;
+    gap: 24px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .nav a {
+    text-decoration: none;
+  }
+  .nav li a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.4;
+  }
+  .nav-label {
+    font-family: var(--serif-en);
+    letter-spacing: 0.15em;
+    font-size: 14px;
+  }
+  .nav-sub {
+    font-size: 10px;
+    color: var(--text-sub);
+  }
+  .nav a[aria-current='page'] .nav-label {
+    color: var(--gold);
+  }
+  .lang {
+    font-size: 13px;
+    color: var(--gold);
+    border: 1px solid var(--line);
+    padding: 4px 12px;
+  }
+  .menu-btn {
+    display: none;
+    background: none;
+    border: 1px solid var(--line);
+    color: var(--text);
+    font: inherit;
+    font-size: 13px;
+    padding: 6px 14px;
+  }
+  .menu-close {
+    display: none;
+  }
+
+  @media (max-width: 960px) {
+    .menu-btn {
+      display: block;
+    }
+    .nav {
+      display: none;
+      position: fixed;
+      inset: 64px 0 0;
+      background: var(--bg);
+      flex-direction: column;
+      align-items: stretch;
+      padding: 24px var(--gutter);
+      gap: 24px;
+    }
+    .nav ul {
+      flex-direction: column;
+      gap: 0;
+    }
+    .nav li a {
+      flex-direction: row;
+      justify-content: space-between;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-label {
+      font-size: 18px;
+    }
+    .nav-sub {
+      font-size: 12px;
+    }
+    .lang {
+      align-self: flex-start;
+    }
+    :global(body.nav-open) .nav {
+      display: flex;
+    }
+    :global(body.nav-open) .menu-open {
+      display: none;
+    }
+    :global(body.nav-open) .menu-close {
+      display: inline;
+    }
+  }
+
+  .footer {
+    border-top: 1px solid var(--line);
+    padding: 64px 0 96px;
+  }
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .footer-philosophy {
+    margin: 8px 0 0;
+    font-size: 13px;
+  }
+  .footer-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .footer-links a {
+    text-decoration: none;
+    color: var(--text-sub);
+  }
+  .footer-links a:hover {
+    color: var(--gold);
+  }
+  .copyright {
+    font-size: 12px;
+    margin-top: 32px;
+  }
+
+  .palette-switch {
+    position: fixed;
+    right: 12px;
+    bottom: 12px;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    padding: 6px 8px;
+    font-family: var(--serif-ja);
+    font-size: 12px;
+  }
+  .palette-switch button {
+    background: none;
+    border: 1px solid var(--line);
+    color: var(--text);
+    font: inherit;
+    padding: 2px 8px;
+    cursor: pointer;
+  }
+</style>

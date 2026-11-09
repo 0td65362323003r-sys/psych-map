@@ -1,0 +1,44 @@
+---
+import { Image } from 'astro:assets';
+import { t, localePath, type Lang } from '../i18n/ui';
+import type { Work } from '../data/works';
+
+interface Props {
+  work: Work;
+  lang: Lang;
+}
+const { work, lang } = Astro.props;
+const ui = t(lang);
+---
+
+<a class="card" href={localePath(lang, `collection/${work.id}/`)}>
+  <Image src={work.images[0]} alt={work.name[lang]} widths={[400, 720]} sizes="(max-width: 800px) 100vw, 33vw" />
+  <span class="cat sub">{ui.categories[work.category]}</span>
+  <span class="name">{work.name[lang]}</span>
+</a>
+
+<style>
+  .card {
+    display: block;
+    text-decoration: none;
+  }
+  .card :global(img) {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    object-position: top;
+    transition: opacity 0.3s;
+  }
+  .card:hover :global(img) {
+    opacity: 0.85;
+  }
+  .cat {
+    display: block;
+    margin-top: 12px;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+  }
+  .name {
+    display: block;
+  }
+</style>

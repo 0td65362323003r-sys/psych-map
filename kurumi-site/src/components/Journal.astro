@@ -1,0 +1,72 @@
+---
+import Base from '../layouts/Base.astro';
+import { t, localePath, type Lang } from '../i18n/ui';
+import { getPosts, formatDate } from '../lib/microcms';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const ui = t(lang);
+const posts = await getPosts(lang);
+---
+
+<Base lang={lang} path="journal/" title={ui.seo.journal.title} description={ui.seo.journal.desc}>
+  <header class="page-head wrap">
+    <p class="eyebrow">Journal</p>
+    <h1>{ui.journal.title}</h1>
+  </header>
+  <section class="wrap list">
+    {
+      posts.length ? (
+        <ul>
+          {posts.map((p) => (
+            <li>
+              <a href={localePath(lang, `journal/${p.id}/`)}>
+                {p.eyecatch && <img src={`${p.eyecatch.url}?w=480&fm=webp`} alt="" width="240" height="160" loading="lazy" />}
+                <div>
+                  <time class="sub">{formatDate(p.publishedAt, lang)}</time>
+                  {p.category && <span class="cat">{p.category}</span>}
+                  <p class="title">{p.title}</p>
+                </div>
+              </a>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="sub">{ui.journal.empty}</p>
+      )
+    }
+  </section>
+</Base>
+
+<style>
+  .list {
+    padding-bottom: 96px;
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  a {
+    display: flex;
+    gap: 24px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--line);
+    text-decoration: none;
+  }
+  img {
+    width: 160px;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+  }
+  .cat {
+    margin-left: 12px;
+    font-size: 12px;
+    color: var(--gold);
+  }
+  .title {
+    margin: 4px 0 0;
+  }
+</style>

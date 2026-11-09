@@ -1,0 +1,11 @@
+---
+import Post from '../../components/Post.astro';
+import { getPosts } from '../../lib/microcms';
+
+export async function getStaticPaths() {
+  return (await getPosts('ja')).map((post) => ({ params: { id: post.id }, props: { post } }));
+}
+const { post } = Astro.props;
+---
+
+<Post lang="ja" post={post} />

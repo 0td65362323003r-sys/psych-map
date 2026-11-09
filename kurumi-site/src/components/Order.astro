@@ -1,0 +1,147 @@
+---
+import Base from '../layouts/Base.astro';
+import { t, localePath, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const ui = t(lang);
+const o = ui.order;
+---
+
+<Base lang={lang} path="order/" title={ui.seo.order.title} description={ui.seo.order.desc}>
+  <header class="page-head wrap">
+    <p class="eyebrow">Order</p>
+    <h1>{o.title}</h1>
+    <p class="lead">{o.lead}</p>
+  </header>
+
+  <section class="section">
+    <div class="wrap">
+      <h2>{o.priceTitle}</h2>
+      <dl class="prices">
+        {ui.prices.map((p) => <div><dt>{p.item}</dt><dd>{p.price}</dd></div>)}
+      </dl>
+      <p class="sub small">{ui.priceNote}</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2>{o.flowTitle}</h2>
+      <ol class="flow">
+        {o.flow.map((f, i) => <li><span class="num">0{i + 1}</span><h3>{f.h}</h3><p>{f.p}</p></li>)}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap two">
+      <div>
+        <h2>{o.scenesTitle}</h2>
+        <ul class="scenes">{o.scenes.map((s) => <li>{s}</li>)}</ul>
+      </div>
+      <div>
+        <h2>{o.voicesTitle}</h2>
+        <ul class="voices">{o.voices.map((v) => <li>{v}</li>)}</ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2>{o.faqTitle}</h2>
+      <dl class="faq">
+        {o.faq.map((f) => <div><dt>{f.q}</dt><dd>{f.a}</dd></div>)}
+      </dl>
+      <a class="btn" href={localePath(lang, 'contact/')}>{ui.cta}</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .prices {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 0 0 8px;
+  }
+  .prices div {
+    border: 1px solid var(--line);
+    padding: 24px;
+    text-align: center;
+  }
+  .prices dt {
+    color: var(--text-sub);
+  }
+  .prices dd {
+    margin: 4px 0 0;
+    font-size: 26px;
+    color: var(--gold);
+  }
+  .small {
+    font-size: 12px;
+  }
+  .flow {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+  .num {
+    font-family: var(--serif-en);
+    color: var(--gold);
+    font-size: 28px;
+  }
+  .flow h3 {
+    font-weight: 500;
+    margin: 4px 0;
+  }
+  .flow p {
+    margin: 0;
+  }
+  .two {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+  }
+  .scenes,
+  .voices {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+  .scenes li,
+  .voices li {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .voices li::before {
+    content: '“';
+    color: var(--gold);
+    margin-right: 4px;
+  }
+  .faq {
+    margin: 0 0 40px;
+  }
+  .faq div {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .faq dt {
+    color: var(--gold);
+  }
+  .faq dd {
+    margin: 4px 0 0;
+  }
+  @media (max-width: 800px) {
+    .prices,
+    .flow,
+    .two {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

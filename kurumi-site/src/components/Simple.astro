@@ -1,0 +1,63 @@
+---
+// 会社情報とプライバシーポリシーの共通レイアウト
+import Base from '../layouts/Base.astro';
+import { t, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  page: 'company' | 'privacy';
+}
+const { lang, page } = Astro.props;
+const ui = t(lang);
+---
+
+<Base lang={lang} path={`${page}/`} title={ui.seo[page].title} description={ui.seo[page].desc}>
+  <header class="page-head wrap">
+    <h1>{ui[page].title}</h1>
+  </header>
+  <section class="wrap body">
+    {
+      page === 'company' ? (
+        <dl>
+          {ui.company.rows.map((r) => (
+            <div>
+              <dt>{r.h}</dt>
+              <dd>{r.p}</dd>
+            </div>
+          ))}
+        </dl>
+      ) : (
+        ui.privacy.body.map((p) => <p>{p}</p>)
+      )
+    }
+  </section>
+</Base>
+
+<style>
+  .body {
+    max-width: 760px;
+    padding-bottom: 96px;
+  }
+  dl {
+    margin: 0;
+  }
+  dl div {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 24px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  dt {
+    color: var(--text-sub);
+  }
+  dd {
+    margin: 0;
+  }
+  @media (max-width: 640px) {
+    dl div {
+      grid-template-columns: 1fr;
+      gap: 4px;
+    }
+  }
+</style>

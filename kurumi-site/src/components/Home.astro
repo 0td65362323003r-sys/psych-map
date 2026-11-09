@@ -1,0 +1,228 @@
+---
+import { Image, getImage } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import WorkCard from './WorkCard.astro';
+import { t, localePath, type Lang } from '../i18n/ui';
+import { works, heroImage, storyImage } from '../data/works';
+import { getPosts, formatDate } from '../lib/microcms';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const ui = t(lang);
+const pickup = ['look-08', 'look-06', 'look-04'].map((id) => works.find((w) => w.id === id)!);
+const posts = (await getPosts(lang)).slice(0, 3);
+const og = await getImage({ src: heroImage, width: 1200, format: 'jpg' });
+---
+
+<Base lang={lang} path="" title={ui.seo.home.title} description={ui.seo.home.desc} image={og.src}>
+  <section class="hero">
+    <Image src={heroImage} alt="" widths={[640, 1024, 1600]} sizes="100vw" class="hero-img" loading="eager" fetchpriority="high" />
+    <div class="hero-text wrap">
+      <p class="hero-catch">{ui.catch}</p>
+      <p class="hero-sub">{ui.home.heroSub}</p>
+    </div>
+  </section>
+
+  <section class="section concept">
+    <div class="wrap">
+      <p class="eyebrow">Concept</p>
+      <h2>{ui.home.conceptTitle}</h2>
+      <p class="lead">{ui.home.conceptBody}</p>
+    </div>
+  </section>
+
+  <section class="section split">
+    <div class="wrap split-inner">
+      <Image src={storyImage} alt="" widths={[480, 800]} sizes="(max-width: 800px) 100vw, 45vw" class="split-img" />
+      <div>
+        <p class="eyebrow">Story</p>
+        <h2>{ui.home.storyTitle}</h2>
+        <p class="lead">{ui.home.storyBody}</p>
+        <a class="more" href={localePath(lang, 'story/')}>{ui.home.storyMore}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Collection</p>
+      <h2>{ui.home.collectionBody}</h2>
+      <ul class="grid">
+        {pickup.map((w) => <li><WorkCard work={w} lang={lang} /></li>)}
+      </ul>
+      <a class="more" href={localePath(lang, 'collection/')}>{ui.home.collectionMore}</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Designer</p>
+      <h2>{ui.home.designerTitle}</h2>
+      <p class="lead">{ui.home.designerBody}</p>
+      <a class="more" href={localePath(lang, 'designer/')}>{ui.home.designerMore}</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Order</p>
+      <h2>{ui.home.orderTitle}</h2>
+      <dl class="prices">
+        {ui.prices.map((p) => <div><dt>{p.item}</dt><dd>{p.price}</dd></div>)}
+      </dl>
+      <p class="sub small">{ui.priceNote}</p>
+      <p class="lead">{ui.home.orderBody}</p>
+      <a class="more" href={localePath(lang, 'order/')}>{ui.home.orderMore}</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Journal</p>
+      {
+        posts.length ? (
+          <ul class="posts">
+            {posts.map((p) => (
+              <li>
+                <a href={localePath(lang, `journal/${p.id}/`)}>
+                  <time class="sub">{formatDate(p.publishedAt, lang)}</time>
+                  <span>{p.title}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p class="sub">{ui.home.journalEmpty}</p>
+        )
+      }
+    </div>
+  </section>
+
+  <section class="section final">
+    <div class="wrap">
+      <h2>{ui.home.finalTitle}</h2>
+      <p class="lead">{ui.home.finalBody}</p>
+      <a class="btn" href={localePath(lang, 'contact/')}>{ui.cta}</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    position: relative;
+    height: 100svh;
+    min-height: 560px;
+    overflow: hidden;
+  }
+  .hero-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 70%;
+  }
+  /* 上はメニュー、下はキャッチコピーを読みやすくするための影 */
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to bottom, rgba(0, 0, 0, 0.55) 0%, transparent 18%),
+      linear-gradient(to top, var(--bg) 0%, transparent 45%);
+  }
+  .hero-text {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 64px;
+    z-index: 1;
+  }
+  .hero-catch {
+    font-size: clamp(26px, 5vw, 48px);
+    margin: 0;
+    line-height: 1.4;
+    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.6);
+  }
+  .hero-sub {
+    margin: 8px 0 0;
+    color: var(--text);
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+  }
+  .hero-sub::before {
+    content: '';
+    display: block;
+    width: 64px;
+    height: 2px;
+    background: var(--rainbow);
+    margin-bottom: 12px;
+  }
+  .split-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+  .split-img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+  }
+  .grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .prices {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px 48px;
+    margin: 0 0 8px;
+  }
+  .prices div {
+    display: flex;
+    gap: 12px;
+    align-items: baseline;
+  }
+  .prices dt {
+    color: var(--text-sub);
+  }
+  .prices dd {
+    margin: 0;
+    font-size: 22px;
+    color: var(--gold);
+  }
+  .small {
+    font-size: 12px;
+  }
+  .posts {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .posts a {
+    display: flex;
+    gap: 24px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--line);
+    text-decoration: none;
+  }
+  .final {
+    text-align: center;
+  }
+  .final .lead {
+    margin: 0 auto 32px;
+  }
+  @media (max-width: 800px) {
+    .split-inner,
+    .grid {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+  }
+</style>

@@ -1,0 +1,164 @@
+/* 配色は2案。data-palette で切り替える（ロゴの色が決まったら1つに絞る） */
+:root,
+:root[data-palette='black'] {
+  --bg: #0b0b0b;
+  --bg-soft: #151413;
+  --line: #2c2a27;
+  --text: #f3efe6;
+  --text-sub: #a59f93;
+  --gold: #c9a24c;
+  --gold-soft: rgba(201, 162, 76, 0.12);
+}
+
+:root[data-palette='brown'] {
+  --bg: #1d1410;
+  --bg-soft: #2a1d17;
+  --line: #3f2e25;
+  --text: #f4ece0;
+  --text-sub: #b3a493;
+  --gold: #cfa857;
+  --gold-soft: rgba(207, 168, 87, 0.12);
+}
+
+:root {
+  --rainbow: linear-gradient(90deg, #d9534f, #f0ad4e, #f7e463, #5cb85c, #5bc0de, #8e6cc9);
+  --serif-ja: 'Noto Serif JP', 'Hiragino Mincho ProN', serif;
+  --serif-en: 'Cormorant Garamond', 'Times New Roman', serif;
+  --gutter: 20px;
+  --max: 1120px;
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--serif-ja);
+  font-size: 15px;
+  line-height: 1.9;
+  letter-spacing: 0.04em;
+}
+
+html[lang='en'] body {
+  font-family: var(--serif-en);
+  font-size: 18px;
+  letter-spacing: 0.01em;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: inherit;
+}
+
+.wrap {
+  width: 100%;
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.eyebrow {
+  font-family: var(--serif-en);
+  color: var(--gold);
+  letter-spacing: 0.3em;
+  font-size: 13px;
+  text-transform: uppercase;
+}
+
+.section {
+  padding: 96px 0;
+  border-top: 1px solid var(--line);
+}
+
+.section h2 {
+  font-weight: 500;
+  font-size: clamp(22px, 3.2vw, 32px);
+  line-height: 1.5;
+  margin: 8px 0 24px;
+}
+
+.lead {
+  max-width: 640px;
+  color: var(--text);
+}
+
+.sub {
+  color: var(--text-sub);
+}
+
+.more {
+  display: inline-block;
+  margin-top: 24px;
+  color: var(--gold);
+  text-decoration: none;
+  border-bottom: 1px solid var(--gold);
+  padding-bottom: 2px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 16px 40px;
+  border: 1px solid var(--gold);
+  color: var(--text);
+  text-decoration: none;
+  letter-spacing: 0.15em;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+  position: relative;
+}
+
+.btn::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: var(--rainbow);
+}
+
+.btn:hover {
+  background: var(--gold-soft);
+}
+
+.tbc {
+  color: var(--gold);
+  background: var(--gold-soft);
+  padding: 0 4px;
+}
+
+.page-head {
+  padding: 140px 0 48px;
+}
+
+.page-head h1 {
+  font-weight: 500;
+  font-size: clamp(26px, 4vw, 40px);
+  margin: 8px 0 0;
+  line-height: 1.5;
+}
+
+@media (max-width: 640px) {
+  .section {
+    padding: 64px 0;
+  }
+  .page-head {
+    padding: 112px 0 32px;
+  }
+}

@@ -1,0 +1,49 @@
+---
+import Base from '../layouts/Base.astro';
+import { t, localePath, type Lang } from '../i18n/ui';
+import { formatDate, type Post } from '../lib/microcms';
+
+interface Props {
+  lang: Lang;
+  post: Post;
+}
+const { lang, post } = Astro.props;
+const ui = t(lang);
+// 本文の冒頭を説明文の代わりに使う
+const description = post.description ?? post.body.replace(/<[^>]+>/g, '').slice(0, 110);
+---
+
+<Base
+  lang={lang}
+  path={`journal/${post.id}/`}
+  title={`${post.title}${lang === 'ja' ? '｜KURUMI' : ' – KURUMI'}`}
+  description={description}
+  image={post.eyecatch ? `${post.eyecatch.url}?w=1200` : undefined}
+>
+  <article class="wrap post">
+    <header class="page-head">
+      <time class="sub">{formatDate(post.publishedAt, lang)}</time>
+      <h1>{post.title}</h1>
+    </header>
+    {post.eyecatch && <img src={`${post.eyecatch.url}?w=1200&fm=webp`} alt="" width={post.eyecatch.width} height={post.eyecatch.height} />}
+    <div class="body" set:html={post.body} />
+    <a class="more" href={localePath(lang, 'journal/')}>{ui.journal.back}</a>
+  </article>
+</Base>
+
+<style>
+  .post {
+    max-width: 760px;
+    padding-bottom: 96px;
+  }
+  .body :global(img) {
+    margin: 24px 0;
+  }
+  .body :global(h2) {
+    font-weight: 500;
+    margin-top: 48px;
+  }
+  .body :global(a) {
+    color: var(--gold);
+  }
+</style>
