@@ -6,6 +6,7 @@ export type Lang = 'ja' | 'en';
 export const ui = {
   ja: {
     site: 'KURUMI',
+    // キャッチコピーは胡桃さんが検討中。決まるまでTOPには理念を出す
     catch: 'KURUMIを纏い、世界を彩る。',
     philosophy: '和を日常に。和で繋ぐ世界。',
     nav: [
@@ -48,7 +49,7 @@ export const ui = {
       { item: 'ドレス', price: '35万円〜' },
       { item: 'スーツ', price: '38万円〜' },
     ],
-    priceNote: '【要確認：税込／税別】生地やデザインによって変わります。',
+    priceNote: '価格はすべて税別です。生地やデザインによって変わります。ワンピースとコートは、デザインに合わせてお見積もりします。',
 
     story: {
       title: '和で、世界を笑顔に。',
@@ -113,7 +114,7 @@ export const ui = {
       role: 'デザイナー',
       profile: [
         '神奈川県生まれ。中学生のときに家族で沖縄へ移り、モデル・タレントとして活動を始める。テレビ、ラジオ、CM、舞台、司会など幅広く出演し、東京に拠点を移しても活動を続ける。',
-        '2025年7月にブランドKURUMIを立ち上げ、2026年2月にMilan GX Fashion Week 2026でコレクションを発表。【要確認：正式名称】オーダースーツ協会の認定を取得。',
+        '2025年7月にブランドKURUMIを立ち上げ、2026年2月にMilan GX Fashion Week 2026でコレクションを発表。一般社団法人 日本オーダースーツ技能認定協会（JOSSCA）より、フィッターとして「マイスター」「ミドルマイスター」の認定を受ける。',
       ],
       viewTitle: 'デザインの視点',
       view: [
@@ -123,6 +124,7 @@ export const ui = {
       photoPending: 'プロフィール写真（受け取り待ち）',
       careerTitle: '主な実績',
       career: [
+        { h: '資格', p: '一般社団法人 日本オーダースーツ技能認定協会（JOSSCA）フィッター「マイスター」（2025年3月）/「ミドルマイスター」（2025年5月）' },
         { h: '受賞', p: 'MISS GOLF 2023 沖縄大会 グランプリ / MISS GOLF 2023 全国大会 準グランプリ / MISS ORIENTAL 2022 福岡大会 グランプリ / JAPAN WOMEN\'S COLLECTION 2020 沖縄大会 グランプリ' },
         { h: 'ラジオ', p: 'FMヨコハマ 神奈川スバルキャンペーンリポート（2022〜2024年）/ RBCiラジオ ラジオカーリポート 金曜日レギュラー（2019〜2022年）/ RBCiラジオ サタデーマグネット アシスタントMC（2019〜2021年）' },
         { h: 'テレビ', p: 'ゴルフ番組『GOLFBEAT』プロデューサー兼ディレクター兼出演（琉球放送、2021〜2023年）/ JTAカップ（沖縄テレビ）/ NAHAマラソン（琉球放送）/ Aランチ（琉球放送）ほか（2016年〜）' },
@@ -181,8 +183,8 @@ export const ui = {
       faq: [
         { q: 'お支払い方法は？', a: 'お振込かクレジットカードです。' },
         { q: '着物などを持ち込んで作れますか？', a: '思い出の着物で作りたいなどのご希望は、内容によってご相談をお受けします。' },
-        { q: '採寸はどこで？', a: '【要確認】' },
-        { q: '海外からもオーダーできますか？', a: '【要確認】' },
+        { q: '採寸はどこで？', a: '東京で、対面で行います。東京以外への出張採寸もお受けします（出張費がかかる場合があります）。お問い合わせの際にご相談ください。' },
+        { q: '海外からもオーダーできますか？', a: 'お受けしています。来日のタイミングでの採寸のほか、採寸の方法もご相談に応じます。' },
       ],
     },
 
@@ -194,7 +196,7 @@ export const ui = {
         name: 'お名前',
         email: 'メールアドレス',
         item: '希望アイテム',
-        items: ['ジャケット', 'ドレス', 'スーツ', 'ワンピース', 'その他・相談したい'],
+        items: ['ジャケット', 'ドレス', 'スーツ', 'ワンピース', 'コート', 'その他・相談したい'],
         budget: 'ご予算',
         budgets: ['30〜40万円', '40〜60万円', '60万円以上', '相談したい'],
         date: '着用予定日（未定でも可）',
@@ -206,7 +208,7 @@ export const ui = {
       },
       submit: '送信する',
       sending: '送信中…',
-      thanks: 'お問い合わせありがとうございます。内容を確認し、【要確認：返信の目安】以内にご連絡します。',
+      thanks: 'お問い合わせありがとうございます。内容を確認し、3営業日以内にご連絡します。',
       error: '送信できませんでした。時間をおいて、もう一度お試しください。',
       notReady: '（プレビュー版のため、まだ送信できません）',
       privacyNote: '送信いただいた情報は、プライバシーポリシーに沿って取り扱います。',
@@ -216,9 +218,9 @@ export const ui = {
       title: '会社情報',
       rows: [
         { h: '会社名', p: '合同会社Kurumi&Co.' },
-        { h: '代表者', p: '代表社員 横山 胡桃【要確認】' },
-        { h: '設立', p: '【要確認】' },
-        { h: '事業内容', p: 'アパレルブランド「KURUMI」の企画・製作・販売 / マーケティング事業【要確認】' },
+        { h: '代表者', p: '代表社員 横山 胡桃' },
+        { h: '設立', p: '2025年7月29日' },
+        { h: '事業内容', p: 'アパレルブランド「KURUMI」の企画・製作・販売 / マーケティング事業' },
         { h: 'お問い合わせ', p: 'お問い合わせフォームより' },
       ],
     },
@@ -241,7 +243,7 @@ export const ui = {
       story: { title: 'ブランドストーリー｜KURUMI', desc: '和を日常に。和で繋ぐ世界。笑顔の輪を広げたいという思いから生まれた、KURUMIの物語と「新しい和」の考え方。' },
       designer: { title: 'デザイナー 横山胡桃｜KURUMI', desc: 'モデル・タレントとして活動してきた横山胡桃のプロフィールと経歴。着る人を美しく見せる、KURUMIのデザインの視点。' },
       collection: { title: '作品一覧｜西陣織・紅型のドレスとジャケット｜KURUMI', desc: 'ミラノで発表したコレクション「繋がる」より。和の生地とレースやレザーを掛け合わせたドレス、ジャケット、スーツ。' },
-      order: { title: 'オーダーについて｜価格と流れ｜KURUMI', desc: 'ジャケット30万円〜。対面での採寸からおよそ1か月〜1か月半でお渡し。着ていく場面に合わせて仕立てる、KURUMIのオーダーメイド。' },
+      order: { title: 'オーダーについて｜価格と流れ｜KURUMI', desc: 'ジャケット30万円〜（税別）。対面での採寸からおよそ1か月〜1か月半でお渡し。着ていく場面に合わせて仕立てる、KURUMIのオーダーメイド。' },
       contact: { title: 'お問い合わせ｜KURUMI', desc: 'オーダーのご相談はこちらから。着ていきたい場面を教えていただければ、一緒に考えます。' },
       journal: { title: 'お知らせ・ブログ｜KURUMI', desc: 'KURUMIのお知らせ、コレクション、制作の裏側、和の文化について。' },
       company: { title: '会社情報｜KURUMI', desc: '合同会社Kurumi&Co.の会社情報。' },
@@ -293,7 +295,7 @@ export const ui = {
       { item: 'Dresses', price: 'from ¥350,000' },
       { item: 'Suits', price: 'from ¥380,000' },
     ],
-    priceNote: 'Prices vary with fabric and design. [TBC: tax]',
+    priceNote: 'All prices exclude tax and vary with fabric and design. One-pieces and coats are quoted per design.',
 
     story: {
       title: 'Connecting the world through wa.',
@@ -358,7 +360,7 @@ export const ui = {
       role: 'Designer',
       profile: [
         'Born in Kanagawa, Japan, Kurumi moved to Okinawa with her family as a teenager and began her career there as a model and TV personality, appearing on television, radio, commercials and stage, and as an event host. She later moved her base to Tokyo.',
-        'In July 2025 she launched KURUMI, and in February 2026 presented her collection at Milan GX Fashion Week 2026. She is certified by [TBC: official name], a Japanese association for made-to-order suits.',
+        'In July 2025 she launched KURUMI, and in February 2026 presented her collection at Milan GX Fashion Week 2026. She is a certified fitter at the Meister and Middle Meister grades, awarded by the Japan Order Suit Skill Certification Association (JOSSCA).',
       ],
       viewTitle: 'Her eye for design',
       view: [
@@ -368,6 +370,7 @@ export const ui = {
       photoPending: 'Profile photo (coming soon)',
       careerTitle: 'Selected work',
       career: [
+        { h: 'Certification', p: 'Certified fitter, Meister grade (March 2025) and Middle Meister grade (May 2025), Japan Order Suit Skill Certification Association (JOSSCA)' },
         { h: 'Awards', p: 'Grand Prix, MISS GOLF 2023 Okinawa / Runner-up, MISS GOLF 2023 Japan Final / Grand Prix, MISS ORIENTAL 2022 Fukuoka / Grand Prix, JAPAN WOMEN\'S COLLECTION 2020 Okinawa' },
         { h: 'Media', p: 'Regular radio host and reporter on FM Yokohama and RBCi Radio; producer, director and presenter of the golf TV show GOLFBEAT (Ryukyu Broadcasting); commercials for AEON Ryukyu, ATSUGI and others, plus web and print work for ANA, Dunlop and more; stage roles in Tokyo and Okinawa; event host.' },
       ],
@@ -420,8 +423,8 @@ export const ui = {
       faq: [
         { q: 'How can I pay?', a: 'By bank transfer or credit card.' },
         { q: 'Can I bring my own fabric, such as a family kimono?', a: 'We are happy to discuss it. Please tell us about it when you inquire.' },
-        { q: 'Where is the fitting?', a: '[TBC]' },
-        { q: 'Can I order from outside Japan?', a: '[TBC]' },
+        { q: 'Where is the fitting?', a: 'In person in Tokyo. We can also come to you outside Tokyo; a travel fee may apply. Please ask when you inquire.' },
+        { q: 'Can I order from outside Japan?', a: 'Yes. We can take your measurements while you are in Japan, or talk with you about other ways to do it.' },
       ],
     },
 
@@ -433,7 +436,7 @@ export const ui = {
         name: 'Name',
         email: 'Email',
         item: 'Item',
-        items: ['Jacket', 'Dress', 'Suit', 'One-piece', 'Other, or not sure yet'],
+        items: ['Jacket', 'Dress', 'Suit', 'One-piece', 'Coat', 'Other, or not sure yet'],
         budget: 'Budget',
         budgets: ['¥300,000–400,000', '¥400,000–600,000', 'Over ¥600,000', "Let's discuss"],
         date: 'Date you plan to wear it (optional)',
@@ -445,7 +448,7 @@ export const ui = {
       },
       submit: 'Send',
       sending: 'Sending…',
-      thanks: 'Thank you for reaching out. We will reply within [TBC].',
+      thanks: 'Thank you for reaching out. We will reply within 3 business days.',
       error: 'Something went wrong. Please try again later.',
       notReady: '(Preview only: the form is not connected yet)',
       privacyNote: 'Your information is handled in line with our privacy policy.',
@@ -456,7 +459,7 @@ export const ui = {
       rows: [
         { h: 'Company', p: 'Kurumi&Co. LLC' },
         { h: 'Representative', p: 'Kurumi Yokoyama' },
-        { h: 'Established', p: '[TBC]' },
+        { h: 'Established', p: 'July 29, 2025' },
         { h: 'Business', p: 'Design, production and sale of the fashion brand KURUMI / Marketing services' },
         { h: 'Contact', p: 'Via the contact form' },
       ],
@@ -480,7 +483,7 @@ export const ui = {
       story: { title: 'Our Story – KURUMI', desc: 'Wa for every day. How a wish to spread smiles became KURUMI, and what we mean by a new wa.' },
       designer: { title: 'Designer Kurumi Yokoyama – KURUMI', desc: 'Meet Kurumi Yokoyama, the model and TV personality turned designer behind KURUMI.' },
       collection: { title: 'Collection – Nishijin and Bingata Dresses and Jackets – KURUMI', desc: 'From Connect, our Milan collection: dresses, jackets and suits pairing Japanese textiles with lace and leather.' },
-      order: { title: 'Made to Order – Pricing and Process – KURUMI', desc: 'Jackets from ¥300,000. Fitted in person and ready in about 4 to 6 weeks, each piece is tailored to you and your occasion.' },
+      order: { title: 'Made to Order – Pricing and Process – KURUMI', desc: 'Jackets from ¥300,000 plus tax. Fitted in person and ready in about 4 to 6 weeks, each piece is tailored to you and your occasion.' },
       contact: { title: 'Contact – KURUMI', desc: "Start your made-to-order consultation. Tell us where you'd like to wear it." },
       journal: { title: 'Journal – KURUMI', desc: 'News, collections, behind the scenes and Japanese culture from KURUMI.' },
       company: { title: 'Company – KURUMI', desc: 'Company information for Kurumi&Co. LLC.' },
