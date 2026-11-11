@@ -14,17 +14,17 @@ const ui = t(lang);
 const pickup = ['look-08', 'look-06', 'look-04'].map((id) => works.find((w) => w.id === id)!);
 // 生地の見本帳。生地が大きく写っている写真を選び、その位置を拡大して短冊にする
 const swatchFocus: Record<string, { img: number; pos: string }> = {
-  'look-01': { img: 1, pos: '56% 52%' },
+  'look-01': { img: 1, pos: '66% 60%' },
   'look-02': { img: 1, pos: '45% 62%' },
   'look-03': { img: 0, pos: '24% 52%' },
-  'look-04': { img: 0, pos: '82% 58%' },
+  'look-04': { img: 0, pos: '86% 66%' },
   'look-05': { img: 0, pos: '40% 52%' },
   'look-06': { img: 1, pos: '50% 62%' },
   'look-07': { img: 2, pos: '42% 78%' },
-  'look-08': { img: 0, pos: '50% 52%' },
-  'look-09': { img: 1, pos: '62% 86%' },
-  'look-10': { img: 1, pos: '52% 40%' },
-  'look-11': { img: 0, pos: '62% 86%' },
+  'look-08': { img: 0, pos: '50% 74%' },
+  'look-09': { img: 1, pos: '60% 92%' },
+  'look-10': { img: 1, pos: '36% 34%' },
+  'look-11': { img: 0, pos: '72% 96%' },
 };
 const posts = (await getPosts(lang)).slice(0, 3);
 const og = await getImage({ src: heroImage, width: 1200, format: 'jpg' });
@@ -34,7 +34,7 @@ const og = await getImage({ src: heroImage, width: 1200, format: 'jpg' });
   <section class="hero">
     <Image src={heroImage} alt="" widths={[640, 1024, 1600]} sizes="100vw" class="hero-img" loading="eager" fetchpriority="high" />
     <div class="hero-text wrap">
-      <p class="hero-catch">{ui.philosophy}</p>
+      <p class="hero-catch">{ui.philosophy.split(/(?<=[。.])\s*/).filter(Boolean).map((line) => <span>{line}</span>)}</p>
       <p class="hero-sub">{ui.home.heroSub}</p>
     </div>
   </section>
@@ -62,7 +62,8 @@ const og = await getImage({ src: heroImage, width: 1200, format: 'jpg' });
 
   <section class="section">
     <div class="wrap">
-      <h2>{ui.home.collectionBody}</h2>
+      <h2>{ui.home.collectionTitle}</h2>
+      <p class="sub">{ui.home.collectionBody}</p>
       <ul class="grid">
         {pickup.map((w) => <li><WorkCard work={w} lang={lang} /></li>)}
       </ul>
@@ -160,6 +161,9 @@ const og = await getImage({ src: heroImage, width: 1200, format: 'jpg' });
     bottom: 64px;
     z-index: 1;
   }
+  .hero-catch span {
+    display: block;
+  }
   .hero-catch {
     font-size: clamp(26px, 5vw, 48px);
     margin: 0;
@@ -170,6 +174,32 @@ const og = await getImage({ src: heroImage, width: 1200, format: 'jpg' });
     margin: 8px 0 0;
     color: var(--text);
     text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+  }
+  @media (min-width: 900px) {
+    .hero-img {
+      left: auto;
+      width: 46%;
+      object-position: center 62%;
+    }
+    .hero::after {
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.35) 12%, transparent 24%);
+    }
+    .hero-text {
+      top: 50%;
+      bottom: auto;
+      transform: translateY(-50%);
+    }
+    .hero-catch {
+      font-size: clamp(36px, 3.6vw, 54px);
+      max-width: 11em;
+      text-shadow: none;
+    }
+    .hero-sub {
+      max-width: 30em;
+      margin-top: 24px;
+      color: var(--text-sub);
+      text-shadow: none;
+    }
   }
   .split-inner {
     display: grid;
@@ -253,13 +283,13 @@ const og = await getImage({ src: heroImage, width: 1200, format: 'jpg' });
     height: 100%;
     object-fit: cover;
     object-position: var(--focus);
-    transform: scale(3);
+    transform: scale(4.5);
     transform-origin: var(--focus);
     transition: transform 0.4s ease;
   }
   .swatch:hover :global(img),
   .swatch:focus-visible :global(img) {
-    transform: scale(2.4);
+    transform: scale(3.6);
   }
   .pair .prices {
     flex-direction: column;

@@ -168,3 +168,10 @@ button:focus-visible {
 main > .section:last-child {
   padding-bottom: 112px;
 }
+
+h1,
+h2,
+.lead,
+.hero-sub {
+  word-break: auto-phrase;
+}

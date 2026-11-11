@@ -1,5 +1,6 @@
 ---
 import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 import Base from '../layouts/Base.astro';
 import { t, localePath, type Lang } from '../i18n/ui';
 import { works } from '../data/works';
@@ -10,7 +11,12 @@ interface Props {
 const { lang } = Astro.props;
 const ui = t(lang);
 const s = ui.story;
-const milanPhoto = works.find((w) => w.id === 'look-08')!.images[2];
+const milanPhoto = works.find((w) => w.id === 'look-08')!.images[1];
+// 章のあいだに挟む寄りの写真（1章目と3章目のあと）
+const interludes: Record<number, { img: ImageMetadata; alt: string }> = {
+  0: { img: works.find((w) => w.id === 'look-01')!.images[1], alt: works.find((w) => w.id === 'look-01')!.name[lang] },
+  2: { img: works.find((w) => w.id === 'look-10')!.images[1], alt: works.find((w) => w.id === 'look-10')!.name[lang] },
+};
 ---
 
 <Base lang={lang} path="story/" title={ui.seo.story.title} description={ui.seo.story.desc}>
@@ -19,13 +25,20 @@ const milanPhoto = works.find((w) => w.id === 'look-08')!.images[2];
   </header>
 
   {
-    s.sections.map((sec) => (
-      <section class="section">
-        <div class="wrap narrow">
-          <h2>{sec.h}</h2>
-          {sec.p.map((p) => <p>{p}</p>)}
-        </div>
-      </section>
+    s.sections.map((sec, i) => (
+      <>
+        <section class="section">
+          <div class="wrap narrow">
+            <h2>{sec.h}</h2>
+            {sec.p.map((p) => <p>{p}</p>)}
+          </div>
+        </section>
+        {interludes[i] && (
+          <figure class={`interlude wrap ${i % 2 ? 'right' : 'left'}`}>
+            <Image src={interludes[i].img} alt={interludes[i].alt} widths={[480, 900]} sizes="(max-width: 800px) 100vw, 50vw" />
+          </figure>
+        )}
+      </>
     ))
   }
 
@@ -60,6 +73,17 @@ const milanPhoto = works.find((w) => w.id === 'look-08')!.images[2];
 <style>
   .narrow {
     max-width: 720px;
+  }
+  .interlude {
+    margin: 112px auto 0;
+  }
+  .interlude :global(img) {
+    width: min(100%, 520px);
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+  }
+  .interlude.right :global(img) {
+    margin-left: auto;
   }
   .values {
     display: grid;
