@@ -1,31 +1,39 @@
-/* 配色は2案。data-palette で切り替える（ロゴの色が決まったら1つに絞る） */
+/*
+ * デザイン方針（frontend-design の手順で決めたもの）
+ * - 大胆にするのは1か所だけ：TOPの「生地の見本帳」。虹色は作り物のグラデーションではなく、実物の生地の色で見せる
+ * - 黒は本物の黒。金はアンティーク寄りに落とし、文字と罫線にだけ使う
+ * - 書体は2つ：本文と見出しは しっぽり明朝、ロゴと英字の見出しは Bodoni Moda
+ * - 左揃え。セクションの区切りは線ではなく余白でつくる
+ * 配色は2案。data-palette で切り替える（ロゴの色が決まったら1つに絞る）
+ */
 :root,
 :root[data-palette='black'] {
-  --bg: #0b0b0b;
-  --bg-soft: #151413;
-  --line: #2c2a27;
-  --text: #f3efe6;
-  --text-sub: #a59f93;
-  --gold: #c9a24c;
-  --gold-soft: rgba(201, 162, 76, 0.12);
+  --bg: #000000;
+  --bg-soft: #15120e;
+  --line: #2b2620;
+  --text: #f2ece1;
+  --text-sub: #9a9184;
+  --gold: #b48a3c;
+  --gold-soft: rgba(180, 138, 60, 0.14);
 }
 
+/* 焦げ茶（こげちゃ）を土台にした案 */
 :root[data-palette='brown'] {
-  --bg: #1d1410;
-  --bg-soft: #2a1d17;
-  --line: #3f2e25;
-  --text: #f4ece0;
-  --text-sub: #b3a493;
-  --gold: #cfa857;
-  --gold-soft: rgba(207, 168, 87, 0.12);
+  --bg: #23160e;
+  --bg-soft: #2f2016;
+  --line: #45311f;
+  --text: #f3eadb;
+  --text-sub: #b09d86;
+  --gold: #c49a48;
+  --gold-soft: rgba(196, 154, 72, 0.14);
 }
 
 :root {
-  --rainbow: linear-gradient(90deg, #d9534f, #f0ad4e, #f7e463, #5cb85c, #5bc0de, #8e6cc9);
-  --serif-ja: 'Noto Serif JP', 'Hiragino Mincho ProN', serif;
-  --serif-en: 'Cormorant Garamond', 'Times New Roman', serif;
-  --gutter: 20px;
-  --max: 1120px;
+  --serif-ja: 'Shippori Mincho', 'Hiragino Mincho ProN', 'Yu Mincho', serif;
+  --display: 'Bodoni Moda', 'Didot', 'Bodoni 72', serif;
+  --serif-en: 'Shippori Mincho', 'Times New Roman', serif;
+  --gutter: 24px;
+  --max: 1180px;
   color-scheme: dark;
 }
 
@@ -51,8 +59,14 @@ body {
 
 html[lang='en'] body {
   font-family: var(--serif-en);
-  font-size: 18px;
+  font-size: 16px;
   letter-spacing: 0.01em;
+}
+
+html[lang='en'] h1,
+html[lang='en'] h2 {
+  font-family: var(--display);
+  font-weight: 400;
 }
 
 img {
@@ -72,24 +86,16 @@ a {
   padding: 0 var(--gutter);
 }
 
-.eyebrow {
-  font-family: var(--serif-en);
-  color: var(--gold);
-  letter-spacing: 0.3em;
-  font-size: 13px;
-  text-transform: uppercase;
-}
-
 .section {
-  padding: 96px 0;
-  border-top: 1px solid var(--line);
+  padding: 112px 0 0;
 }
 
 .section h2 {
   font-weight: 500;
-  font-size: clamp(22px, 3.2vw, 32px);
+  font-size: clamp(22px, 3vw, 30px);
   line-height: 1.5;
-  margin: 8px 0 24px;
+  margin: 0 0 24px;
+  text-wrap: balance;
 }
 
 .lead {
@@ -116,25 +122,20 @@ a {
   border: 1px solid var(--gold);
   color: var(--text);
   text-decoration: none;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.08em;
   background: transparent;
   font: inherit;
   cursor: pointer;
-  position: relative;
-}
-
-.btn::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -1px;
-  height: 2px;
-  background: var(--rainbow);
 }
 
 .btn:hover {
   background: var(--gold-soft);
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 1px solid var(--gold);
+  outline-offset: 3px;
 }
 
 .tbc {
@@ -150,15 +151,20 @@ a {
 .page-head h1 {
   font-weight: 500;
   font-size: clamp(26px, 4vw, 40px);
-  margin: 8px 0 0;
+  margin: 0;
   line-height: 1.5;
+  text-wrap: balance;
 }
 
 @media (max-width: 640px) {
   .section {
-    padding: 64px 0;
+    padding: 80px 0 0;
   }
   .page-head {
     padding: 112px 0 32px;
   }
+}
+
+main > .section:last-child {
+  padding-bottom: 112px;
 }

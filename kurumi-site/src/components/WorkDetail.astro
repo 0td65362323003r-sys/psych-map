@@ -31,7 +31,7 @@ const og = await getImage({ src: work.images[0], width: 1200, format: 'jpg' });
       }
     </div>
     <div class="info">
-      <p class="eyebrow">{ui.categories[work.category]}</p>
+      <p class="cat">{ui.categories[work.category]}</p>
       <h1>{name}</h1>
       <dl>
         <dt>{c.materials}</dt>
@@ -63,6 +63,10 @@ const og = await getImage({ src: work.images[0], width: 1200, format: 'jpg' });
     position: sticky;
     top: 120px;
     align-self: start;
+  }
+  .cat {
+    color: var(--gold);
+    margin: 0;
   }
   .info h1 {
     font-weight: 500;

@@ -12,6 +12,20 @@ interface Props {
 const { lang } = Astro.props;
 const ui = t(lang);
 const pickup = ['look-08', 'look-06', 'look-04'].map((id) => works.find((w) => w.id === id)!);
+// 生地の見本帳。生地が大きく写っている写真を選び、その位置を拡大して短冊にする
+const swatchFocus: Record<string, { img: number; pos: string }> = {
+  'look-01': { img: 1, pos: '56% 52%' },
+  'look-02': { img: 1, pos: '45% 62%' },
+  'look-03': { img: 0, pos: '24% 52%' },
+  'look-04': { img: 0, pos: '82% 58%' },
+  'look-05': { img: 0, pos: '40% 52%' },
+  'look-06': { img: 1, pos: '50% 62%' },
+  'look-07': { img: 2, pos: '42% 78%' },
+  'look-08': { img: 0, pos: '50% 52%' },
+  'look-09': { img: 1, pos: '62% 86%' },
+  'look-10': { img: 1, pos: '52% 40%' },
+  'look-11': { img: 0, pos: '62% 86%' },
+};
 const posts = (await getPosts(lang)).slice(0, 3);
 const og = await getImage({ src: heroImage, width: 1200, format: 'jpg' });
 ---
@@ -27,27 +41,27 @@ const og = await getImage({ src: heroImage, width: 1200, format: 'jpg' });
 
   <section class="section concept">
     <div class="wrap">
-      <p class="eyebrow">Concept</p>
       <h2>{ui.home.conceptTitle}</h2>
       <p class="lead">{ui.home.conceptBody}</p>
-    </div>
-  </section>
-
-  <section class="section split">
-    <div class="wrap split-inner">
-      <Image src={storyImage} alt="" widths={[480, 800]} sizes="(max-width: 800px) 100vw, 45vw" class="split-img" />
-      <div>
-        <p class="eyebrow">Story</p>
-        <h2>{ui.home.storyTitle}</h2>
-        <p class="lead">{ui.home.storyBody}</p>
-        <a class="more" href={localePath(lang, 'story/')}>{ui.home.storyMore}</a>
-      </div>
+      <nav class="swatches" aria-label={ui.home.swatchLabel}>
+        <p class="sub swatch-label">{ui.home.swatchLabel}</p>
+        <ul>
+          {
+            works.map((w) => (
+              <li>
+                <a class="swatch" href={localePath(lang, `collection/${w.id}/`)} title={w.name[lang]} style={`--focus: ${swatchFocus[w.id].pos}`}>
+                  <Image src={w.images[swatchFocus[w.id].img]} alt={w.name[lang]} widths={[320]} sizes="320px" loading="lazy" />
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
     </div>
   </section>
 
   <section class="section">
     <div class="wrap">
-      <p class="eyebrow">Collection</p>
       <h2>{ui.home.collectionBody}</h2>
       <ul class="grid">
         {pickup.map((w) => <li><WorkCard work={w} lang={lang} /></li>)}
@@ -56,33 +70,41 @@ const og = await getImage({ src: heroImage, width: 1200, format: 'jpg' });
     </div>
   </section>
 
-  <section class="section">
-    <div class="wrap">
-      <p class="eyebrow">Designer</p>
-      <h2>{ui.home.designerTitle}</h2>
-      <p class="lead">{ui.home.designerBody}</p>
-      <a class="more" href={localePath(lang, 'designer/')}>{ui.home.designerMore}</a>
+  <section class="section split">
+    <div class="wrap split-inner">
+      <Image src={storyImage} alt="" widths={[480, 800]} sizes="(max-width: 800px) 100vw, 45vw" class="split-img" />
+      <div>
+        <h2>{ui.home.storyTitle}</h2>
+        <p class="lead">{ui.home.storyBody}</p>
+        <a class="more" href={localePath(lang, 'story/')}>{ui.home.storyMore}</a>
+      </div>
     </div>
   </section>
 
   <section class="section">
-    <div class="wrap">
-      <p class="eyebrow">Order</p>
-      <h2>{ui.home.orderTitle}</h2>
-      <dl class="prices">
-        {ui.prices.map((p) => <div><dt>{p.item}</dt><dd>{p.price}</dd></div>)}
-      </dl>
-      <p class="sub small">{ui.priceNote}</p>
-      <p class="lead">{ui.home.orderBody}</p>
-      <a class="more" href={localePath(lang, 'order/')}>{ui.home.orderMore}</a>
+    <div class="wrap pair">
+      <div>
+        <h2>{ui.home.designerTitle}</h2>
+        <p>{ui.home.designerBody}</p>
+        <a class="more" href={localePath(lang, 'designer/')}>{ui.home.designerMore}</a>
+      </div>
+      <div>
+        <h2>{ui.home.orderTitle}</h2>
+        <dl class="prices">
+          {ui.prices.map((p) => <div><dt>{p.item}</dt><dd>{p.price}</dd></div>)}
+        </dl>
+        <p class="sub small">{ui.priceNote}</p>
+        <p>{ui.home.orderBody}</p>
+        <a class="more" href={localePath(lang, 'order/')}>{ui.home.orderMore}</a>
+      </div>
     </div>
   </section>
 
-  <section class="section">
-    <div class="wrap">
-      <p class="eyebrow">Journal</p>
-      {
-        posts.length ? (
+  {
+    posts.length > 0 && (
+      <section class="section">
+        <div class="wrap">
+          <h2>{ui.journal.title}</h2>
           <ul class="posts">
             {posts.map((p) => (
               <li>
@@ -93,12 +115,10 @@ const og = await getImage({ src: heroImage, width: 1200, format: 'jpg' });
               </li>
             ))}
           </ul>
-        ) : (
-          <p class="sub">{ui.home.journalEmpty}</p>
-        )
-      }
-    </div>
-  </section>
+        </div>
+      </section>
+    )
+  }
 
   <section class="section final">
     <div class="wrap">
@@ -150,14 +170,6 @@ const og = await getImage({ src: heroImage, width: 1200, format: 'jpg' });
     margin: 8px 0 0;
     color: var(--text);
     text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
-  }
-  .hero-sub::before {
-    content: '';
-    display: block;
-    width: 64px;
-    height: 2px;
-    background: var(--rainbow);
-    margin-bottom: 12px;
   }
   .split-inner {
     display: grid;
@@ -212,13 +224,67 @@ const og = await getImage({ src: heroImage, width: 1200, format: 'jpg' });
     border-bottom: 1px solid var(--line);
     text-decoration: none;
   }
-  .final {
-    text-align: center;
-  }
   .final .lead {
-    margin: 0 auto 32px;
+    margin-bottom: 32px;
+  }
+  .swatches {
+    margin-top: 56px;
+  }
+  .swatch-label {
+    font-size: 13px;
+    margin: 0 0 12px;
+  }
+  .swatches ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(11, minmax(0, 1fr));
+    gap: 6px;
+  }
+  .swatch {
+    display: block;
+    aspect-ratio: 1 / 2.4;
+    overflow: hidden;
+    outline-offset: 2px;
+  }
+  .swatch :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: var(--focus);
+    transform: scale(3);
+    transform-origin: var(--focus);
+    transition: transform 0.4s ease;
+  }
+  .swatch:hover :global(img),
+  .swatch:focus-visible :global(img) {
+    transform: scale(2.4);
+  }
+  .pair .prices {
+    flex-direction: column;
+    gap: 4px;
+  }
+  .pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .swatch :global(img) {
+      transition: none;
+    }
   }
   @media (max-width: 800px) {
+    .swatches ul {
+      display: flex;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+    .swatches li {
+      flex: 0 0 56px;
+    }
+    .pair,
     .split-inner,
     .grid {
       grid-template-columns: 1fr;

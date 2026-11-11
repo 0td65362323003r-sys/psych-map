@@ -51,7 +51,7 @@ const jsonLd = {
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=Noto+Serif+JP:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500&family=Shippori+Mincho:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -78,8 +78,7 @@ const jsonLd = {
                 return (
                   <li>
                     <a href={href} aria-current={current.startsWith(href) ? 'page' : undefined}>
-                      <span class="nav-label">{item.label}</span>
-                      <span class="nav-sub">{item.sub}</span>
+                      {item.label}
                     </a>
                   </li>
                 );
@@ -166,9 +165,9 @@ const jsonLd = {
     justify-content: space-between;
   }
   .logo {
-    font-family: var(--serif-en);
-    font-size: 24px;
-    letter-spacing: 0.35em;
+    font-family: var(--display);
+    font-size: 26px;
+    letter-spacing: 0.12em;
     text-decoration: none;
     color: var(--text);
   }
@@ -188,22 +187,15 @@ const jsonLd = {
     text-decoration: none;
   }
   .nav li a {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    line-height: 1.4;
-  }
-  .nav-label {
-    font-family: var(--serif-en);
-    letter-spacing: 0.15em;
+    display: block;
     font-size: 14px;
+    letter-spacing: 0.08em;
+    padding: 4px 0;
+    border-bottom: 1px solid transparent;
   }
-  .nav-sub {
-    font-size: 10px;
-    color: var(--text-sub);
-  }
-  .nav a[aria-current='page'] .nav-label {
-    color: var(--gold);
+  .nav li a:hover,
+  .nav a[aria-current='page'] {
+    border-bottom-color: var(--gold);
   }
   .lang {
     font-size: 13px;
@@ -243,16 +235,9 @@ const jsonLd = {
       gap: 0;
     }
     .nav li a {
-      flex-direction: row;
-      justify-content: space-between;
       padding: 16px 0;
-      border-bottom: 1px solid var(--line);
-    }
-    .nav-label {
       font-size: 18px;
-    }
-    .nav-sub {
-      font-size: 12px;
+      border-bottom: 1px solid var(--line);
     }
     .lang {
       align-self: flex-start;
