@@ -24,24 +24,24 @@ export const ui = {
     close: '閉じる',
 
     home: {
-      heroSub: 'ミラノで発表した、新しい和の装い。',
-      conceptTitle: '着物でも、リメイクでもない。',
+      heroSub: '西陣織や紅型など、和の生地で仕立てるオーダーメイドのドレスとジャケット',
+      conceptTitle: '和の生地を、洋服で日常に',
       conceptBody:
-        '西陣織、紅型、ちりめん。日本の美しい布から、ドレスやジャケットという洋の形で、まったく新しい一着を仕立てます。それがKURUMIの「新しい和」です。',
-      storyTitle: '和は、言葉がなくても伝わる。',
-      storyBody: '「素敵」と笑顔になる瞬間に、国境はありません。KURUMIは、その笑顔の輪を一着から広げていきます。',
+        'KURUMIは、西陣織や紅型、ちりめんなどの和の生地を使い、ドレスやジャケットを一から仕立てています。着物のリメイクはせず、一着ずつ新しく作っているので、ほかにはないデザインが生まれます。',
+      storyTitle: '和の服で、世界に笑顔を広げたい',
+      storyBody: '和のものを見ると、日本の人も海外の人も「素敵！」と笑顔になります。KURUMIの服が世界に広がれば、笑顔が広がって、世の中が少し仲良くなると考えています。',
       storyMore: 'ブランドストーリーを読む',
-      collectionBody: 'Milan GX Fashion Week 2026で発表したコレクションから。',
+      collectionBody: '2026年2月、Milan GX Fashion Week 2026で発表した作品です。',
       collectionMore: '作品を見る',
       designerTitle: 'デザイナー 横山 胡桃',
-      designerBody: 'モデルとして「どうすれば美しく見えるか」を追いかけてきた目で、着る人を引き立てるシルエットを描きます。',
+      designerBody: 'モデルとしての経験から、着る人が美しく見える色とシルエットのバランスを大切にしています。',
       designerMore: 'デザイナーについて',
-      orderTitle: 'すべてオーダーメイドです。',
+      orderTitle: 'すべてオーダーメイドで仕立てます',
       orderBody: '採寸からおよそ1か月〜1か月半でお届けします。',
       orderMore: 'オーダーについて',
       journalEmpty: '記事は準備中です。',
-      finalTitle: 'あなたのための一着を。',
-      finalBody: '人前に立つ日、大切な会食、海外のパーティー。その日のあなたに合わせて仕立てます。',
+      finalTitle: 'オーダーのご相談',
+      finalBody: '登壇や会食、パーティーなど、着ていく場面を教えてください。お好みに合わせて、柄の見せ方やシルエットを一緒に決めていきます。',
     },
 
     prices: [
@@ -52,59 +52,53 @@ export const ui = {
     priceNote: '価格はすべて税別です。生地やデザインによって変わります。ワンピースとコートは、デザインに合わせてお見積もりします。',
 
     story: {
-      title: '和で、世界を笑顔に。',
+      title: '和を日常に。和で繋ぐ世界。',
       sections: [
         {
-          h: 'はじまりは、笑顔',
+          h: 'ブランドを始めたきっかけ',
           p: [
-            '私の家族は皆仲がよく、昔から笑顔の絶えない家庭でした。そんな家族は、今も私の誇りです。',
-            'ラジオの仕事をしていたころ、ファンの方が「朝からくるみんの元気な声を聞いて、今日も頑張ろうって思えた」と笑顔で話してくれました。そのとき、太陽のように、たくさんの人に元気と笑顔を届けたいと心から思ったのです。',
-          ],
-        },
-        {
-          h: '服との出会い',
-          p: [
-            'モデルやタレントとして人前に立つ中で、気づいたことがあります。私がいちばん笑顔になれるのは、素敵な服を着ているときだと。',
-            'だったら今度は、着る人を笑顔にする服を私が作ろう。そう決めて、2025年7月にKURUMIを立ち上げました。',
+            '私の家族はみんな仲がよく、昔から笑顔の絶えない家庭でした。そんな家族が、私の誇りです。',
+            'ラジオの仕事をしていたころ、ファンの方が「朝からくるみんの元気な声を聞いて、一日頑張ろうと思えた」と笑顔で話してくれました。それがとても嬉しくて、太陽のように、いろいろな人に元気と笑顔を届けたいと思うようになりました。',
+            'モデルやタレントとして人前に立つうちに、自分がいちばん笑顔になれるのは、素敵な服を着ているときだと気づきました。それなら着る人が笑顔になれる服を自分で作ろうと思い、2025年7月にKURUMIを立ち上げました。',
           ],
         },
         {
           h: 'なぜ「和」なのか',
           p: [
-            '和の美しさは、言葉がなくても伝わります。日本の人も、海外の人も、和の装いを見ると「素敵！」と笑顔になります。',
-            '和は、世界の共通言語になれる。そう信じて、和を取り入れたブランドにしました。',
+            '和のものは、言葉が分からなくても伝わります。日本の人も海外の人も、和の装いを見ると「素敵！」と笑顔になります。',
+            '和のお洋服は、世界の共通言語になれると思っています。KURUMIの服が世界に広がれば、笑顔が広がって、世の中が少し仲良くなる。そう考えて、和を取り入れたブランドにしました。',
           ],
         },
         {
-          h: '笑顔の輪に託す願い',
+          h: '沖縄で考えたこと',
           p: [
-            '沖縄で過ごした日々の中で、平和の尊さを考える機会がたくさんありました。',
-            '人と人が笑顔の輪でつながれば、世界はもう少しやさしくなれる。一着の服が、その小さなきっかけになれたら。そんな希望を、KURUMIに託しています。',
+            '中学生のときから沖縄で暮らし、平和について考える機会がたくさんありました。',
+            '人と人が笑顔でつながっていけば、世の中はもっと穏やかになるのではないか。お洋服でつながっていけたら、少しは平和につながるのではないか。KURUMIには、そんな希望も込めています。',
           ],
         },
         {
-          h: '新しい和',
+          h: 'KURUMIの服づくり',
           p: [
-            'KURUMIは、着物のリメイクをしません。西陣織を中心に、紅型、ちりめん、シルクなどの和の生地を、レースやレザー、英国やイタリアのスーツ生地と掛け合わせ、まったく新しい一着を一から仕立てます。',
-            '着物でも和装でもない、日常やパーティーで和を楽しむための服。それが私たちの「新しい和」です。',
+            'KURUMIは着物のリメイクはせず、一着ずつ新しく作っています。西陣織を中心に、紅型、ちりめん、シルクなどの和の生地を、レースやレザー、英国やイタリアのスーツ生地と組み合わせます。',
+            '着物や和装とは違う装いで、日常やパーティーで和を楽しんでいただくための服です。',
           ],
         },
       ],
       valuesTitle: '大切にしていること',
       values: [
-        { h: 'バランス', p: '色もシルエットも、着る人がいちばん美しく見えるかどうか。' },
-        { h: 'デザイン', p: '異素材を大胆に掛け合わせ、自由で、他にはない一着を。' },
-        { h: '笑顔の輪', p: '着る人も、それを見る人も、「素敵」と笑顔になる服を。' },
+        { h: 'バランス', p: '色やシルエットのバランスを見て、着る人が美しく見えるかどうかを確かめます。' },
+        { h: 'デザイン', p: 'レザーやレースなどの異素材と組み合わせ、面白いと思えるデザインかどうかを考えます。' },
+        { h: '笑顔が広がること', p: '着る人も、それを見た人も「素敵」と笑顔になれる服を、これからも作っていきます。' },
       ],
-      milanTitle: 'ミラノ「繋がる」',
+      milanTitle: 'ミラノでの発表',
       milan: [
         '2026年2月25日、Milan GX Fashion Week 2026で、ドレス6着、ジャケット・スーツ3着、コート1着の計10着を発表しました。',
-        'テーマは「繋がる」。和の服をミラノで発表し、日本と世界をつなぐ。紅型のドレスには、イタリア国旗の色を込めました。',
+        'ショーのテーマは「繋がる」です。和の服をミラノで発表し、日本と世界をつなぐことを目指しました。紅型のドレスは、イタリア国旗の色で表現しています。',
       ],
       futureTitle: 'これから',
       future: [
-        '3年後には日本にお店を、5年後には海外にもお店を。',
-        '「日本のブランド」と聞いてKURUMIを思い浮かべる人が、国内にも海外にもいる。そんな未来を目指しています。',
+        '3年後には日本に、5年後には海外にもお店を出したいと考えています。',
+        '「日本のブランド」と聞いたときに、国内だけでなく海外でもKURUMIを思い浮かべてもらえるよう、少しずつ広げていきます。',
       ],
     },
 
@@ -118,8 +112,8 @@ export const ui = {
       ],
       viewTitle: 'デザインの視点',
       view: [
-        '着物が身近にない環境で育ったからこそ、和を外から自由に見つめられる。大河ドラマ『江』に描かれた女性の強さと奥ゆかしさに心を動かされたことも、和に惹かれたきっかけのひとつです。',
-        'モデルとして磨いた「どうすれば美しく見えるか」という目が、シルエットとバランスに活きています。',
+        '着物が身近にない環境で育ったため、和を外から自由な目で見ることができます。大河ドラマ『江』で描かれた女性の強さや奥ゆかしさにも惹かれてきました。',
+        'モデルとして「どうすれば美しく見えるか」を考えてきた経験を、シルエットとバランスづくりに活かしています。',
       ],
       photoPending: 'プロフィール写真（受け取り待ち）',
       careerTitle: '主な実績',
@@ -137,8 +131,8 @@ export const ui = {
     },
 
     collection: {
-      title: '和の布から生まれた、世界に一つの一着。',
-      lead: 'Milan GX Fashion Week 2026で発表したコレクション「繋がる」より。西陣織、紅型、ちりめん、シルクを、レースやレザー、英国やイタリアのスーツ生地と掛け合わせました。ここにある作品をもとに、あなたのための一着をお仕立てします。',
+      title: 'ミラノで発表したコレクション',
+      lead: '2026年2月にMilan GX Fashion Week 2026で発表したコレクション「繋がる」の作品です。西陣織、紅型、ちりめん、シルクなどの和の生地に、レースやレザー、英国やイタリアのスーツ生地を組み合わせています。どの作品も、デザインをもとにオーダーでお仕立てできます。',
       all: 'すべて',
       orderFromThis: 'この作品をもとにオーダーを相談する',
       back: '作品一覧へ戻る',
@@ -160,7 +154,7 @@ export const ui = {
     },
 
     order: {
-      title: 'あなたと、その日のために仕立てる一着。',
+      title: 'オーダーについて',
       lead: 'KURUMIの服は、すべてオーダーメイドです。お好みや着ていく場面に合わせて、柄の見せ方やシルエットを一緒に決めていきます。',
       priceTitle: '参考価格',
       flowTitle: 'オーダーの流れ',
@@ -189,8 +183,8 @@ export const ui = {
     },
 
     contact: {
-      title: 'オーダーのご相談は、こちらから。',
-      lead: 'まだイメージが固まっていなくても大丈夫です。着ていきたい場面を教えていただければ、一緒に考えます。',
+      title: 'オーダーのご相談',
+      lead: 'イメージが固まっていなくても大丈夫です。着ていく場面を教えていただければ、一緒に考えます。',
       required: '必須',
       fields: {
         name: 'お名前',
@@ -240,10 +234,10 @@ export const ui = {
 
     seo: {
       home: { title: 'KURUMI｜和の生地で仕立てるオーダーメイドのドレス・ジャケット', desc: '西陣織や紅型など和の生地から、ドレスやジャケットを一から仕立てるオーダーメイドブランド。Milan GX Fashion Week 2026でコレクションを発表。' },
-      story: { title: 'ブランドストーリー｜KURUMI', desc: '和を日常に。和で繋ぐ世界。笑顔の輪を広げたいという思いから生まれた、KURUMIの物語と「新しい和」の考え方。' },
+      story: { title: 'ブランドストーリー｜KURUMI', desc: '和を日常に。和で繋ぐ世界。デザイナー横山胡桃がKURUMIを始めたきっかけと、和の生地で服を作る理由。' },
       designer: { title: 'デザイナー 横山胡桃｜KURUMI', desc: 'モデル・タレントとして活動してきた横山胡桃のプロフィールと経歴。着る人を美しく見せる、KURUMIのデザインの視点。' },
       collection: { title: '作品一覧｜西陣織・紅型のドレスとジャケット｜KURUMI', desc: 'ミラノで発表したコレクション「繋がる」より。和の生地とレースやレザーを掛け合わせたドレス、ジャケット、スーツ。' },
-      order: { title: 'オーダーについて｜価格と流れ｜KURUMI', desc: 'ジャケット30万円〜（税別）。対面での採寸からおよそ1か月〜1か月半でお渡し。着ていく場面に合わせて仕立てる、KURUMIのオーダーメイド。' },
+      order: { title: 'オーダーについて｜価格と流れ｜KURUMI', desc: 'ジャケット30万円〜（税別）。対面での採寸からおよそ1か月〜1か月半でお渡し。着ていく場面に合わせて仕立てます。' },
       contact: { title: 'お問い合わせ｜KURUMI', desc: 'オーダーのご相談はこちらから。着ていきたい場面を教えていただければ、一緒に考えます。' },
       journal: { title: 'お知らせ・ブログ｜KURUMI', desc: 'KURUMIのお知らせ、コレクション、制作の裏側、和の文化について。' },
       company: { title: '会社情報｜KURUMI', desc: '合同会社Kurumi&Co.の会社情報。' },
@@ -270,24 +264,24 @@ export const ui = {
     close: 'Close',
 
     home: {
-      heroSub: 'A new Japanese elegance, unveiled in Milan.',
-      conceptTitle: 'Not a kimono. Not a remake.',
+      heroSub: 'Made-to-order dresses and jackets in Nishijin brocade, bingata and other Japanese textiles',
+      conceptTitle: 'Japanese textiles, made into clothes for every day',
       conceptBody:
-        'From Nishijin brocade, Ryukyu bingata and silk chirimen, KURUMI creates entirely new dresses and jackets. This is our new wa.',
-      storyTitle: 'Wa needs no translation.',
-      storyBody: 'When someone smiles and says "beautiful," there are no borders. KURUMI spreads that circle of smiles, one garment at a time.',
+        'KURUMI makes dresses and jackets from scratch using Japanese textiles such as Nishijin brocade, Ryukyu bingata and chirimen silk. We do not remake kimono. Each piece is newly designed, so no two are alike.',
+      storyTitle: 'Clothes that spread smiles around the world',
+      storyBody: 'People in Japan and abroad smile when they see Japanese design, even without a shared language. As KURUMI reaches more people, we believe those smiles will spread and the world will get a little friendlier.',
       storyMore: 'Read our story',
-      collectionBody: 'Selected from the collection presented at Milan GX Fashion Week 2026.',
+      collectionBody: 'Pieces shown at Milan GX Fashion Week 2026 in February 2026.',
       collectionMore: 'View the collection',
       designerTitle: 'Designer Kurumi Yokoyama',
-      designerBody: 'Years as a model taught her what makes a person look their best. Every silhouette she draws is made to do exactly that.',
+      designerBody: 'Drawing on her years as a model, she focuses on the balance of color and silhouette that makes the wearer look their best.',
       designerMore: 'About the designer',
-      orderTitle: 'Every piece is made to order.',
+      orderTitle: 'Every piece is made to order',
       orderBody: 'Ready about 4 to 6 weeks after your fitting.',
       orderMore: 'How to order',
       journalEmpty: 'Posts are coming soon.',
-      finalTitle: 'A piece made for you.',
-      finalBody: 'For the stage, an important dinner, a party abroad. Tailored to you and your day.',
+      finalTitle: 'Start an order',
+      finalBody: 'Tell us where you plan to wear it, such as a talk, a dinner or a party. We will decide the pattern placement and silhouette together.',
     },
 
     prices: [
@@ -298,59 +292,53 @@ export const ui = {
     priceNote: 'All prices exclude tax and vary with fabric and design. One-pieces and coats are quoted per design.',
 
     story: {
-      title: 'Connecting the world through wa.',
+      title: 'Wa for every day. A world connected through wa.',
       sections: [
         {
-          h: 'It began with a smile',
+          h: 'How KURUMI began',
           p: [
-            'I grew up in a family that was always laughing. They are still my greatest pride.',
-            'When I worked in radio, a listener once told me, with a big smile, that hearing my cheerful voice each morning gave them the energy to face the day. In that moment I knew what I wanted: to bring energy and smiles to people, like the sun.',
-          ],
-        },
-        {
-          h: 'Finding fashion',
-          p: [
-            'Working as a model and TV personality, I noticed something: I smile most when I am wearing something beautiful.',
-            'So I decided to make clothes that bring that same smile to whoever wears them. I launched KURUMI in July 2025.',
+            'I grew up in a close family that was always laughing. They are still my pride.',
+            'When I worked in radio, a listener told me with a smile that hearing my cheerful voice in the morning helped them get through the day. It made me very happy, and I started to want to bring energy and smiles to many people, the way the sun does.',
+            'Standing in front of people as a model and TV personality, I noticed that I smile most when I am wearing beautiful clothes. So I decided to make clothes that make the wearer smile, and launched KURUMI in July 2025.',
           ],
         },
         {
           h: 'Why wa',
           p: [
-            'The beauty of wa, the Japanese aesthetic, needs no words. In Japan or abroad, people see it and smile: "How beautiful!"',
-            'I believe wa can be a language the whole world shares. That is why KURUMI is built on it.',
+            'Wa, Japanese design and culture, comes across even without words. People in Japan and abroad see Japanese dress and smile: "How beautiful!"',
+            'I think clothes with wa can be a language the whole world shares. If KURUMI reaches more people, smiles will spread and the world will get a little friendlier. That is why I built the brand around wa.',
           ],
         },
         {
-          h: 'A hope woven in',
+          h: 'What Okinawa taught me',
           p: [
-            'Growing up in Okinawa, I often found myself thinking about how precious peace is.',
-            'When people are connected by smiles, the world becomes a little kinder. If a single garment can be a small part of that, it is enough. That hope is woven into KURUMI.',
+            'I lived in Okinawa from junior high school, and I had many chances there to think about peace.',
+            'If people connect through smiles, perhaps the world can become calmer. If clothes can help people connect, perhaps they can do a little for peace. KURUMI carries that hope too.',
           ],
         },
         {
-          h: 'A new wa',
+          h: 'How we make our clothes',
           p: [
-            'KURUMI does not remake kimono. We start from Japanese textiles, chiefly Nishijin brocade, along with Ryukyu bingata, chirimen and silk, and pair them with lace, leather and British and Italian suiting to create entirely new pieces.',
-            'Not kimono, not traditional dress, but clothes for enjoying wa in everyday life and at parties. This is our new wa.',
+            'KURUMI does not remake kimono. Each piece is newly made. We work mainly with Nishijin brocade, along with Ryukyu bingata, chirimen and silk, and combine them with lace, leather and British and Italian suiting.',
+            'The result looks nothing like kimono or traditional dress. These are clothes for enjoying wa in daily life and at parties.',
           ],
         },
       ],
       valuesTitle: 'What we value',
       values: [
-        { h: 'Balance', p: 'Color and silhouette, always chosen to make the wearer look their most beautiful.' },
-        { h: 'Design', p: 'Bold, free pairings of materials for pieces like no other.' },
-        { h: 'A circle of smiles', p: 'Clothes that make both the wearer and everyone around them say "beautiful."' },
+        { h: 'Balance', p: 'We check the balance of color and silhouette to make sure the wearer looks beautiful.' },
+        { h: 'Design', p: 'We combine Japanese textiles with leather, lace and other materials, and ask whether the design is interesting.' },
+        { h: 'Spreading smiles', p: 'We want to keep making clothes that make both the wearer and the people around them smile.' },
       ],
-      milanTitle: 'Milan: Connect',
+      milanTitle: 'Showing in Milan',
       milan: [
         'On February 25, 2026, KURUMI presented ten looks at Milan GX Fashion Week 2026: six dresses, three jackets and suits, and one coat.',
-        'The theme was "Connect": Japanese garments shown in Milan, linking Japan and the world. One bingata dress carries the colors of the Italian flag.',
+        'The theme of the show was "Connect". By presenting Japanese clothes in Milan, we set out to connect Japan with the world. One bingata dress uses the colors of the Italian flag.',
       ],
       futureTitle: 'What comes next',
       future: [
-        'A store in Japan within three years, and abroad within five.',
-        'Our goal is simple: when people in Japan and around the world think of a Japanese brand, KURUMI comes to mind.',
+        'We plan to open a store in Japan within three years, and abroad within five.',
+        'We want people in Japan and around the world to think of KURUMI when they think of a Japanese brand.',
       ],
     },
 
@@ -362,10 +350,10 @@ export const ui = {
         'Born in Kanagawa, Japan, Kurumi moved to Okinawa with her family as a teenager and began her career there as a model and TV personality, appearing on television, radio, commercials and stage, and as an event host. She later moved her base to Tokyo.',
         'In July 2025 she launched KURUMI, and in February 2026 presented her collection at Milan GX Fashion Week 2026. She is a certified fitter at the Meister and Middle Meister grades, awarded by the Japan Order Suit Skill Certification Association (JOSSCA).',
       ],
-      viewTitle: 'Her eye for design',
+      viewTitle: 'How she designs',
       view: [
-        'Because kimono were never part of her everyday life, Kurumi sees wa with fresh, free eyes. She was also drawn to it through the historical drama Gō, moved by the strength and grace of the women it portrays.',
-        'Her years as a model gave her an instinct for what makes a person look beautiful, and it shows in every silhouette and every balance of color.',
+        'Kimono were not part of her everyday life growing up, so she looks at wa from the outside, without fixed rules. She was also drawn to it by the historical drama Gō and the strength and grace of the women in it.',
+        'As a model she spent years thinking about what makes a person look beautiful, and she uses that experience when shaping silhouette and balance.',
       ],
       photoPending: 'Profile photo (coming soon)',
       careerTitle: 'Selected work',
@@ -377,8 +365,8 @@ export const ui = {
     },
 
     collection: {
-      title: 'One-of-a-kind pieces, born from Japanese textiles.',
-      lead: 'From Connect, the collection presented at Milan GX Fashion Week 2026. Nishijin brocade, Ryukyu bingata, chirimen and silk, paired with lace, leather and British and Italian suiting. Any piece here can be the starting point for one made just for you.',
+      title: 'The Milan collection',
+      lead: 'Pieces from Connect, the collection shown at Milan GX Fashion Week 2026 in February 2026. Japanese textiles such as Nishijin brocade, Ryukyu bingata, chirimen and silk are combined with lace, leather and British and Italian suiting. Any of these designs can be made to order for you.',
       all: 'All',
       orderFromThis: 'Request a piece inspired by this design',
       back: 'Back to the collection',
@@ -400,7 +388,7 @@ export const ui = {
     },
 
     order: {
-      title: 'A piece tailored to you, and to your day.',
+      title: 'Made to order',
       lead: 'Every KURUMI piece is made to order. Together we decide how the pattern is placed and how the silhouette falls, based on your taste and the occasion.',
       priceTitle: 'Pricing',
       flowTitle: 'How it works',
@@ -413,11 +401,11 @@ export const ui = {
       scenes: ['Speaking on stage or in front of an audience', 'Networking events where you want to be remembered', 'Important dinners, parties and dates', 'Welcoming international guests, or parties abroad'],
       voicesTitle: 'From our clients',
       voices: [
-        "Because it's a jacket, I can wear it to dinners and every day. I love it.",
-        'One piece, and my whole look came alive.',
-        'At networking events, people now come up and talk to me first.',
-        "My international guests said 'beautiful!' and the conversation just flowed.",
-        'The design is stunning.',
+        "It's a jacket, so I can wear it to dinners and in daily life. I really like it.",
+        'One piece made my outfit look elegant.',
+        'At networking events, more people start conversations with me.',
+        "My international guests said 'beautiful!', and it got the conversation going.",
+        'The design is beautiful.',
       ],
       faqTitle: 'FAQ',
       faq: [
@@ -429,8 +417,8 @@ export const ui = {
     },
 
     contact: {
-      title: 'Start your made-to-order consultation here.',
-      lead: "No need to have everything decided. Just tell us where you'd like to wear it, and we'll take it from there together.",
+      title: 'Order consultation',
+      lead: "You don't need a finished idea. Tell us where you plan to wear it, and we will work it out with you.",
       required: 'Required',
       fields: {
         name: 'Name',
@@ -480,11 +468,11 @@ export const ui = {
 
     seo: {
       home: { title: 'KURUMI – Made-to-Order Dresses and Jackets in Japanese Textiles', desc: 'Made-to-order dresses and jackets crafted from Nishijin brocade, bingata and other Japanese textiles. Presented at Milan GX Fashion Week 2026.' },
-      story: { title: 'Our Story – KURUMI', desc: 'Wa for every day. How a wish to spread smiles became KURUMI, and what we mean by a new wa.' },
+      story: { title: 'Our Story – KURUMI', desc: 'Wa for every day. How designer Kurumi Yokoyama started KURUMI, and why she makes clothes from Japanese textiles.' },
       designer: { title: 'Designer Kurumi Yokoyama – KURUMI', desc: 'Meet Kurumi Yokoyama, the model and TV personality turned designer behind KURUMI.' },
       collection: { title: 'Collection – Nishijin and Bingata Dresses and Jackets – KURUMI', desc: 'From Connect, our Milan collection: dresses, jackets and suits pairing Japanese textiles with lace and leather.' },
-      order: { title: 'Made to Order – Pricing and Process – KURUMI', desc: 'Jackets from ¥300,000 plus tax. Fitted in person and ready in about 4 to 6 weeks, each piece is tailored to you and your occasion.' },
-      contact: { title: 'Contact – KURUMI', desc: "Start your made-to-order consultation. Tell us where you'd like to wear it." },
+      order: { title: 'Made to Order – Pricing and Process – KURUMI', desc: 'Jackets from ¥300,000 plus tax. Fitted in person and ready in about 4 to 6 weeks.' },
+      contact: { title: 'Contact – KURUMI', desc: 'Ask about an order. Tell us where you plan to wear it.' },
       journal: { title: 'Journal – KURUMI', desc: 'News, collections, behind the scenes and Japanese culture from KURUMI.' },
       company: { title: 'Company – KURUMI', desc: 'Company information for Kurumi&Co. LLC.' },
       privacy: { title: 'Privacy Policy – KURUMI', desc: 'Privacy policy of Kurumi&Co. LLC.' },
