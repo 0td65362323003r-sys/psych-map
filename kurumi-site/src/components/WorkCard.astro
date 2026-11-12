@@ -12,7 +12,7 @@ const ui = t(lang);
 ---
 
 <a class="card" href={localePath(lang, `collection/${work.id}/`)}>
-  <Image src={work.images[0]} alt={work.name[lang]} widths={[400, 720]} sizes="(max-width: 800px) 50vw, 33vw" />
+  <Image src={work.images[0]} alt="" widths={[400, 720]} sizes="(max-width: 800px) 50vw, 33vw" />
   <span class="cat sub">{work.quote ? '\u00a0' : ui.categories[work.category]}</span>
   <span class="name">{work.name[lang]}</span>
 </a>
