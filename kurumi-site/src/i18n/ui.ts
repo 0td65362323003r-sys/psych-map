@@ -16,6 +16,8 @@ export const ui = {
       { href: 'contact/', label: 'お問い合わせ' },
     ],
     cta: 'オーダーのご相談',
+    // スマホのヘッダーに入る短い表記
+    ctaShort: 'ご相談',
     langSwitch: 'English',
     skip: '本文へ移動',
     footer: { company: '会社情報', privacy: 'プライバシーポリシー', copyright: '© 2026 合同会社Kurumi&Co.' },
@@ -195,7 +197,7 @@ export const ui = {
     contact: {
       title: 'オーダーのご相談',
       lead: 'イメージが固まっていなくても大丈夫です。着ていく場面を教えていただければ、一緒に考えます。',
-      next: '3営業日以内にメールでご返信いたします。そのうえで、採寸の日程をご相談します。参考価格はジャケット30万円〜（税別）です。海外からのご相談も承ります。',
+      next: '3営業日以内にメールでご返信いたします。そのうえで、採寸の日程をご相談します。参考価格はジャケット30万円〜、ドレス35万円〜、スーツ38万円〜（いずれも税別）です。海外からのご相談も承ります。',
       credential: 'デザイナーの横山胡桃は、日本オーダースーツ技能認定協会（JOSSCA）認定のフィッター（マイスター／ミドルマイスター）です。',
       aboutPiece: 'ご相談の作品：',
       required: '必須',
@@ -281,6 +283,7 @@ export const ui = {
       { href: 'contact/', label: 'Contact' },
     ],
     cta: 'Request a consultation',
+    ctaShort: 'Inquire',
     langSwitch: '日本語',
     skip: 'Skip to content',
     footer: { company: 'Company', privacy: 'Privacy policy', copyright: '© 2026 Kurumi&Co. LLC' },
@@ -460,7 +463,7 @@ export const ui = {
     contact: {
       title: 'Order consultation',
       lead: 'You do not need a finished idea. Tell us where you plan to wear the piece, and we will shape it with you.',
-      next: 'We reply by email within three business days to arrange your measurements. Jackets start at ¥300,000 plus tax. Inquiries from outside Japan are welcome.',
+      next: 'We reply by email within three business days to arrange your measurements. Jackets from ¥300,000, dresses from ¥350,000 and suits from ¥380,000, plus tax. Inquiries from outside Japan are welcome.',
       credential: 'Designer Kurumi Yokoyama is a fitter certified at the Meister and Middle Meister grades by the Japan Order Suit Skill Certification Association (JOSSCA).',
       aboutPiece: 'Piece you are asking about: ',
       required: 'Required',

@@ -101,7 +101,7 @@ const jsonLd = {
       <div class="header-inner">
         <a class="logo" href={localePath(lang)}>KURUMI</a>
         <div class="header-actions">
-          <a class="header-cta" href={localePath(lang, 'contact/')}>{ui.cta}</a>
+          {path !== 'contact/' && <a class="header-cta" href={localePath(lang, 'contact/')}>{ui.ctaShort}</a>}
           <button class="menu-btn" type="button" aria-controls="nav" aria-expanded="false">
             <span class="menu-open">{ui.menu}</span><span class="menu-close">{ui.close}</span>
           </button>
@@ -340,8 +340,12 @@ const jsonLd = {
       display: inline;
     }
   }
-  @media (max-width: 360px) {
+  @media (max-width: 400px) {
+    .header-inner {
+      gap: 8px;
+    }
     .logo {
+      flex-shrink: 0;
       font-size: 22px;
     }
     .header-cta {

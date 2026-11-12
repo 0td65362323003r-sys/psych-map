@@ -34,7 +34,16 @@ const next = works[(idx + 1) % works.length];
     <div class="photos">
       {
         work.images.map((img, i) => (
-          <Image src={img} alt={`${name} ${i + 1}`} widths={[480, 900, 1300]} sizes="(max-width: 900px) 100vw, 60vw" loading={i === 0 ? 'eager' : 'lazy'} />
+          <>
+            <Image src={img} alt={`${name} ${i + 1}`} widths={[480, 900, 1300]} sizes="(max-width: 900px) 100vw, 60vw" loading={i === 0 ? 'eager' : 'lazy'} />
+            {i === 0 && (
+              <div class="quick">
+                <p class="quick-name">{name}</p>
+                <p class="quick-price">{price ? <>{price}<span class="sub">{c.priceTax}</span></> : c.priceQuote}</p>
+                <a class="btn" href={`${localePath(lang, 'contact/')}?ref=${work.id}`}>{c.orderFromThis}</a>
+              </div>
+            )}
+          </>
         ))
       }
     </div>
@@ -141,7 +150,28 @@ const next = works[(idx + 1) % works.length];
     display: block;
     width: fit-content;
   }
+  /* スマホでは1枚目の写真のすぐ下に、価格と相談ボタンを出す */
+  .quick {
+    display: none;
+  }
   @media (max-width: 900px) {
+    .quick {
+      display: block;
+      padding: 8px 0 24px;
+      border-bottom: 1px solid var(--line);
+    }
+    .quick p {
+      margin: 0;
+    }
+    .quick-price {
+      color: var(--gold);
+      font-size: 20px;
+      margin: 4px 0 16px !important;
+    }
+    .quick .sub {
+      font-size: 13px;
+      margin-left: 4px;
+    }
     .work {
       grid-template-columns: 1fr;
       gap: 32px;

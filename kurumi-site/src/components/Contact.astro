@@ -14,6 +14,7 @@ const f = c.fields;
 const endpoint = import.meta.env.PUBLIC_CONTACT_ENDPOINT ?? '';
 // 作品ページから来たときに「ご相談の作品」を表示するための名前一覧
 const workNames = Object.fromEntries(works.map((w) => [w.id, w.name[lang]]));
+const workCats = Object.fromEntries(works.map((w) => [w.id, w.category]));
 ---
 
 <Base lang={lang} path="contact/" title={ui.seo.contact.title} description={ui.seo.contact.desc}>
@@ -26,7 +27,7 @@ const workNames = Object.fromEntries(works.map((w) => [w.id, w.name[lang]]));
 
   <section class="wrap form-wrap">
     <p class="piece" hidden data-label={c.aboutPiece}></p>
-    <form id="contact" data-endpoint={endpoint} data-sending={c.sending} data-submit={c.submit} data-works={JSON.stringify(workNames)} novalidate>
+    <form id="contact" data-endpoint={endpoint} data-sending={c.sending} data-submit={c.submit} data-works={JSON.stringify(workNames)} data-cats={JSON.stringify(workCats)} novalidate>
       <input type="hidden" name="lang" value={lang} />
       <input type="hidden" name="ref" value="" />
       <!-- 迷惑送信よけ。人には見えない欄で、入力があれば保存しない -->
@@ -109,6 +110,11 @@ const workNames = Object.fromEntries(works.map((w) => [w.id, w.name[lang]]));
     form.querySelector<HTMLInputElement>('input[name=ref]')!.value = ref;
     piece.textContent = `${piece.dataset.label}${names[ref]}`;
     piece.hidden = false;
+    // 作品の種類に合わせて「ご希望のアイテム」を選んでおく（選択肢の順：ジャケット・ドレス・スーツ・ワンピース・コート）
+    const cats: Record<string, string> = JSON.parse(form.dataset.cats ?? '{}');
+    const idx = ({ jacket: 0, dress: 1, suit: 2, coat: 4 } as Record<string, number>)[cats[ref]];
+    const radios = form.querySelectorAll<HTMLInputElement>('input[name=item]');
+    if (idx !== undefined && radios[idx]) radios[idx].checked = true;
   }
 
   // 必須の欄を確かめ、だめな欄の下に理由を出す
