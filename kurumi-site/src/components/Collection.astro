@@ -27,7 +27,7 @@ const cats = [...new Set(works.map((w) => w.category))] as Category[];
     </div>
     <p class="visually-hidden" aria-live="polite" id="filter-status" data-template={c.filterStatus(999)}></p>
     <ul class="grid">
-      {works.map((w) => <li data-cat={w.category}><WorkCard work={w} lang={lang} /></li>)}
+      {works.map((w) => <li data-cat={w.quote ? 'all-only' : w.category}><WorkCard work={w} lang={lang} /></li>)}
       {works.length % 3 === 2 && (
         <li class="fill-li" data-cat="all">
           <div class="fill">
