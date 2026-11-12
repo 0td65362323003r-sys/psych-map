@@ -465,7 +465,7 @@ export const ui = {
     contact: {
       title: 'Order consultation',
       lead: 'You do not need a finished idea. Tell us where you plan to wear the piece, and we will shape it with you.',
-      next: 'We reply by email within three business days to arrange your measurements. Jackets from ¥300,000, dresses from ¥350,000 and suits from ¥380,000, plus tax. Inquiries from outside Japan are welcome.',
+      next: 'We reply by email within three business days to arrange your measurements. Guide prices start at ¥300,000 for jackets, ¥350,000 for dresses and ¥380,000 for suits, plus tax. Inquiries from outside Japan are welcome.',
       credential: 'Designer Kurumi Yokoyama is a fitter certified at the Meister and Middle Meister grades by the Japan Order Suit Skill Certification Association (JOSSCA).',
       aboutPiece: 'Piece you are asking about: ',
       required: 'Required',
