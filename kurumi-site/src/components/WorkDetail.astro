@@ -3,7 +3,6 @@ import { Image, getImage } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import { t, localePath, type Lang } from '../i18n/ui';
 import { works, type Work } from '../data/works';
-import CtaBlock from './CtaBlock.astro';
 
 interface Props {
   lang: Lang;
@@ -72,8 +71,6 @@ const next = works[(idx + 1) % works.length];
       <a class="more" href={localePath(lang, 'collection/')}>{c.back}</a>
     </div>
   </article>
-
-  <CtaBlock lang={lang} />
 </Base>
 
 <style>
@@ -82,7 +79,7 @@ const next = works[(idx + 1) % works.length];
     grid-template-columns: 3fr 2fr;
     gap: 56px;
     padding-top: 120px;
-    padding-bottom: 0;
+    padding-bottom: 112px;
   }
   .photos {
     display: grid;

@@ -41,7 +41,7 @@ export const ui = {
       designerBody: 'モデルとしての経験から、着る人が美しく見える色とシルエットのバランスを大切にしています。',
       designerMore: 'デザイナーについて',
       orderTitle: 'すべてオーダーメイドで仕立てます',
-      orderBody: '採寸は東京で、対面で行います。出張採寸や、海外にお住まいの方からのご依頼もご相談ください。採寸からおよそ1か月〜1か月半でお渡しします。',
+      orderBody: '採寸は東京で、対面で行います。出張採寸や、海外にお住まいの方からのご依頼もご相談ください。採寸からおよそ1\u2060か\u2060月〜1\u2060か\u2060月\u2060半でお渡しします。',
       orderMore: 'オーダーについて',
       voicesTitle: 'お客様の声',
       finalTitle: 'オーダーのご相談',
@@ -111,6 +111,7 @@ export const ui = {
       name: '横山 胡桃',
       kana: 'よこやま くるみ',
       role: 'デザイナー',
+      photoCaption: 'KURUMIの作品（Milan GX Fashion Week 2026）',
       profile: [
         '神奈川県生まれ。中学生のときに家族で沖縄へ移り、モデル・タレントとして活動を始める。テレビ、ラジオ、CM、舞台、司会など幅広く出演し、東京に拠点を移してからも活動を続ける。',
         '2025年7月にブランドKURUMIを立ち上げ、2026年2月にMilan GX Fashion Week 2026でコレクションを発表。一般社団法人 日本オーダースーツ技能認定協会（JOSSCA）より、フィッターとして「マイスター」「ミドルマイスター」の認定を受ける。',
@@ -148,7 +149,7 @@ export const ui = {
       priceLabel: '参考価格',
       priceTax: '（税別）',
       priceQuote: 'デザインに合わせてお見積もり',
-      orderInfo: '採寸は東京で対面。採寸からおよそ1か月〜1か月半でお渡しします。海外からのご依頼もご相談ください。',
+      orderInfo: '採寸は東京で対面。採寸からおよそ1\u2060か\u2060月〜1\u2060か\u2060月\u2060半でお渡しします。海外からのご依頼もご相談ください。',
       workDesc: 'KURUMIのオーダーメイド作品。和の生地を使い、デザインをもとにお仕立てします。',
       materialGlossaryTitle: '素材について',
       glossary: [
@@ -173,7 +174,7 @@ export const ui = {
       flow: [
         { h: 'お問い合わせ', p: 'フォームから、ご希望のアイテムや着用予定日をお知らせください。' },
         { h: '採寸', p: '東京にて対面で採寸し、デザインや生地を一緒に決めます。出張採寸や、海外にお住まいの方からのご依頼もご相談ください。' },
-        { h: 'お渡し', p: '採寸からおよそ1か月〜1か月半でお渡しします。' },
+        { h: 'お渡し', p: '採寸からおよそ1\u2060か\u2060月〜1\u2060か\u2060月\u2060半でお渡しします。' },
       ],
       scenesTitle: 'こんな場面に',
       scenes: ['登壇やスピーチなど、人前に立つ日', '交流会で、さりげなく印象に残りたいとき', '大切な会食やパーティー、デート', '海外のお客様を迎えるお仕事や、海外でのパーティー'],
@@ -262,7 +263,7 @@ export const ui = {
       story: { title: 'ブランドストーリー｜KURUMI', desc: '和を日常に。和で繋ぐ世界。デザイナー横山胡桃がKURUMIを始めたきっかけと、和の生地で服を作る理由。' },
       designer: { title: 'デザイナー 横山胡桃｜KURUMI', desc: 'モデル・タレントとして活動してきた横山胡桃のプロフィールと経歴。着る人を美しく見せるデザインの考え方も紹介します。' },
       collection: { title: '作品一覧｜西陣織・紅型のドレスとジャケット｜KURUMI', desc: '和の生地で仕立てるKURUMIのドレス、ジャケット、スーツ、コート。どの作品も、デザインをもとにオーダーでお仕立てできます。' },
-      order: { title: 'オーダーについて｜価格と流れ｜KURUMI', desc: 'ジャケット30万円〜（税別）。東京での対面採寸からおよそ1か月〜1か月半でお渡し。出張採寸や海外からのご依頼もご相談ください。' },
+      order: { title: 'オーダーについて｜価格と流れ｜KURUMI', desc: 'ジャケット30万円〜（税別）。東京での対面採寸からおよそ1\u2060か\u2060月〜1\u2060か\u2060月\u2060半でお渡し。出張採寸や海外からのご依頼もご相談ください。' },
       contact: { title: 'お問い合わせ｜KURUMI', desc: 'オーダーのご相談はこちらから。着ていきたい場面を教えていただければ、一緒に考えます。' },
       journal: { title: 'お知らせ・ブログ｜KURUMI', desc: 'KURUMIのお知らせ、コレクション、制作の裏側、和の文化について。' },
       company: { title: '会社情報｜KURUMI', desc: '合同会社Kurumi&Co.の会社情報。' },
@@ -377,6 +378,7 @@ export const ui = {
       name: 'KURUMI YOKOYAMA',
       kana: '',
       role: 'Designer',
+      photoCaption: 'A KURUMI piece, Milan GX Fashion Week 2026',
       profile: [
         'Born in Kanagawa, Japan, Kurumi moved to Okinawa with her family in junior high school and began her career there as a model and TV personality. She has worked in television, radio, commercials and theater, and as an event host, and later moved her base to Tokyo.',
         'In July 2025 she launched KURUMI, and in February 2026 presented her collection at Milan GX Fashion Week 2026. She is a certified fitter at the Meister and Middle Meister grades, awarded by the Japan Order Suit Skill Certification Association (JOSSCA).',

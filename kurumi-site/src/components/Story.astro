@@ -35,7 +35,7 @@ const interludes: Record<number, { img: ImageMetadata; alt: string }> = {
           </div>
         </section>
         {interludes[i] && (
-          <figure class={`interlude wrap ${i % 2 ? 'right' : 'left'}`}>
+          <figure class={`interlude wrap ${Object.keys(interludes).indexOf(String(i)) % 2 ? 'right' : 'left'}`}>
             <Image src={interludes[i].img} alt={interludes[i].alt} widths={[480, 900]} sizes="(max-width: 800px) 100vw, 50vw" />
           </figure>
         )}
@@ -77,7 +77,7 @@ const interludes: Record<number, { img: ImageMetadata; alt: string }> = {
     margin: 112px auto 0;
   }
   .interlude :global(img) {
-    width: min(100%, 520px);
+    width: min(100%, 640px);
     aspect-ratio: 4 / 5;
     object-fit: cover;
   }

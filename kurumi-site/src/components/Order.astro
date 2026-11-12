@@ -2,6 +2,9 @@
 import Base from '../layouts/Base.astro';
 import { t, type Lang } from '../i18n/ui';
 import CtaBlock from './CtaBlock.astro';
+import { Image } from 'astro:assets';
+import { works } from '../data/works';
+const flowImage = works.find((w) => w.id === 'look-04')!;
 
 interface Props {
   lang: Lang;
@@ -28,11 +31,14 @@ const o = ui.order;
   </section>
 
   <section class="section">
-    <div class="wrap">
-      <h2>{o.flowTitle}</h2>
-      <ol class="flow">
-        {o.flow.map((f, i) => <li><span class="num">0{i + 1}</span><h3>{f.h}</h3><p>{f.p}</p></li>)}
-      </ol>
+    <div class="wrap flow-wrap">
+      <div>
+        <h2>{o.flowTitle}</h2>
+        <ol class="flow">
+          {o.flow.map((f, i) => <li><span class="num">0{i + 1}</span><h3>{f.h}</h3><p>{f.p}</p></li>)}
+        </ol>
+      </div>
+      <Image src={flowImage.images[1]} alt={flowImage.name[lang]} widths={[480, 900]} sizes="(max-width: 800px) 100vw, 45vw" class="flow-img" />
     </div>
   </section>
 
@@ -91,8 +97,18 @@ const o = ui.order;
     padding: 0;
     margin: 0;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
     gap: 32px;
+  }
+  .flow-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+  .flow-img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
   }
   .num {
     font-family: var(--serif-en);
@@ -122,13 +138,10 @@ const o = ui.order;
     padding: 12px 0;
     border-bottom: 1px solid var(--line);
   }
-  .voices li::before {
-    content: '“';
-    color: var(--gold);
-    margin-right: 4px;
-  }
   .voices blockquote {
     margin: 0;
+    padding-left: 16px;
+    border-left: 1px solid var(--gold);
   }
   .faq {
     margin: 0;
@@ -144,7 +157,7 @@ const o = ui.order;
     margin: 4px 0 0;
   }
   @media (max-width: 800px) {
-    .flow,
+    .flow-wrap,
     .two {
       grid-template-columns: 1fr;
     }

@@ -212,3 +212,8 @@ li,
   word-break: auto-phrase;
   text-wrap: pretty;
 }
+
+/* 見出しのすぐ後のセクションは、上の余白を詰める */
+.page-head + .section {
+  padding-top: 24px;
+}

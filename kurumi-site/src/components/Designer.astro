@@ -2,6 +2,10 @@
 import Base from '../layouts/Base.astro';
 import { t, type Lang } from '../i18n/ui';
 import CtaBlock from './CtaBlock.astro';
+import { Image } from 'astro:assets';
+import { works } from '../data/works';
+// プロフィール写真が届くまでは、作品の写真を「作品」と明記して置く
+const piece = works.find((w) => w.id === 'look-01')!;
 
 interface Props {
   lang: Lang;
@@ -19,8 +23,12 @@ const d = ui.designer;
   </header>
 
   <section class="section">
-    <div class="wrap narrow">
-      {d.profile.map((p) => <p>{p}</p>)}
+    <div class="wrap profile">
+      <figure>
+        <Image src={piece.images[0]} alt={piece.name[lang]} widths={[480, 800]} sizes="(max-width: 800px) 100vw, 40vw" />
+        <figcaption class="sub">{d.photoCaption}</figcaption>
+      </figure>
+      <div>{d.profile.map((p) => <p>{p}</p>)}</div>
     </div>
   </section>
 
@@ -44,6 +52,27 @@ const d = ui.designer;
 </Base>
 
 <style>
+  .profile {
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    gap: 56px;
+    align-items: start;
+  }
+  .profile figure {
+    margin: 0;
+  }
+  .profile :global(img) {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+  }
+  figcaption {
+    font-size: 12px;
+    margin-top: 8px;
+  }
+  .profile p:first-child {
+    margin-top: 0;
+  }
   .career {
     margin: 0;
   }
@@ -62,6 +91,10 @@ const d = ui.designer;
     font-size: 14px;
   }
   @media (max-width: 800px) {
+    .profile {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
     .career div {
       grid-template-columns: 1fr;
       gap: 4px;

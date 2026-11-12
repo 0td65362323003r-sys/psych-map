@@ -14,17 +14,17 @@ const ui = t(lang);
 const pickup = ['look-08', 'look-02', 'look-04'].map((id) => works.find((w) => w.id === id)!);
 // 生地の見本帳。生地が大きく写っている写真を選び、その位置を拡大して短冊にする
 const swatchFocus: Record<string, { img: number; pos: string }> = {
-  'look-01': { img: 1, pos: '66% 60%' },
+  'look-01': { img: 1, pos: '52% 55%' },
   'look-02': { img: 1, pos: '45% 62%' },
   'look-03': { img: 0, pos: '24% 52%' },
-  'look-04': { img: 0, pos: '86% 66%' },
+  'look-04': { img: 0, pos: '90% 76%' },
   'look-05': { img: 0, pos: '40% 52%' },
   'look-06': { img: 1, pos: '50% 62%' },
   'look-07': { img: 2, pos: '42% 78%' },
   'look-08': { img: 0, pos: '50% 74%' },
   'look-09': { img: 1, pos: '60% 92%' },
-  'look-10': { img: 1, pos: '36% 34%' },
-  'look-11': { img: 0, pos: '72% 96%' },
+  'look-10': { img: 1, pos: '50% 42%' },
+  'look-11': { img: 0, pos: '62% 88%' },
 };
 const posts = (await getPosts(lang)).slice(0, 3);
 const og = await getImage({ src: heroImage, width: 1200, format: 'jpg' });
@@ -176,6 +176,7 @@ const og = await getImage({ src: heroImage, width: 1200, format: 'jpg' });
   }
   .hero-catch span {
     display: block;
+    text-wrap: balance;
   }
   .hero-catch {
     font-weight: 500;
@@ -318,13 +319,13 @@ const og = await getImage({ src: heroImage, width: 1200, format: 'jpg' });
     height: 100%;
     object-fit: cover;
     object-position: var(--focus);
-    transform: scale(2.5);
+    transform: scale(3.5);
     transform-origin: var(--focus);
     transition: transform 0.4s ease;
   }
   .swatch:hover :global(img),
   .swatch:focus-visible :global(img) {
-    transform: scale(2);
+    transform: scale(3);
   }
   .pair .prices {
     flex-direction: column;

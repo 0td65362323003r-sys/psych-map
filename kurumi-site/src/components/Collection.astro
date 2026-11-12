@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import WorkCard from './WorkCard.astro';
 import CtaBlock from './CtaBlock.astro';
-import { t, type Lang } from '../i18n/ui';
+import { t, localePath, type Lang } from '../i18n/ui';
 import { works, type Category } from '../data/works';
 
 interface Props {
@@ -28,6 +28,14 @@ const cats = [...new Set(works.map((w) => w.category))] as Category[];
     <p class="visually-hidden" aria-live="polite" id="filter-status" data-template={c.filterStatus(999)}></p>
     <ul class="grid">
       {works.map((w) => <li data-cat={w.category}><WorkCard work={w} lang={lang} /></li>)}
+      {works.length % 3 === 2 && (
+        <li class="fill-li" data-cat="all">
+          <div class="fill">
+            <p>{ui.home.finalBody}</p>
+            <a class="more" href={localePath(lang, 'contact/')}>{ui.cta}</a>
+          </div>
+        </li>
+      )}
     </ul>
   </section>
 
@@ -49,10 +57,10 @@ const cats = [...new Set(works.map((w) => w.category))] as Category[];
   buttons.forEach((b) =>
     b.addEventListener('click', () => {
       buttons.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
-      items.forEach((li) => (li.hidden = b.dataset.cat !== 'all' && li.dataset.cat !== b.dataset.cat));
+      items.forEach((li) => (li.hidden = li.classList.contains('fill-li') ? b.dataset.cat !== 'all' : b.dataset.cat !== 'all' && li.dataset.cat !== b.dataset.cat));
       const status = document.getElementById('filter-status');
       if (status) {
-        const n = [...items].filter((li) => !li.hidden).length;
+        const n = [...items].filter((li) => !li.hidden && !li.classList.contains('fill-li')).length;
         status.textContent = (status.dataset.template ?? '').replace('999', String(n));
       }
     }),
@@ -87,6 +95,23 @@ const cats = [...new Set(works.map((w) => w.category))] as Category[];
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 40px 24px;
+  }
+  /* 3列の最後の段が空くときは、オーダーへの案内で埋める */
+  .fill {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 32px;
+    border: 1px solid var(--line);
+    aspect-ratio: 2 / 3;
+  }
+  .fill p {
+    margin: 0 0 16px;
+  }
+  @media (max-width: 800px) {
+    .grid .fill-li {
+      display: none;
+    }
   }
   .glossary dl {
     display: grid;
