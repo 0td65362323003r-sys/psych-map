@@ -31,7 +31,7 @@ const cats = [...new Set(works.map((w) => w.category))] as Category[];
       {works.length % 3 === 2 && (
         <li class="fill-li" data-cat="all">
           <div class="fill">
-            <p>{ui.home.finalBody}</p>
+            <p>{c.fillBody}</p>
             <a class="more" href={localePath(lang, 'contact/')}>{ui.cta}</a>
           </div>
         </li>
@@ -109,8 +109,9 @@ const cats = [...new Set(works.map((w) => w.category))] as Category[];
     margin: 0 0 16px;
   }
   @media (max-width: 800px) {
-    .grid .fill-li {
-      display: none;
+    .fill {
+      padding: 16px;
+      font-size: 14px;
     }
   }
   .glossary dl {

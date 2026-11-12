@@ -152,6 +152,11 @@ const next = works[(idx + 1) % works.length];
     display: none;
   }
   @media (max-width: 900px) {
+    /* 1枚目の下に出した価格とボタンを、下の欄でくり返さない */
+    .info .price,
+    .info > .btn {
+      display: none;
+    }
     .quick {
       display: block;
       padding: 8px 0 24px;

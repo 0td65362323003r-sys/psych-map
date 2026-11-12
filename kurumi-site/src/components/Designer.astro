@@ -5,7 +5,7 @@ import CtaBlock from './CtaBlock.astro';
 import { Image } from 'astro:assets';
 import { works } from '../data/works';
 // プロフィール写真が届くまでは、作品の写真を「作品」と明記して置く
-const piece = works.find((w) => w.id === 'look-01')!;
+const piece = works.find((w) => w.id === 'look-02')!;
 
 interface Props {
   lang: Lang;
@@ -24,8 +24,8 @@ const d = ui.designer;
 
   <section class="section">
     <div class="wrap profile">
-      <figure>
-        <Image src={piece.images[0]} alt={piece.name[lang]} widths={[480, 800]} sizes="(max-width: 800px) 100vw, 40vw" />
+      <figure class="fabric">
+        <Image src={piece.images[1]} alt={piece.name[lang]} widths={[800, 1600]} sizes="(max-width: 800px) 100vw, 40vw" />
         <figcaption class="sub">{d.photoCaption}</figcaption>
       </figure>
       <div>{d.profile.map((p) => <p>{p}</p>)}</div>
@@ -61,10 +61,20 @@ const d = ui.designer;
   .profile figure {
     margin: 0;
   }
+  /* 顔の写っていない、生地の寄りを見せる（本人の写真と誤解されないように） */
+  .fabric {
+    overflow: hidden;
+  }
   .profile :global(img) {
     width: 100%;
     aspect-ratio: 3 / 4;
     object-fit: cover;
+    object-position: 45% 62%;
+    transform: scale(2.6);
+    transform-origin: 45% 62%;
+  }
+  .fabric {
+    position: relative;
   }
   figcaption {
     font-size: 12px;
