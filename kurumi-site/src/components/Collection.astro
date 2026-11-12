@@ -31,7 +31,8 @@ const cats = [...new Set(works.map((w) => w.category))] as Category[];
       {works.length % 3 === 2 && (
         <li class="fill-li" data-cat="all">
           <div class="fill">
-            <p>{c.fillBody}</p>
+            {/* 日本語は文末の「できます。」を1行にまとめ、最後の行に1文字だけ残らないようにする */}
+            <p>{lang === 'ja' ? <>{c.fillBody.slice(0, -5)}<span class="nw">{c.fillBody.slice(-5)}</span></> : c.fillBody}</p>
             <a class="more" href={localePath(lang, 'contact/')}>{ui.cta}</a>
           </div>
         </li>
@@ -107,11 +108,15 @@ const cats = [...new Set(works.map((w) => w.category))] as Category[];
   }
   .fill p {
     margin: 0 0 16px;
+    letter-spacing: 0;
+  }
+  .nw {
+    white-space: nowrap;
   }
   @media (max-width: 800px) {
     .fill {
-      padding: 16px;
-      font-size: 14px;
+      padding: 14px;
+      font-size: 13px;
       aspect-ratio: auto;
       height: 100%;
     }
