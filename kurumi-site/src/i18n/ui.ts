@@ -68,7 +68,7 @@ export const ui = {
           h: 'なぜ「和」なのか',
           p: [
             '和のものは、言葉が分からなくても伝わります。日本の人も海外の人も、和の装いを見ると「素敵！」と笑顔になります。',
-            '和のお洋服は、世界の共通言語になれると思っています。KURUMIの服が世界に広がれば笑顔も広がり、世の中が少し仲良くなるはずです。だから、和を取り入れたブランドにしました。',
+            '和のお洋服は、世界の共通言語になれると思っています。KURUMIの服が世界に広がれば笑顔も広がり、世の中が少し仲良くなっていくと信じています。だから、和を取り入れたブランドにしました。',
           ],
         },
         {
@@ -134,7 +134,7 @@ export const ui = {
 
     collection: {
       title: '作品',
-      lead: 'KURUMIの作品です。多くは2026年2月のMilan GX Fashion Week 2026で発表したものです。西陣織、紅型、ちりめん、シルクなどの和の生地に、レースやレザー、英国やイタリアのスーツ生地を組み合わせています。どの作品も、デザインをもとにオーダーでお仕立てできます。',
+      lead: '2026年2月のMilan GX Fashion Week 2026で発表した作品を中心にご紹介します。西陣織、紅型、ちりめん、シルクなどの和の生地に、レースやレザー、英国やイタリアのスーツ生地を組み合わせています。どの作品も、デザインをもとにオーダーでお仕立てできます。',
       all: 'すべて',
       filterLabel: '作品の種類で絞り込む',
       filterStatus: (n: number) => `${n}点の作品を表示しています`,
@@ -170,7 +170,7 @@ export const ui = {
       flowTitle: 'オーダーの流れ',
       flow: [
         { h: 'お問い合わせ', p: 'フォームから、ご希望のアイテムや着用予定日をお知らせください。' },
-        { h: '採寸', p: '東京で、対面で採寸し、デザインや生地を一緒に決めます。出張採寸や、海外にお住まいの方からのご依頼もご相談ください。' },
+        { h: '採寸', p: '東京にて対面で採寸し、デザインや生地を一緒に決めます。出張採寸や、海外にお住まいの方からのご依頼もご相談ください。' },
         { h: 'お渡し', p: '採寸からおよそ1か月〜1か月半でお渡しします。' },
       ],
       scenesTitle: 'こんな場面に',
@@ -195,7 +195,7 @@ export const ui = {
     contact: {
       title: 'オーダーのご相談',
       lead: 'イメージが固まっていなくても大丈夫です。着ていく場面を教えていただければ、一緒に考えます。',
-      next: '3営業日以内にメールでご返信し、採寸の日程をご相談します。参考価格はジャケット30万円〜（税別）です。海外からのご相談も承ります。',
+      next: '3営業日以内にメールでご返信いたします。そのうえで、採寸の日程をご相談します。参考価格はジャケット30万円〜（税別）です。海外からのご相談も承ります。',
       credential: 'デザイナーの横山胡桃は、日本オーダースーツ技能認定協会（JOSSCA）認定のフィッター（マイスター／ミドルマイスター）です。',
       aboutPiece: 'ご相談の作品：',
       required: '必須',
@@ -225,7 +225,7 @@ export const ui = {
       thanksNote: 'ご返信はGmailのアドレスからお送りします。届かない場合は、迷惑メールフォルダもご確認ください。',
       thanksMore: '作品をもっと見る',
       error: '送信できませんでした。時間をおいて、もう一度お試しください。',
-      errorAlt: 'うまく送れない場合は、Instagramのメッセージからもご連絡いただけます。',
+      errorAlt: 'うまく送れない場合は、こちらのメッセージからもご連絡いただけます：',
       notReady: 'このフォームは確認用のため、まだ送信できません。',
       privacyNote: '送信いただいた情報の取り扱いについては、こちらをご覧ください：',
     },
@@ -251,7 +251,7 @@ export const ui = {
       ],
     },
 
-    journal: { title: 'お知らせ・ブログ', empty: '記事は準備中です。最新の様子はInstagramでご覧いただけます。', back: '一覧へ戻る' },
+    journal: { title: 'お知らせ・ブログ', empty: '記事は準備中です。最新の様子はこちらからご覧いただけます：', back: '一覧へ戻る' },
 
     notFound: { title: 'ページが見つかりません', body: 'お探しのページは、移動または削除された可能性があります。', home: 'トップページへ' },
 
@@ -297,7 +297,7 @@ export const ui = {
       storyBody: 'People in Japan and abroad smile when they see Japanese design, even without a shared language. As KURUMI reaches more people, we believe those smiles will spread and the world will become a little friendlier.',
       storyMore: 'Read our story',
       collectionTitle: 'Collection',
-      collectionBody: 'Mostly pieces shown at Milan GX Fashion Week 2026 in February 2026.',
+      collectionBody: 'Featuring pieces shown at Milan GX Fashion Week 2026 in February 2026.',
       collectionMore: 'View the collection',
       swatchLabel: 'Browse by fabric',
       designerTitle: 'Designer Kurumi Yokoyama',
@@ -347,7 +347,7 @@ export const ui = {
           h: 'How we make our clothes',
           p: [
             'KURUMI does not remake kimono. Each piece is newly made. We work mainly with Nishijin brocade, along with Ryukyu bingata, chirimen and silk, and combine them with lace, leather and British and Italian suiting.',
-            'They are Western in cut, made for enjoying wa in daily life and at parties.',
+            'The pieces are Western in cut, made for enjoying wa in daily life and at parties.',
           ],
         },
       ],
@@ -388,18 +388,18 @@ export const ui = {
         { h: 'Certification', p: 'Certified fitter, Meister grade (March 2025) and Middle Meister grade (May 2025), Japan Order Suit Skill Certification Association (JOSSCA)' },
         { h: 'Awards', p: 'Grand Prix, MISS GOLF 2023 Okinawa / Runner-up, MISS GOLF 2023 Japan Final / Grand Prix, MISS ORIENTAL 2022 Fukuoka / Grand Prix, JAPAN WOMEN\'S COLLECTION 2020 Okinawa' },
         { h: 'Radio', p: 'Kanagawa Subaru campaign reporter, FM Yokohama (2022–2024) / Radio car reporter, Friday regular, RBCi Radio (2019–2022) / Assistant MC, Saturday Magnet, RBCi Radio (2019–2021)' },
-        { h: 'Television', p: 'Producer, director and presenter of the golf program GOLFBEAT, Ryukyu Broadcasting (2021–2023) / JTA Cup (Okinawa Television) / NAHA Marathon (Ryukyu Broadcasting) / Aランチ (Ryukyu Broadcasting) and others (2016–)' },
-        { h: 'Commercials', p: 'Ambassador for Okinawa Shokuryo「愛を米守礼」(2021–2024) / AEON Ryukyu「火水ぴか市」/ ATSUGI and eight others (2018–)' },
-        { h: 'Drama', p: 'しに怖い夜 (2019) / 闘牛戦士ワイドー (2018)' },
-        { h: 'Stage', p: '団地ング・ヒーロー (Tokyo, 2024) / こと〜築地寿司物語〜明日への轍 and てっちゃんの写真館 (Tokyo, 2023) / こと〜築地寿司物語〜百年の絆 (Tokyo, 2022) / ニライカナイからの贈り物 (Okinawa, 2019)' },
-        { h: 'Modeling', p: 'ANA web commercial / Dunlop / ことりっぷ / BE-PAL / Kariyushi MAJUN / AEON advertising / bridal shows and others (2018–)' },
+        { h: 'Television', p: 'Producer, director and presenter of the golf program GOLFBEAT, Ryukyu Broadcasting (2021–2023) / JTA Cup (Okinawa Television) / NAHA Marathon (Ryukyu Broadcasting) and other programs (2016–)' },
+        { h: 'Commercials', p: 'Ambassador, Okinawa Shokuryo (2021–2024) / AEON Ryukyu / ATSUGI and eight others (2018–)' },
+        { h: 'Drama', p: 'Two TV dramas (2018, 2019)' },
+        { h: 'Stage', p: 'Five stage productions in Tokyo (2022–2024) and Okinawa (2019)' },
+        { h: 'Modeling', p: 'ANA web commercial / Dunlop / BE-PAL / Kariyushi MAJUN / AEON advertising / bridal shows and others (2018–)' },
         { h: 'Host', p: 'FM Yokohama Hakone event / Numero Neuf launch (2025) / FM Yokohama golf tournament (2023, 2024) / Ryukyu Kaiensai fireworks festival and others (2018–)' },
       ],
     },
 
     collection: {
       title: 'Collection',
-      lead: 'KURUMI pieces, many of them shown at Milan GX Fashion Week 2026 in February 2026. Japanese textiles such as Nishijin brocade, Ryukyu bingata, chirimen and silk are combined with lace, leather and British and Italian suiting. Any of these designs can be made to order for you.',
+      lead: 'Many of these pieces were shown at Milan GX Fashion Week 2026 in February 2026. Japanese textiles such as Nishijin brocade, Ryukyu bingata, chirimen and silk are combined with lace, leather and British and Italian suiting. Any of these designs can be made to order for you.',
       all: 'All',
       filterLabel: 'Filter by type',
       filterStatus: (n: number) => `Showing ${n} ${n === 1 ? 'piece' : 'pieces'}`,
@@ -436,7 +436,7 @@ export const ui = {
       flow: [
         { h: 'Inquiry', p: 'Tell us through the form what you would like and when you plan to wear it.' },
         { h: 'Measurements', p: 'We take your measurements in person in Tokyo and choose the design and fabric together. We can also come to you, or arrange a session when you visit Japan.' },
-        { h: 'Delivery', p: 'Your piece is ready about 4 to 6 weeks after your measurements are taken.' },
+        { h: 'Completion', p: 'Your piece is ready about 4 to 6 weeks after your measurements are taken.' },
       ],
       scenesTitle: 'Occasions',
       scenes: ['Speaking on stage or in front of an audience', 'Networking events where you want to be remembered', 'Important dinners, parties and dates', 'Welcoming international guests, or parties abroad'],
@@ -451,7 +451,7 @@ export const ui = {
       faqTitle: 'Questions',
       faq: [
         { q: 'How can I pay?', a: 'By bank transfer or credit card.' },
-        { q: 'Can I bring my own fabric, such as a family kimono?', a: 'Depending on the fabric, we can discuss it. Please tell us about it when you inquire.' },
+        { q: 'Can I bring my own fabric, such as a family kimono?', a: 'It depends on the fabric, and we are happy to discuss it. Please tell us about it when you inquire.' },
         { q: 'Where are measurements taken?', a: 'In person in Tokyo. We can also come to you outside Tokyo; a travel fee may apply. Please ask when you inquire.' },
         { q: 'Can I order from outside Japan?', a: 'Yes. We can take your measurements while you are in Japan, or agree on another way to do it.' },
       ],
@@ -460,9 +460,9 @@ export const ui = {
     contact: {
       title: 'Order consultation',
       lead: 'You do not need a finished idea. Tell us where you plan to wear the piece, and we will shape it with you.',
-      next: 'We reply by email within three business days to arrange your measurements. Jackets start from ¥300,000 plus tax. Inquiries from outside Japan are welcome.',
-      credential: 'Designer Kurumi Yokoyama is a certified fitter (Meister and Middle Meister) of the Japan Order Suit Skill Certification Association (JOSSCA).',
-      aboutPiece: 'About: ',
+      next: 'We reply by email within three business days to arrange your measurements. Jackets start at ¥300,000 plus tax. Inquiries from outside Japan are welcome.',
+      credential: 'Designer Kurumi Yokoyama is a fitter certified at the Meister and Middle Meister grades by the Japan Order Suit Skill Certification Association (JOSSCA).',
+      aboutPiece: 'Piece you are asking about: ',
       required: 'Required',
       fields: {
         name: 'Name',
@@ -490,7 +490,7 @@ export const ui = {
       thanksNote: 'Our reply comes from a Gmail address. If you do not see it, please check your spam folder.',
       thanksMore: 'See more of the collection',
       error: 'Your message could not be sent. Please try again in a little while.',
-      errorAlt: 'If it still does not go through, you can also message us on Instagram.',
+      errorAlt: 'If it still does not go through, you can also message us on',
       notReady: 'This form is a preview and cannot send yet.',
       privacyNote: 'For how we handle your information, see our',
     },
@@ -516,7 +516,7 @@ export const ui = {
       ],
     },
 
-    journal: { title: 'Journal', empty: 'Posts are coming soon. You can follow our latest news on Instagram.', back: 'Back to the journal' },
+    journal: { title: 'Journal', empty: 'Posts are coming soon. For our latest news, follow us on', back: 'Back to the journal' },
 
     notFound: { title: 'Page not found', body: 'The page you are looking for may have moved or been removed.', home: 'Go to the home page' },
 
