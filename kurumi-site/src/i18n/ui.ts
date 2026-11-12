@@ -339,7 +339,7 @@ export const ui = {
         {
           h: 'What Okinawa taught me',
           p: [
-            'I have lived in Okinawa since junior high school, and there I had many chances to think about peace.',
+            'I moved to Okinawa in junior high school, and living there gave me many chances to think about peace.',
             'I believe that when people connect through smiles, the world becomes a gentler place, and I hope clothes can help, in a small way, toward peace. KURUMI carries that hope too.',
           ],
         },

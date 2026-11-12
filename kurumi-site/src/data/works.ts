@@ -17,6 +17,8 @@ export interface Work {
   materials: { ja: string; en: string } | null;
   note: { ja: string; en: string } | null;
   images: ImageMetadata[];
+  // 種類が確認できるまで参考価格を出さず「お見積もり」にする
+  quote?: boolean;
 }
 
 export const works: Work[] = [
@@ -99,6 +101,7 @@ export const works: Work[] = [
     materials: null,
     note: null,
     images: [photo('20'), photo('22'), photo('25')],
+    quote: true,
   },
   {
     id: 'look-11',
@@ -107,6 +110,7 @@ export const works: Work[] = [
     materials: null,
     note: null,
     images: [photo('26')],
+    quote: true,
   },
 ];
 
