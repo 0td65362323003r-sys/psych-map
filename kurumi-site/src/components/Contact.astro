@@ -14,7 +14,8 @@ const f = c.fields;
 const endpoint = import.meta.env.PUBLIC_CONTACT_ENDPOINT ?? '';
 // 作品ページから来たときに「ご相談の作品」を表示するための名前一覧
 const workNames = Object.fromEntries(works.map((w) => [w.id, w.name[lang]]));
-const workCats = Object.fromEntries(works.map((w) => [w.id, w.category]));
+// 種類が確認できていない作品（見積もり表示のもの）は、アイテムを選んでおかない
+const workCats = Object.fromEntries(works.filter((w) => !w.quote).map((w) => [w.id, w.category]));
 ---
 
 <Base lang={lang} path="contact/" title={ui.seo.contact.title} description={ui.seo.contact.desc}>
