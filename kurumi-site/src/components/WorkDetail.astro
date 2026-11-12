@@ -47,7 +47,7 @@ const next = works[(idx + 1) % works.length];
       }
     </div>
     <div class="info">
-      <p class="cat">{ui.categories[work.category]}</p>
+      {!work.quote && <p class="cat">{ui.categories[work.category]}</p>}
       <h1>{name}</h1>
       {
         work.materials && (
