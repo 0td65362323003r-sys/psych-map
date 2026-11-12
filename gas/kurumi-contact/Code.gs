@@ -7,12 +7,12 @@ const HEADERS = ['受付日時', '言語', 'お名前', 'メールアドレス',
 const STATUSES = ['未対応', '返信済み', '成約'];
 
 // 各欄の長さの上限。これを超える送信は受け付けない
-const LIMITS = { name: 100, email: 200, item: 50, budget: 50, date: 20, scene: 200, fabric: 20, message: 3000, ref: 20, lang: 2 };
+const LIMITS = { name: 100, email: 200, item: 100, budget: 100, date: 20, scene: 400, fabric: 50, message: 3000, ref: 20, lang: 2 };
 
 function doPost(e) {
   const p = (e && e.parameter) || {};
   // 人には見えない欄に入力がある送信は、迷惑送信として保存しない（相手には成功に見せる）
-  if (p.website) return json_({ ok: true });
+  if (p.hp_url) return json_({ ok: true });
 
   const v = {};
   for (const key in LIMITS) {

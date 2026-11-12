@@ -51,7 +51,7 @@ const og = await getImage({ src: heroImage, width: 1200, format: 'jpg' });
             works.map((w) => (
               <li>
                 <a class="swatch" href={localePath(lang, `collection/${w.id}/`)} title={w.name[lang]} style={`--focus: ${swatchFocus[w.id].pos}`}>
-                  <Image src={w.images[swatchFocus[w.id].img]} alt={w.name[lang]} widths={[1000]} sizes="1000px" loading="lazy" />
+                  <Image src={w.images[swatchFocus[w.id].img]} alt={w.name[lang]} widths={[400, 800]} sizes="(max-width: 800px) 80vw, 360px" loading="lazy" />
                 </a>
               </li>
             ))
