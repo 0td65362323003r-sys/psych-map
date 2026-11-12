@@ -1,0 +1,33 @@
+---
+// 存在しないURLに来たときのページ。Cloudflare Pages は 404.html を自動で使う
+import Base from '../layouts/Base.astro';
+import { t, localePath } from '../i18n/ui';
+
+const ja = t('ja');
+const en = t('en');
+---
+
+<Base lang="ja" path="" title={ja.seo.notFound.title} description={ja.seo.notFound.desc} alternate={false} noindex>
+  <section class="page-head wrap nf">
+    <h1>{ja.notFound.title}</h1>
+    <p class="sub">{ja.notFound.body}</p>
+    <a class="btn" href={localePath('ja')}>{ja.notFound.home}</a>
+    <p lang="en" class="en">
+      {en.notFound.title}. {en.notFound.body} <a href={localePath('en')}>{en.notFound.home}</a>
+    </p>
+  </section>
+</Base>
+
+<style>
+  .nf {
+    min-height: 70svh;
+  }
+  .btn {
+    margin-top: 24px;
+  }
+  .en {
+    margin-top: 48px;
+    color: var(--text-sub);
+    font-size: 14px;
+  }
+</style>

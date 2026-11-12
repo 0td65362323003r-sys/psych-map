@@ -2,8 +2,9 @@
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import Base from '../layouts/Base.astro';
-import { t, localePath, type Lang } from '../i18n/ui';
+import { t, type Lang } from '../i18n/ui';
 import { works } from '../data/works';
+import CtaBlock from './CtaBlock.astro';
 
 interface Props {
   lang: Lang;
@@ -11,7 +12,7 @@ interface Props {
 const { lang } = Astro.props;
 const ui = t(lang);
 const s = ui.story;
-const milanPhoto = works.find((w) => w.id === 'look-08')!.images[1];
+const milanPhoto = works.find((w) => w.id === 'look-07')!.images[0];
 // 章のあいだに挟む寄りの写真（1章目と3章目のあと）
 const interludes: Record<number, { img: ImageMetadata; alt: string }> = {
   0: { img: works.find((w) => w.id === 'look-01')!.images[1], alt: works.find((w) => w.id === 'look-01')!.name[lang] },
@@ -53,7 +54,7 @@ const interludes: Record<number, { img: ImageMetadata; alt: string }> = {
 
   <section class="section">
     <div class="wrap milan">
-      <Image src={milanPhoto} alt="" widths={[480, 800]} sizes="(max-width: 800px) 100vw, 40vw" />
+      <Image src={milanPhoto} alt={s.milanAlt} widths={[480, 800]} sizes="(max-width: 800px) 100vw, 40vw" />
       <div>
         <h2>{s.milanTitle}</h2>
         {s.milan.map((p) => <p>{p}</p>)}
@@ -65,15 +66,13 @@ const interludes: Record<number, { img: ImageMetadata; alt: string }> = {
     <div class="wrap narrow">
       <h2>{s.futureTitle}</h2>
       {s.future.map((p) => <p>{p}</p>)}
-      <a class="btn" href={localePath(lang, 'contact/')}>{ui.cta}</a>
     </div>
   </section>
+
+  <CtaBlock lang={lang} />
 </Base>
 
 <style>
-  .narrow {
-    max-width: 720px;
-  }
   .interlude {
     margin: 112px auto 0;
   }
@@ -107,9 +106,6 @@ const interludes: Record<number, { img: ImageMetadata; alt: string }> = {
     width: 100%;
     aspect-ratio: 3 / 4;
     object-fit: cover;
-  }
-  .btn {
-    margin-top: 24px;
   }
   @media (max-width: 800px) {
     .milan {

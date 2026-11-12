@@ -1,0 +1,24 @@
+---
+// ページの最後に置く、オーダー相談への入口
+import { t, localePath, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const ui = t(lang);
+---
+
+<section class="section cta-block">
+  <div class="wrap">
+    <h2>{ui.home.finalTitle}</h2>
+    <p class="lead">{ui.home.finalBody}</p>
+    <a class="btn" href={localePath(lang, 'contact/')}>{ui.cta}</a>
+  </div>
+</section>
+
+<style>
+  .lead {
+    margin-bottom: 32px;
+  }
+</style>

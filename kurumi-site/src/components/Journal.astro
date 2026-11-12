@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { t, localePath, type Lang } from '../i18n/ui';
+import { t, localePath, INSTAGRAM_URL, type Lang } from '../i18n/ui';
 import { getPosts, formatDate } from '../lib/microcms';
 
 interface Props {
@@ -11,7 +11,7 @@ const ui = t(lang);
 const posts = await getPosts(lang);
 ---
 
-<Base lang={lang} path="journal/" title={ui.seo.journal.title} description={ui.seo.journal.desc}>
+<Base lang={lang} path="journal/" title={ui.seo.journal.title} description={ui.seo.journal.desc} noindex={posts.length === 0}>
   <header class="page-head wrap">
     <h1>{ui.journal.title}</h1>
   </header>
@@ -24,7 +24,7 @@ const posts = await getPosts(lang);
               <a href={localePath(lang, `journal/${p.id}/`)}>
                 {p.eyecatch && <img src={`${p.eyecatch.url}?w=480&fm=webp`} alt="" width="240" height="160" loading="lazy" />}
                 <div>
-                  <time class="sub">{formatDate(p.publishedAt, lang)}</time>
+                  <time class="sub" datetime={p.publishedAt}>{formatDate(p.publishedAt, lang)}</time>
                   {p.category && <span class="cat">{p.category}</span>}
                   <p class="title">{p.title}</p>
                 </div>
@@ -33,7 +33,9 @@ const posts = await getPosts(lang);
           ))}
         </ul>
       ) : (
-        <p class="sub">{ui.journal.empty}</p>
+        <p class="sub">
+          {ui.journal.empty} <a href={INSTAGRAM_URL} target="_blank" rel="noopener">Instagram</a>
+        </p>
       )
     }
   </section>

@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
-import { t, localePath, type Lang } from '../i18n/ui';
+import { t, localePath, INSTAGRAM_URL, type Lang } from '../i18n/ui';
+import { works } from '../data/works';
 
 interface Props {
   lang: Lang;
@@ -11,16 +12,21 @@ const c = ui.contact;
 const f = c.fields;
 // 問い合わせを受けるGoogle Apps ScriptのURL。Cloudflareの環境変数で設定する
 const endpoint = import.meta.env.PUBLIC_CONTACT_ENDPOINT ?? '';
+// 作品ページから来たときに「ご相談の作品」を表示するための名前一覧
+const workNames = Object.fromEntries(works.map((w) => [w.id, w.name[lang]]));
 ---
 
 <Base lang={lang} path="contact/" title={ui.seo.contact.title} description={ui.seo.contact.desc}>
   <header class="page-head wrap">
     <h1>{c.title}</h1>
     <p class="lead">{c.lead}</p>
+    <p class="sub next">{c.next}</p>
+    <p class="sub small">{c.credential}</p>
   </header>
 
   <section class="wrap form-wrap">
-    <form id="contact" data-endpoint={endpoint} data-sending={c.sending} data-submit={c.submit} novalidate>
+    <p class="piece" hidden data-label={c.aboutPiece}></p>
+    <form id="contact" data-endpoint={endpoint} data-sending={c.sending} data-submit={c.submit} data-works={JSON.stringify(workNames)} novalidate>
       <input type="hidden" name="lang" value={lang} />
       <input type="hidden" name="ref" value="" />
       <!-- 迷惑送信よけ。人には見えない欄で、入力があれば保存しない -->
@@ -28,19 +34,22 @@ const endpoint = import.meta.env.PUBLIC_CONTACT_ENDPOINT ?? '';
         <label>Website<input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
       </div>
 
-      <label class="field">
-        <span>{f.name}<em>{c.required}</em></span>
-        <input type="text" name="name" required autocomplete="name" />
-      </label>
-      <label class="field">
-        <span>{f.email}<em>{c.required}</em></span>
-        <input type="email" name="email" required autocomplete="email" />
-      </label>
-      <fieldset class="field">
+      <div class="field">
+        <label for="f-name">{f.name}<em>{c.required}</em></label>
+        <input id="f-name" type="text" name="name" required maxlength="100" autocomplete="name" aria-describedby="e-name" />
+        <p class="err" id="e-name" hidden>{c.invalid.name}</p>
+      </div>
+      <div class="field">
+        <label for="f-email">{f.email}<em>{c.required}</em></label>
+        <input id="f-email" type="email" name="email" required maxlength="200" autocomplete="email" inputmode="email" aria-describedby="e-email" />
+        <p class="err" id="e-email" hidden>{c.invalid.email}</p>
+      </div>
+      <fieldset class="field" aria-describedby="e-item">
         <legend>{f.item}<em>{c.required}</em></legend>
         <div class="options">
           {f.items.map((v, i) => <label class="opt"><input type="radio" name="item" value={v} required={i === 0} />{v}</label>)}
         </div>
+        <p class="err" id="e-item" hidden>{c.invalid.item}</p>
       </fieldset>
       <fieldset class="field">
         <legend>{f.budget}</legend>
@@ -48,10 +57,10 @@ const endpoint = import.meta.env.PUBLIC_CONTACT_ENDPOINT ?? '';
           {f.budgets.map((v) => <label class="opt"><input type="radio" name="budget" value={v} />{v}</label>)}
         </div>
       </fieldset>
-      <label class="field">
-        <span>{f.date}</span>
-        <input type="date" name="date" />
-      </label>
+      <div class="field">
+        <label for="f-date">{f.date}</label>
+        <input id="f-date" type="date" name="date" />
+      </div>
       <fieldset class="field">
         <legend>{f.scene}</legend>
         <div class="options">
@@ -64,18 +73,25 @@ const endpoint = import.meta.env.PUBLIC_CONTACT_ENDPOINT ?? '';
           {f.fabrics.map((v) => <label class="opt"><input type="radio" name="fabric" value={v} />{v}</label>)}
         </div>
       </fieldset>
-      <label class="field">
-        <span>{f.message}</span>
-        <textarea name="message" rows="6"></textarea>
-      </label>
+      <div class="field">
+        <label for="f-message">{f.message}</label>
+        <textarea id="f-message" name="message" rows="6" maxlength="3000" placeholder={f.messagePh}></textarea>
+      </div>
 
       <p class="sub small">{c.privacyNote} <a href={localePath(lang, 'privacy/')}>{ui.footer.privacy}</a></p>
       {!endpoint && <p class="sub small">{c.notReady}</p>}
-      <p class="status" role="status" aria-live="polite"></p>
       <button class="btn" type="submit">{c.submit}</button>
     </form>
-    <p class="thanks" hidden>{c.thanks}</p>
-    <p class="error-msg" hidden>{c.error}</p>
+
+    <div class="thanks" hidden tabindex="-1">
+      <p>{c.thanks}</p>
+      <p class="sub small">{c.thanksNote}</p>
+      <a class="more" href={localePath(lang, 'collection/')}>{c.thanksMore}</a>
+    </div>
+    <div class="error-msg" role="alert" hidden>
+      <p>{c.error}</p>
+      <p class="small">{c.errorAlt} <a href={INSTAGRAM_URL} target="_blank" rel="noopener">Instagram</a></p>
+    </div>
   </section>
 </Base>
 
@@ -84,31 +100,60 @@ const endpoint = import.meta.env.PUBLIC_CONTACT_ENDPOINT ?? '';
   const thanks = document.querySelector<HTMLElement>('.thanks')!;
   const errorMsg = document.querySelector<HTMLElement>('.error-msg')!;
   const button = form.querySelector<HTMLButtonElement>('button[type=submit]')!;
+  const piece = document.querySelector<HTMLElement>('.piece')!;
 
-  // 作品ページから来たときは、どの作品かを一緒に送る
+  // 作品ページから来たときは、どの作品かを表示して一緒に送る
   const ref = new URLSearchParams(location.search).get('ref');
-  if (ref) form.querySelector<HTMLInputElement>('input[name=ref]')!.value = ref;
+  const names: Record<string, string> = JSON.parse(form.dataset.works ?? '{}');
+  if (ref && names[ref]) {
+    form.querySelector<HTMLInputElement>('input[name=ref]')!.value = ref;
+    piece.textContent = `${piece.dataset.label}${names[ref]}`;
+    piece.hidden = false;
+  }
+
+  // 必須の欄を確かめ、だめな欄の下に理由を出す
+  function check(): boolean {
+    const rules: [string, () => boolean][] = [
+      ['name', () => (form.elements.namedItem('name') as HTMLInputElement).value.trim() !== ''],
+      ['email', () => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((form.elements.namedItem('email') as HTMLInputElement).value.trim())],
+      ['item', () => !!form.querySelector('input[name=item]:checked')],
+    ];
+    let first: HTMLElement | null = null;
+    for (const [key, ok] of rules) {
+      const valid = ok();
+      const err = document.getElementById(`e-${key}`)!;
+      err.hidden = valid;
+      const input = key === 'item' ? form.querySelector<HTMLElement>('input[name=item]')! : document.getElementById(`f-${key}`)!;
+      if (key !== 'item') input.setAttribute('aria-invalid', String(!valid));
+      if (!valid && !first) first = input;
+    }
+    first?.focus();
+    return !first;
+  }
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     errorMsg.hidden = true;
-    if (!form.reportValidity()) return;
+    if (!check()) return;
 
     const data = new FormData(form);
     if (data.get('website')) return;
     const body = new URLSearchParams();
-    for (const [k, v] of data) body.append(k, String(v));
+    for (const [k, v] of data) if (k !== 'scene') body.append(k, String(v));
     body.set('scene', data.getAll('scene').join('、'));
 
     button.disabled = true;
     button.textContent = form.dataset.sending!;
     try {
       if (!form.dataset.endpoint) throw new Error('not connected');
-      // Google Apps Script は CORS に対応していないので no-cors で送る（結果は読めない）
-      await fetch(form.dataset.endpoint, { method: 'POST', mode: 'no-cors', body });
+      // Apps Script は送った内容を保存できたら {"ok":true} を返す。それを確かめてからお礼を出す
+      const res = await fetch(form.dataset.endpoint, { method: 'POST', body });
+      const json = await res.json();
+      if (!json.ok) throw new Error(json.error ?? 'failed');
       form.hidden = true;
+      piece.hidden = true;
       thanks.hidden = false;
-      window.scrollTo({ top: 0 });
+      thanks.focus();
     } catch {
       errorMsg.hidden = false;
       button.disabled = false;
@@ -118,17 +163,28 @@ const endpoint = import.meta.env.PUBLIC_CONTACT_ENDPOINT ?? '';
 </script>
 
 <style>
-  .form-wrap {
+  .next {
+    max-width: 640px;
+    margin-top: 24px;
+  }
+  .form-wrap > * {
     max-width: 720px;
-    padding-bottom: 96px;
+  }
+  .form-wrap {
+    padding-bottom: 112px;
+  }
+  .piece {
+    color: var(--gold);
+    margin: 0 0 32px;
   }
   .field {
     display: block;
     border: 0;
     padding: 0;
     margin: 0 0 28px;
+    min-width: 0;
   }
-  .field > span,
+  .field > label,
   legend {
     display: block;
     margin-bottom: 8px;
@@ -148,40 +204,64 @@ const endpoint = import.meta.env.PUBLIC_CONTACT_ENDPOINT ?? '';
   textarea {
     width: 100%;
     background: var(--bg-soft);
-    border: 1px solid var(--line);
+    border: 1px solid var(--field-border);
     color: var(--text);
     font: inherit;
     font-size: 16px;
     padding: 12px;
   }
-  input:focus,
-  textarea:focus {
+  textarea::placeholder {
+    color: var(--text-sub);
+  }
+  input:focus-visible,
+  textarea:focus-visible {
     outline: 1px solid var(--gold);
     outline-offset: 0;
+  }
+  [aria-invalid='true'] {
+    border-color: #d9826b;
+  }
+  .err {
+    color: #e8a08c;
+    font-size: 13px;
+    margin: 6px 0 0;
   }
   .options {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px 20px;
+    gap: 4px 20px;
   }
   .opt {
     display: inline-flex;
-    gap: 6px;
+    gap: 8px;
     align-items: center;
+    min-height: 44px;
+    cursor: pointer;
   }
   .opt input {
     accent-color: var(--gold);
+    width: 18px;
+    height: 18px;
+    margin: 0;
+  }
+  .opt input:focus-visible {
+    outline: 1px solid var(--gold);
+    outline-offset: 3px;
   }
   .hp {
     position: absolute;
     left: -9999px;
   }
   .small {
-    font-size: 12px;
+    font-size: 13px;
   }
   .thanks,
   .error-msg {
     border: 1px solid var(--gold);
     padding: 24px;
+  }
+  .thanks p:first-child,
+  .error-msg p:first-child {
+    margin-top: 0;
   }
 </style>

@@ -1,6 +1,9 @@
 ---
+import { getImage } from 'astro:assets';
 import '../styles/global.css';
-import { t, localePath, type Lang } from '../i18n/ui';
+import { t, localePath, INSTAGRAM_URL, YOUTUBE_URL, type Lang } from '../i18n/ui';
+import { heroImage } from '../data/works';
+import { getPosts } from '../lib/microcms';
 
 interface Props {
   lang: Lang;
@@ -9,14 +12,29 @@ interface Props {
   title: string;
   description: string;
   image?: string;
+  // もう一方の言語に同じページがないとき（ブログ記事など）は false にする
+  alternate?: boolean;
+  // alternate が false のとき、言語切り替えで飛ぶ先
+  otherPath?: string;
+  noindex?: boolean;
 }
 
-const { lang, path, title, description, image } = Astro.props;
+const { lang, path, title, description, image, alternate = true, otherPath = path, noindex = false } = Astro.props;
 const ui = t(lang);
 const other: Lang = lang === 'ja' ? 'en' : 'ja';
 const canonical = new URL(localePath(lang, path), Astro.site);
-const ogImage = image ? new URL(image, Astro.site).href : undefined;
+const fallbackOg = await getImage({ src: heroImage, width: 1200, format: 'jpg' });
+const ogImage = new URL(image ?? fallbackOg.src, Astro.site).href;
 const current = Astro.url.pathname;
+const switchHref = localePath(other, alternate ? path : otherPath);
+
+// 記事がない間は、メニューの「お知らせ」を出さない
+const hasPosts = (await getPosts(lang)).length > 0;
+const nav = ui.nav.filter((item) => item.href !== 'journal/' || hasPosts);
+
+// Cloudflare の確認用URL（main 以外のブランチ）は検索に載せない
+const branch = process.env.CF_PAGES_BRANCH;
+const robotsNoindex = noindex || (branch !== undefined && branch !== 'main');
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -25,7 +43,7 @@ const jsonLd = {
   legalName: lang === 'ja' ? '合同会社Kurumi&Co.' : 'Kurumi&Co. LLC',
   url: new URL('/', Astro.site).href,
   founder: { '@type': 'Person', name: lang === 'ja' ? '横山胡桃' : 'Kurumi Yokoyama', jobTitle: 'Designer' },
-  sameAs: ['https://www.instagram.com/kurumi_official_japan/', 'https://www.youtube.com/@kurumi_jp'],
+  sameAs: [INSTAGRAM_URL, YOUTUBE_URL],
 };
 ---
 
@@ -36,44 +54,62 @@ const jsonLd = {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {robotsNoindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonical} />
-    <link rel="alternate" hreflang="ja" href={new URL(localePath('ja', path), Astro.site)} />
-    <link rel="alternate" hreflang="en" href={new URL(localePath('en', path), Astro.site)} />
-    <link rel="alternate" hreflang="x-default" href={new URL(localePath('ja', path), Astro.site)} />
+    {
+      alternate ? (
+        <>
+          <link rel="alternate" hreflang="ja" href={new URL(localePath('ja', path), Astro.site)} />
+          <link rel="alternate" hreflang="en" href={new URL(localePath('en', path), Astro.site)} />
+          <link rel="alternate" hreflang="x-default" href={new URL(localePath('ja', path), Astro.site)} />
+        </>
+      ) : (
+        <link rel="alternate" hreflang={lang} href={canonical} />
+      )
+    }
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="KURUMI" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content={lang === 'ja' ? 'ja_JP' : 'en_US'} />
-    {ogImage && <meta property="og:image" content={ogImage} />}
+    {alternate && <meta property="og:locale:alternate" content={lang === 'ja' ? 'en_US' : 'ja_JP'} />}
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:alt" content={title} />
     <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500&family=Shippori+Mincho:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500&family=Shippori+Mincho:wght@400;500&display=swap"
       rel="stylesheet"
     />
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
     <script is:inline>
-      // 配色の比較用（?palette=brown で茶×金）。デザイン確定後に削除する
+      // 配色の比較用。URLの末尾に #palette を付けたときだけ切り替えボタンを出す（デザイン確定後に削除する）
       try {
-        const p = new URLSearchParams(location.search).get('palette') || sessionStorage.getItem('palette');
-        if (p === 'brown' || p === 'black') {
-          document.documentElement.dataset.palette = p;
-          sessionStorage.setItem('palette', p);
-        }
+        if (location.hash === '#palette') sessionStorage.setItem('palette-review', '1');
+        const p = sessionStorage.getItem('palette');
+        if (p === 'brown' || p === 'black') document.documentElement.dataset.palette = p;
       } catch (e) {}
     </script>
   </head>
   <body>
+    <a class="skip" href="#main">{ui.skip}</a>
     <header class="header">
       <div class="header-inner">
         <a class="logo" href={localePath(lang)}>KURUMI</a>
+        <div class="header-actions">
+          <a class="header-cta" href={localePath(lang, 'contact/')}>{ui.cta}</a>
+          <button class="menu-btn" type="button" aria-controls="nav" aria-expanded="false">
+            <span class="menu-open">{ui.menu}</span><span class="menu-close">{ui.close}</span>
+          </button>
+        </div>
         <nav class="nav" id="nav" aria-label={ui.menu}>
           <ul>
             {
-              ui.nav.map((item) => {
+              nav.map((item) => {
                 const href = localePath(lang, item.href);
                 return (
                   <li>
@@ -85,15 +121,12 @@ const jsonLd = {
               })
             }
           </ul>
-          <a class="lang" href={localePath(other, path)} hreflang={other} lang={other}>{ui.langSwitch}</a>
+          <a class="lang" href={switchHref} hreflang={other} lang={other}>{ui.langSwitch}</a>
         </nav>
-        <button class="menu-btn" type="button" aria-controls="nav" aria-expanded="false">
-          <span class="menu-open">{ui.menu}</span><span class="menu-close">{ui.close}</span>
-        </button>
       </div>
     </header>
 
-    <main>
+    <main id="main" tabindex="-1">
       <slot />
     </main>
 
@@ -104,35 +137,53 @@ const jsonLd = {
           <p class="sub footer-philosophy">{ui.philosophy}</p>
         </div>
         <ul class="footer-links">
-          <li><a href="https://www.instagram.com/kurumi_official_japan/" rel="noopener" target="_blank">Instagram</a></li>
-          <li><a href="https://www.youtube.com/@kurumi_jp" rel="noopener" target="_blank">YouTube</a></li>
+          <li><a href={INSTAGRAM_URL} rel="noopener" target="_blank">Instagram</a></li>
+          <li><a href={YOUTUBE_URL} rel="noopener" target="_blank">YouTube</a></li>
           <li><a href={localePath(lang, 'company/')}>{ui.footer.company}</a></li>
           <li><a href={localePath(lang, 'privacy/')}>{ui.footer.privacy}</a></li>
-          <li><a href={localePath(other, path)} hreflang={other} lang={other}>{ui.langSwitch}</a></li>
+          <li><a href={switchHref} hreflang={other} lang={other}>{ui.langSwitch}</a></li>
         </ul>
       </div>
       <p class="wrap copyright sub">{ui.footer.copyright}</p>
     </footer>
 
-    <div class="palette-switch" role="group" aria-label="配色の比較（デザイン確認用）">
-      <span>配色</span>
-      <button type="button" data-set="black">黒×金</button>
-      <button type="button" data-set="brown">茶×金</button>
+    <div class="palette-switch" role="group" aria-label={ui.palette.label} hidden>
+      <span>{ui.palette.name}</span>
+      <button type="button" data-set="black">{ui.palette.black}</button>
+      <button type="button" data-set="brown">{ui.palette.brown}</button>
     </div>
 
     <script>
       const btn = document.querySelector<HTMLButtonElement>('.menu-btn')!;
-      btn.addEventListener('click', () => {
-        const open = document.body.classList.toggle('nav-open');
+      const nav = document.querySelector<HTMLElement>('#nav')!;
+      const outside = [document.querySelector('main'), document.querySelector('footer')] as HTMLElement[];
+
+      function setMenu(open: boolean) {
+        document.body.classList.toggle('nav-open', open);
         btn.setAttribute('aria-expanded', String(open));
+        // メニューを開いている間は、後ろのページを操作できないようにする
+        outside.forEach((el) => (el.inert = open));
+        if (open) nav.querySelector('a')?.focus();
+      }
+      btn.addEventListener('click', () => setMenu(!document.body.classList.contains('nav-open')));
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && document.body.classList.contains('nav-open')) {
+          setMenu(false);
+          btn.focus();
+        }
       });
+      window.matchMedia('(min-width: 961px)').addEventListener('change', (e) => e.matches && setMenu(false));
 
       const header = document.querySelector('.header')!;
       const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 40);
       onScroll();
       window.addEventListener('scroll', onScroll, { passive: true });
 
-      document.querySelectorAll<HTMLButtonElement>('.palette-switch button').forEach((b) => {
+      const palette = document.querySelector<HTMLElement>('.palette-switch')!;
+      try {
+        if (sessionStorage.getItem('palette-review') === '1') palette.hidden = false;
+      } catch (e) {}
+      palette.querySelectorAll<HTMLButtonElement>('button').forEach((b) => {
         b.addEventListener('click', () => {
           document.documentElement.dataset.palette = b.dataset.set;
           try {
@@ -145,6 +196,22 @@ const jsonLd = {
 </html>
 
 <style>
+  .skip {
+    position: absolute;
+    left: 8px;
+    top: -48px;
+    z-index: 40;
+    background: var(--bg);
+    color: var(--text);
+    border: 1px solid var(--gold);
+    padding: 8px 16px;
+  }
+  .skip:focus {
+    top: 8px;
+  }
+  main:focus {
+    outline: none;
+  }
   .header {
     position: fixed;
     inset: 0 0 auto;
@@ -153,7 +220,7 @@ const jsonLd = {
   }
   .header.scrolled,
   :global(body.nav-open) .header {
-    background: color-mix(in srgb, var(--bg) 92%, transparent);
+    background: var(--bg);
     border-bottom: 1px solid var(--line);
   }
   .header-inner {
@@ -163,6 +230,7 @@ const jsonLd = {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 16px;
   }
   .logo {
     font-family: var(--display);
@@ -171,7 +239,14 @@ const jsonLd = {
     text-decoration: none;
     color: var(--text);
   }
+  .header-actions {
+    display: none;
+    order: 2;
+    align-items: center;
+    gap: 8px;
+  }
   .nav {
+    order: 1;
     display: flex;
     align-items: center;
     gap: 28px;
@@ -189,7 +264,7 @@ const jsonLd = {
   .nav li a {
     display: block;
     font-size: 14px;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.04em;
     padding: 4px 0;
     border-bottom: 1px solid transparent;
   }
@@ -200,25 +275,34 @@ const jsonLd = {
   .lang {
     font-size: 13px;
     color: var(--gold);
-    border: 1px solid var(--line);
+    border: 1px solid var(--field-border);
     padding: 4px 12px;
   }
+  .header-cta {
+    font-size: 13px;
+    text-decoration: none;
+    color: var(--text);
+    border: 1px solid var(--gold);
+    padding: 6px 12px;
+    white-space: nowrap;
+  }
   .menu-btn {
-    display: none;
     background: none;
-    border: 1px solid var(--line);
+    border: 1px solid var(--field-border);
     color: var(--text);
     font: inherit;
     font-size: 13px;
     padding: 6px 14px;
+    white-space: nowrap;
+    min-height: 36px;
   }
   .menu-close {
     display: none;
   }
 
   @media (max-width: 960px) {
-    .menu-btn {
-      display: block;
+    .header-actions {
+      display: flex;
     }
     .nav {
       display: none;
@@ -229,6 +313,7 @@ const jsonLd = {
       align-items: stretch;
       padding: 24px var(--gutter);
       gap: 24px;
+      overflow-y: auto;
     }
     .nav ul {
       flex-direction: column;
@@ -242,6 +327,9 @@ const jsonLd = {
     .lang {
       align-self: flex-start;
     }
+    :global(body.nav-open) {
+      overflow: hidden;
+    }
     :global(body.nav-open) .nav {
       display: flex;
     }
@@ -250,6 +338,14 @@ const jsonLd = {
     }
     :global(body.nav-open) .menu-close {
       display: inline;
+    }
+  }
+  @media (max-width: 360px) {
+    .logo {
+      font-size: 22px;
+    }
+    .header-cta {
+      padding: 6px 8px;
     }
   }
 
@@ -298,19 +394,19 @@ const jsonLd = {
     background: var(--bg-soft);
     border: 1px solid var(--line);
     padding: 6px 8px;
-    font-family: var(--serif-ja);
     font-size: 12px;
+    opacity: 0.7;
   }
-  @media (max-width: 960px) {
-    .palette-switch {
-      top: 68px;
-      bottom: auto;
-      right: 8px;
-    }
+  .palette-switch:hover,
+  .palette-switch:focus-within {
+    opacity: 1;
+  }
+  .palette-switch[hidden] {
+    display: none;
   }
   .palette-switch button {
     background: none;
-    border: 1px solid var(--line);
+    border: 1px solid var(--field-border);
     color: var(--text);
     font: inherit;
     padding: 2px 8px;

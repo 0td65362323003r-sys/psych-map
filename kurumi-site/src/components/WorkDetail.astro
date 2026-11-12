@@ -2,7 +2,8 @@
 import { Image, getImage } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import { t, localePath, type Lang } from '../i18n/ui';
-import type { Work } from '../data/works';
+import { works, type Work } from '../data/works';
+import CtaBlock from './CtaBlock.astro';
 
 interface Props {
   lang: Lang;
@@ -13,13 +14,20 @@ const ui = t(lang);
 const c = ui.collection;
 const name = work.name[lang];
 const og = await getImage({ src: work.images[0], width: 1200, format: 'jpg' });
+// 参考価格。ワンピースとコートは価格を出さず見積もり
+const priceIndex: Partial<Record<Work['category'], number>> = { jacket: 0, dress: 1, suit: 2 };
+const pi = priceIndex[work.category];
+const price = pi === undefined ? null : ui.prices[pi].price;
+const idx = works.findIndex((w) => w.id === work.id);
+const prev = works[(idx - 1 + works.length) % works.length];
+const next = works[(idx + 1) % works.length];
 ---
 
 <Base
   lang={lang}
   path={`collection/${work.id}/`}
   title={`${name}${lang === 'ja' ? '｜KURUMI' : ' – KURUMI'}`}
-  description={work.note?.[lang] ?? ui.seo.collection.desc}
+  description={work.note?.[lang] ?? `${name}${lang === 'ja' ? '。' : '. '}${c.workDesc}`}
   image={og.src}
 >
   <article class="wrap work">
@@ -42,10 +50,21 @@ const og = await getImage({ src: work.images[0], width: 1200, format: 'jpg' });
         )
       }
       {work.note && <p>{work.note[lang]}</p>}
+      <dl class="price">
+        <dt>{c.priceLabel}</dt>
+        <dd>{price ? <>{price}<span class="sub">{c.priceTax}</span></> : c.priceQuote}</dd>
+      </dl>
+      <p class="sub small">{c.orderInfo}</p>
       <a class="btn" href={`${localePath(lang, 'contact/')}?ref=${work.id}`}>{c.orderFromThis}</a>
+      <nav class="pager" aria-label={c.title}>
+        <a href={localePath(lang, `collection/${prev.id}/`)} rel="prev">← {c.prev}</a>
+        <a href={localePath(lang, `collection/${next.id}/`)} rel="next">{c.next} →</a>
+      </nav>
       <a class="more" href={localePath(lang, 'collection/')}>{c.back}</a>
     </div>
   </article>
+
+  <CtaBlock lang={lang} />
 </Base>
 
 <style>
@@ -54,7 +73,7 @@ const og = await getImage({ src: work.images[0], width: 1200, format: 'jpg' });
     grid-template-columns: 3fr 2fr;
     gap: 56px;
     padding-top: 120px;
-    padding-bottom: 96px;
+    padding-bottom: 0;
   }
   .photos {
     display: grid;
@@ -87,8 +106,36 @@ const og = await getImage({ src: work.images[0], width: 1200, format: 'jpg' });
   dd {
     margin: 0;
   }
+  .price dd {
+    font-size: 22px;
+    color: var(--gold);
+  }
+  .price .sub {
+    font-size: 13px;
+    margin-left: 4px;
+  }
+  .small {
+    font-size: 13px;
+  }
   .btn {
     margin: 8px 0 24px;
+  }
+  .pager {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 8px;
+    font-size: 14px;
+  }
+  .pager a {
+    text-decoration: none;
+    color: var(--text-sub);
+  }
+  .pager a:hover {
+    color: var(--gold);
   }
   .more {
     display: block;

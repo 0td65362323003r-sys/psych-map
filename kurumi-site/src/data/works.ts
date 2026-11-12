@@ -12,7 +12,7 @@ export type Category = 'dress' | 'jacket' | 'suit' | 'coat';
 export interface Work {
   id: string;
   category: Category;
-  // 作品名が届くまでは見た目の説明を仮の名前にしている
+  // 作品名が届くまでは見た目の説明を仮の名前にしている（素材名は確認できるまで入れない）
   name: { ja: string; en: string };
   materials: { ja: string; en: string } | null;
   note: { ja: string; en: string } | null;
@@ -31,7 +31,7 @@ export const works: Work[] = [
   {
     id: 'look-02',
     category: 'coat',
-    name: { ja: '和柄のロングコート', en: 'Long Coat' },
+    name: { ja: '和柄のロングコート', en: 'Japanese-Pattern Long Coat' },
     materials: null,
     note: null,
     images: [photo('03'), photo('04')],
@@ -71,7 +71,7 @@ export const works: Work[] = [
   {
     id: 'look-07',
     category: 'dress',
-    name: { ja: '青の和柄とオーガンジーのドレス', en: 'Blue Dress with Organza Cape' },
+    name: { ja: '青の和柄ドレス', en: 'Blue Patterned Dress' },
     materials: null,
     note: null,
     images: [photo('14'), photo('15'), photo('17')],
@@ -82,12 +82,12 @@ export const works: Work[] = [
     name: { ja: '花鳥柄のロングドレス', en: 'Floral Bird-Motif Gown' },
     materials: null,
     note: null,
-    images: [photo('18'), photo('16'), photo('23'), photo('24')],
+    images: [photo('18'), photo('16'), photo('23')],
   },
   {
     id: 'look-09',
     category: 'dress',
-    name: { ja: '黒レザーと赤のドレス', en: 'Black Leather and Red Dress' },
+    name: { ja: '黒と赤のドレス', en: 'Black and Red Dress' },
     materials: null,
     note: null,
     images: [photo('21'), photo('19')],
@@ -110,5 +110,6 @@ export const works: Work[] = [
   },
 ];
 
-export const heroImage = photo('23');
-export const storyImage = photo('13');
+// TOPの写真。服が画面いっぱいに写っているものを使う
+export const heroImage = photo('13');
+export const storyImage = photo('23');

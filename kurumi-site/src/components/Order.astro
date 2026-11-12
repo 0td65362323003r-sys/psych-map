@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
-import { t, localePath, type Lang } from '../i18n/ui';
+import { t, type Lang } from '../i18n/ui';
+import CtaBlock from './CtaBlock.astro';
 
 interface Props {
   lang: Lang;
@@ -43,7 +44,7 @@ const o = ui.order;
       </div>
       <div>
         <h2>{o.voicesTitle}</h2>
-        <ul class="voices">{o.voices.map((v) => <li>{v}</li>)}</ul>
+        <ul class="voices">{o.voices.map((v) => <li><blockquote>{v}</blockquote></li>)}</ul>
       </div>
     </div>
   </section>
@@ -54,29 +55,32 @@ const o = ui.order;
       <dl class="faq">
         {o.faq.map((f) => <div><dt>{f.q}</dt><dd>{f.a}</dd></div>)}
       </dl>
-      <a class="btn" href={localePath(lang, 'contact/')}>{ui.cta}</a>
     </div>
   </section>
+
+  <CtaBlock lang={lang} />
 </Base>
 
 <style>
+  /* 値札のように、品目と価格を1行ずつ並べる */
   .prices {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    margin: 0 0 8px;
+    max-width: 520px;
+    margin: 0 0 16px;
   }
   .prices div {
-    border: 1px solid var(--line);
-    padding: 24px;
-    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 24px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
   }
   .prices dt {
     color: var(--text-sub);
   }
   .prices dd {
-    margin: 4px 0 0;
-    font-size: 26px;
+    margin: 0;
+    font-size: 22px;
     color: var(--gold);
   }
   .small {
@@ -123,8 +127,11 @@ const o = ui.order;
     color: var(--gold);
     margin-right: 4px;
   }
+  .voices blockquote {
+    margin: 0;
+  }
   .faq {
-    margin: 0 0 40px;
+    margin: 0;
   }
   .faq div {
     padding: 16px 0;
@@ -137,7 +144,6 @@ const o = ui.order;
     margin: 4px 0 0;
   }
   @media (max-width: 800px) {
-    .prices,
     .flow,
     .two {
       grid-template-columns: 1fr;
