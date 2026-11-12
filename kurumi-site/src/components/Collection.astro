@@ -93,7 +93,7 @@ const cats = [...new Set(works.map((w) => w.category))] as Category[];
     margin: 0 0 96px;
     padding: 0;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 40px 24px;
   }
   /* 3列の最後の段が空くときは、オーダーへの案内で埋める */
@@ -112,11 +112,13 @@ const cats = [...new Set(works.map((w) => w.category))] as Category[];
     .fill {
       padding: 16px;
       font-size: 14px;
+      aspect-ratio: auto;
+      height: 100%;
     }
   }
   .glossary dl {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 32px;
     margin: 0;
   }
@@ -129,7 +131,7 @@ const cats = [...new Set(works.map((w) => w.category))] as Category[];
   }
   @media (max-width: 800px) {
     .grid {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 32px 12px;
     }
     .glossary dl {
