@@ -20,11 +20,11 @@ Node.js 22.12 以上が必要です。
 | 作品の名前・生地・説明・写真 | `src/data/works.ts`（写真は `src/assets/works/`） |
 | 色・フォント | `src/styles/global.css` |
 
-`【要確認】` / `[TBC]` は胡桃さんの回答待ちの箇所です。
+作品名は見た目からの仮名です。胡桃さんの回答（作品名・生地・説明）が届いたら `works.ts` を差し替えます。事実は `docs/REQUIREMENTS.md` と矛盾させないでください。
 
 ## 配色の比較（デザイン確認用）
 
-画面右下の「配色」ボタン、または `?palette=brown` で茶×金に切り替わります。配色が決まったら、`src/layouts/Base.astro` の `palette-switch` と切り替えのスクリプトを消し、`global.css` の配色を1つにします。
+URLの末尾に `#palette` を付けて開くと、画面右下に「配色」ボタンが出て、茶×金に切り替えられます（同じタブを開いている間だけ表示）。配色が決まったら、`src/layouts/Base.astro` の `palette-switch` と切り替えのスクリプトを消し、`global.css` の配色を1つにします。
 
 ## 環境変数（Cloudflare Pages の設定画面で入れる）
 
@@ -36,7 +36,7 @@ Node.js 22.12 以上が必要です。
 | `PUBLIC_CONTACT_ENDPOINT` | お問い合わせ用 Google Apps Script のウェブアプリURL |
 | `NODE_VERSION` | `22` |
 
-microCMS の変数がなければ、ブログは「準備中」と表示されます。
+microCMS の変数がなければ、メニューから「お知らせ」が消え、お知らせのページは検索に載らない設定になります。`main` 以外のブランチの確認用URLは、自動で検索除けになります。
 
 ## Cloudflare Pages の設定
 
@@ -62,3 +62,13 @@ API名 `journal`（リスト形式）を作り、次の項目を用意します�
 ## お問い合わせフォーム
 
 `../gas/kurumi-contact/Code.gs` を、胡桃さんのスプレッドシートの Apps Script に貼り付けます。`setup` を一度実行してから、ウェブアプリ（実行ユーザー：自分、アクセス：全員）としてデプロイし、そのURLを `PUBLIC_CONTACT_ENDPOINT` に入れます。
+
+フォームは、Apps Script が `{"ok":true}` を返したときだけお礼を表示します。保存に失敗したときはエラーとInstagramへの案内が出ます。公開前に、本番URLから1件テスト送信し、シートとメール（kurumiandco@gmail.com）に届くことを確かめてください。
+
+## 確認用ページ（claude.ai）を作り直す
+
+```sh
+scripts/build-preview.sh <出力先>
+```
+
+ビルドしてリンクを相対パスに直し、`_astro` を `assets` に名前を変えたものを書き出します。
