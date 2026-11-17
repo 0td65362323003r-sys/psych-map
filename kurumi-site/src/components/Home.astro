@@ -31,7 +31,11 @@ const og = await getImage({ src: heroImage, width: 1200, format: 'jpg' });
 
 <Base lang={lang} path="" title={ui.seo.home.title} description={ui.seo.home.desc} image={og.src}>
   <section class="hero">
-    <Image src={heroImage} alt="" widths={[640, 1024, 1600]} sizes="(min-width: 900px) 46vw, 100vw" class="hero-img" loading="eager" fetchpriority="high" />
+    {/* Milan GX Fashion Week 2026 のショー映像から作った、音なしの短いループ（胡桃さん提供） */}
+    <div class="hero-img">
+      <video class="hero-video" src="/video/hero.mp4" poster="/video/hero-poster.jpg" autoplay muted loop playsinline preload="auto" aria-label={ui.home.videoLabel}></video>
+      <button class="video-toggle" type="button" data-pause={ui.home.videoPause} data-play={ui.home.videoPlay}>{ui.home.videoPause}</button>
+    </div>
     <div class="hero-text wrap">
       <h1 class="hero-catch">{ui.philosophy.split(/(?<=[。.,、])\s*/).filter(Boolean).map((line) => <span>{line}</span>)}</h1>
       <p class="hero-sub">{ui.home.heroSub}</p>
@@ -139,16 +143,52 @@ const og = await getImage({ src: heroImage, width: 1200, format: 'jpg' });
   </section>
 </Base>
 
+<script>
+  const video = document.querySelector<HTMLVideoElement>('.hero-video');
+  const toggle = document.querySelector<HTMLButtonElement>('.video-toggle');
+  if (video && toggle) {
+    const sync = () => (toggle.textContent = video.paused ? toggle.dataset.play! : toggle.dataset.pause!);
+    // 動きを減らす設定の人には、最初は止めた状態で見せる
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) video.pause();
+    toggle.addEventListener('click', () => (video.paused ? video.play() : video.pause()));
+    video.addEventListener('play', sync);
+    video.addEventListener('pause', sync);
+    sync();
+  }
+</script>
+
 <style>
   /* スマホ：写真の下に文字を置く（写真に文字を重ねない） */
   .hero {
     position: relative;
     overflow: hidden;
   }
+  .hero-video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+  /* 動きのある映像は止められるようにする */
+  .video-toggle {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    z-index: 2;
+    background: color-mix(in srgb, var(--bg) 70%, transparent);
+    border: 1px solid var(--field-border);
+    color: var(--text);
+    font: inherit;
+    font-size: 12px;
+    padding: 8px 12px;
+    min-height: 36px;
+    cursor: pointer;
+  }
   .hero-img {
     position: relative;
     width: 100%;
-    height: 78svh;
+    height: min(78svh, 125vw);
     min-height: 460px;
     object-fit: cover;
     object-position: center 40%;
@@ -158,7 +198,7 @@ const og = await getImage({ src: heroImage, width: 1200, format: 'jpg' });
     content: '';
     position: absolute;
     inset: 0 0 auto;
-    height: 78svh;
+    height: min(78svh, 125vw);
     min-height: 460px;
     pointer-events: none;
     background:

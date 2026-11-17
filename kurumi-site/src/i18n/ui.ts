@@ -25,6 +25,9 @@ export const ui = {
     close: '閉じる',
 
     home: {
+      videoLabel: 'Milan GX Fashion Week 2026 のランウェイ映像',
+      videoPause: '映像を止める',
+      videoPlay: '映像を再生',
       heroSub: '西陣織や紅型など、和の生地で仕立てるオーダーメイドのドレスとジャケット',
       conceptTitle: '和の生地を、洋服で日常に',
       conceptBody:
@@ -292,6 +295,9 @@ export const ui = {
     close: 'Close',
 
     home: {
+      videoLabel: 'Runway footage from Milan GX Fashion Week 2026',
+      videoPause: 'Pause video',
+      videoPlay: 'Play video',
       heroSub: 'Made-to-order dresses and jackets in Nishijin brocade, bingata and other Japanese textiles',
       conceptTitle: 'Japanese textiles, made into clothes for every day',
       conceptBody:
