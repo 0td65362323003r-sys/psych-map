@@ -25,6 +25,8 @@ const swatchFocus: Record<string, { img: number; pos: string }> = {
   'look-09': { img: 1, pos: '60% 92%' },
   'look-10': { img: 1, pos: '50% 42%' },
 };
+// 見本帳は、生地の色が虹の順（赤→橙→金→緑→青→紫→白）に並ぶようにする
+const swatchOrder = ['look-09', 'look-02', 'look-01', 'look-06', 'look-04', 'look-08', 'look-07', 'look-03', 'look-05', 'look-10'];
 const posts = (await getPosts(lang)).slice(0, 3);
 const og = await getImage({ src: heroImage, width: 1200, format: 'jpg' });
 ---
@@ -51,7 +53,7 @@ const og = await getImage({ src: heroImage, width: 1200, format: 'jpg' });
         <p class="sub swatch-label">{ui.home.swatchLabel}</p>
         <ul>
           {
-            works.map((w) => (
+            swatchOrder.map((id) => works.find((w) => w.id === id)!).map((w) => (
               <li>
                 <a class="swatch" href={localePath(lang, `collection/${w.id}/`)} title={w.name[lang]} style={`--focus: ${swatchFocus[w.id].pos}`}>
                   <Image src={w.images[swatchFocus[w.id].img]} alt={w.name[lang]} widths={[400, 800]} sizes="(max-width: 800px) 80vw, 360px" loading="lazy" />
@@ -96,7 +98,7 @@ const og = await getImage({ src: heroImage, width: 1200, format: 'jpg' });
       <div>
         <h2>{ui.home.orderTitle}</h2>
         <dl class="prices">
-          {ui.prices.map((p) => <div><dt>{p.item}</dt><dd>{p.price}</dd></div>)}
+          {ui.prices.map((p) => <div><dt>{p.item}</dt><dd>{p.price}<span class="tax">{ui.collection.priceTax}</span></dd></div>)}
         </dl>
         <p class="sub small">{ui.priceNote}</p>
         <p>{ui.home.orderBody}</p>
@@ -381,16 +383,12 @@ const og = await getImage({ src: heroImage, width: 1200, format: 'jpg' });
     }
   }
   @media (max-width: 800px) {
+    /* スマホでは5本×2段にして、スクロールしなくても虹の並びが見えるようにする */
     .swatches ul {
-      display: flex;
-      overflow-x: auto;
-      padding-bottom: 8px;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
     }
-    .swatches ul {
-      mask-image: linear-gradient(to right, #000 85%, transparent);
-    }
-    .swatches li {
-      flex: 0 0 22vw;
+    .swatch {
+      aspect-ratio: 1 / 2;
     }
     .pair,
     .voices,
@@ -399,5 +397,10 @@ const og = await getImage({ src: heroImage, width: 1200, format: 'jpg' });
       grid-template-columns: 1fr;
       gap: 32px;
     }
+  }
+  .tax {
+    font-size: 12px;
+    color: var(--text-sub);
+    margin-left: 4px;
   }
 </style>

@@ -31,6 +31,7 @@ const workCats = Object.fromEntries(works.filter((w) => !w.quote).map((w) => [w.
     <form id="contact" data-endpoint={endpoint} data-sending={c.sending} data-submit={c.submit} data-works={JSON.stringify(workNames)} data-cats={JSON.stringify(workCats)} novalidate>
       <input type="hidden" name="lang" value={lang} />
       <input type="hidden" name="ref" value="" />
+      <input type="hidden" name="ref_name" value="" />
       <!-- 迷惑送信よけ。人には見えない欄で、入力があれば保存しない -->
       <div class="hp" aria-hidden="true">
         <label>Leave blank<input type="text" name="hp_url" tabindex="-1" autocomplete="off" /></label>
@@ -109,6 +110,8 @@ const workCats = Object.fromEntries(works.filter((w) => !w.quote).map((w) => [w.
   const names: Record<string, string> = JSON.parse(form.dataset.works ?? '{}');
   if (ref && names[ref]) {
     form.querySelector<HTMLInputElement>('input[name=ref]')!.value = ref;
+    // 胡桃さんが通知メールで作品を見分けられるよう、作品名も一緒に送る
+    form.querySelector<HTMLInputElement>('input[name=ref_name]')!.value = names[ref];
     piece.textContent = `${piece.dataset.label}${names[ref]}`;
     piece.hidden = false;
     // 作品の種類に合わせて「ご希望のアイテム」を選んでおく（選択肢の順：ジャケット・ドレス・スーツ・ワンピース・コート）

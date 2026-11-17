@@ -63,12 +63,14 @@ const next = works[(idx + 1) % works.length];
         <dd>{price ? <>{price}<span class="sub">{c.priceTax}</span></> : c.priceQuote}</dd>
       </dl>
       <p class="sub small">{c.orderInfo}</p>
-      <a class="btn" href={`${localePath(lang, 'contact/')}?ref=${work.id}`}>{c.orderFromThis}</a>
+      <a class="btn info-btn" href={`${localePath(lang, 'contact/')}?ref=${work.id}`}>{c.orderFromThis}</a>
       <nav class="pager" aria-label={c.title}>
         <a href={localePath(lang, `collection/${prev.id}/`)} rel="prev">← {c.prev}</a>
         <a href={localePath(lang, `collection/${next.id}/`)} rel="next">{c.next} →</a>
       </nav>
       <a class="more" href={localePath(lang, 'collection/')}>{c.back}</a>
+      {/* スマホでは、ページの最後をオーダーの相談にする */}
+      <a class="btn end-btn" href={`${localePath(lang, 'contact/')}?ref=${work.id}`}>{c.orderFromThis}</a>
     </div>
   </article>
 </Base>
@@ -148,14 +150,19 @@ const next = works[(idx + 1) % works.length];
     width: fit-content;
   }
   /* スマホでは1枚目の写真のすぐ下に、価格と相談ボタンを出す */
-  .quick {
+  .quick,
+  .end-btn {
     display: none;
   }
   @media (max-width: 900px) {
     /* 1枚目の下に出した価格とボタンを、下の欄でくり返さない */
     .info .price,
-    .info > .btn {
+    .info > .info-btn {
       display: none;
+    }
+    .info > .end-btn {
+      display: inline-block;
+      margin-top: 32px;
     }
     .quick {
       display: block;

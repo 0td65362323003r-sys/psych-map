@@ -31,7 +31,7 @@ export const ui = {
       heroSub: '西陣織や紅型など、和の生地で仕立てるオーダーメイドのドレスとジャケット',
       conceptTitle: '和の生地を、洋服で日常に',
       conceptBody:
-        'KURUMIは、西陣織や紅型、ちりめんなどの和の生地を使い、ドレスやジャケットを一から仕立てています。着物をリメイクせず、一着ずつ新しく作っているので、ほかにはないデザインが生まれます。',
+        'KURUMIは、西陣織や紅型、ちりめんなどの和の生地を使い、ドレスやジャケットを一から仕立てています。着物をリメイクせず、一着ずつ新しく作っているので、デザインを自由に考えられます。',
       storyTitle: '和の服で、世界に笑顔を広げたい',
       storyBody: '和のものを見ると、日本の人も海外の人も「素敵！」と笑顔になります。KURUMIの服が世界に広がれば、笑顔も広がり、世の中が少し仲良くなると考えています。',
       storyMore: 'ブランドストーリーを読む',
@@ -64,7 +64,7 @@ export const ui = {
           h: 'ブランドを始めたきっかけ',
           p: [
             '私の家族はみんな仲がよく、昔から笑顔の絶えない家庭でした。そんな家族が、私の誇りです。',
-            'ラジオの仕事をしていたころ、ファンの方が「朝からくるみんの元気な声を聞いて、一日頑張ろうと思えた」と笑顔で話してくれました。それがとても嬉しくて、太陽のように、いろいろな人に元気と笑顔を届けたいと思うようになりました。',
+            'ラジオの仕事をしていたころ、ファンの方が「朝からくるみんの元気な声が聞けて、一日頑張ろうと元気をもらった」と笑顔で話してくれました。それがとても嬉しくて、太陽のように、いろいろな人に元気と笑顔を届けたいと思うようになりました。',
             'モデルやタレントとして人前に立つうちに、自分がいちばん笑顔になれるのは、素敵な服を着ているときだと気づきました。それなら着る人が笑顔になれる服を自分で作ろうと思い、2025年7月にKURUMIを立ち上げました。',
           ],
         },
@@ -73,13 +73,7 @@ export const ui = {
           p: [
             '和のものは、言葉が分からなくても伝わります。日本の人も海外の人も、和の装いを見ると「素敵！」と笑顔になります。',
             '和のお洋服は、世界の共通言語になれると思っています。KURUMIの服が世界に広がれば笑顔も広がり、世の中が少し仲良くなっていくと信じています。だから、和を取り入れたブランドにしました。',
-          ],
-        },
-        {
-          h: '沖縄で考えたこと',
-          p: [
-            '中学生のときから沖縄で暮らし、平和について考える機会がたくさんありました。',
-            '人と人が笑顔でつながれば、世の中はもっと穏やかになるのではないか。お洋服がそのきっかけになれたら、少しでも平和に近づけるかもしれない。KURUMIには、そんな願いも込めています。',
+            '中学生のときから暮らした沖縄では、平和について考える機会がたくさんありました。人と人が笑顔でつながることが、その一歩になればと願っています。',
           ],
         },
         {
@@ -151,7 +145,7 @@ export const ui = {
       priceLabel: '参考価格',
       priceTax: '（税別）',
       priceQuote: 'デザインに合わせてお見積もり',
-      orderInfo: '採寸は東京で対面。採寸からおよそ1\u2060か\u2060月〜1\u2060か\u2060月\u2060半でお渡しします。海外からのご依頼もご相談ください。',
+      orderInfo: '採寸は東京で、対面で行います。採寸からおよそ1\u2060か\u2060月〜1\u2060か\u2060月\u2060半でお渡しします。海外からのご依頼もご相談ください。',
       workDesc: 'KURUMIのオーダーメイド作品。和の生地を使い、デザインをもとにお仕立てします。',
       materialGlossaryTitle: '素材について',
       glossary: [
@@ -301,7 +295,7 @@ export const ui = {
       heroSub: 'Made-to-order dresses and jackets in Nishijin brocade, bingata and other Japanese textiles',
       conceptTitle: 'Japanese textiles, made into clothes for every day',
       conceptBody:
-        'KURUMI makes each dress and jacket new, from Japanese textiles such as Nishijin brocade, Ryukyu bingata and chirimen silk. We do not remake kimono, and our designs are found nowhere else.',
+        'KURUMI makes each dress and jacket new, from Japanese textiles such as Nishijin brocade, Ryukyu bingata and chirimen silk. We do not remake kimono, so each design starts fresh.',
       storyTitle: 'Clothes that spread smiles around the world',
       storyBody: 'People in Japan and abroad smile when they see Japanese design, even without a shared language. As KURUMI reaches more people, we believe those smiles will spread and the world will become a little friendlier.',
       storyMore: 'Read our story',
@@ -343,13 +337,7 @@ export const ui = {
           p: [
             'Wa, Japanese style and culture, comes across even without words. When people in Japan and abroad see Japanese attire, they smile and say, "How beautiful!"',
             'I think clothes with wa can be a language the whole world shares. I built KURUMI around wa in the hope that, as it reaches more people, smiles will spread and the world will become a little friendlier.',
-          ],
-        },
-        {
-          h: 'What Okinawa taught me',
-          p: [
-            'I moved to Okinawa in junior high school, and living there gave me many chances to think about peace.',
-            'I believe that when people connect through smiles, the world becomes a gentler place, and I hope clothes can help, in a small way, toward peace. KURUMI carries that hope too.',
+            'I moved to Okinawa in junior high school, and living there gave me many chances to think about peace. I hope that people connecting through smiles can be a small step toward it.',
           ],
         },
         {

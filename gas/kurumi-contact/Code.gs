@@ -7,7 +7,7 @@ const HEADERS = ['受付日時', '言語', 'お名前', 'メールアドレス',
 const STATUSES = ['未対応', '返信済み', '成約'];
 
 // 各欄の長さの上限。これを超える送信は受け付けない
-const LIMITS = { name: 100, email: 200, item: 100, budget: 100, date: 20, scene: 400, fabric: 50, message: 3000, ref: 20, lang: 2 };
+const LIMITS = { name: 100, email: 200, item: 100, budget: 100, date: 20, scene: 400, fabric: 50, message: 3000, ref: 20, ref_name: 100, lang: 2 };
 
 function doPost(e) {
   const p = (e && e.parameter) || {};
@@ -23,12 +23,15 @@ function doPost(e) {
   if (!v.name || !v.item) return json_({ ok: false, error: 'missing' });
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.email)) return json_({ ok: false, error: 'email' });
 
+  // 見ていた作品は「作品名（look-01）」の形で残す
+  const piece = v.ref ? (v.ref_name ? v.ref_name + '（' + v.ref + '）' : v.ref) : '';
+
   const lock = LockService.getScriptLock();
   if (!lock.tryLock(10000)) return json_({ ok: false, error: 'busy' });
   try {
     const sheet = getSheet_();
     const now = Utilities.formatDate(new Date(), 'Asia/Tokyo', 'yyyy/MM/dd HH:mm');
-    const row = [now, v.lang, v.name, v.email, v.item, v.budget, v.date, v.scene, v.fabric, v.message, v.ref].map(cell_);
+    const row = [now, v.lang, v.name, v.email, v.item, v.budget, v.date, v.scene, v.fabric, v.message, piece].map(cell_);
     sheet.appendRow(row.concat([STATUSES[0]]));
   } finally {
     lock.releaseLock();
@@ -50,7 +53,7 @@ function doPost(e) {
         '着用予定日：' + (v.date || '-'),
         '着用シーン：' + (v.scene || '-'),
         '素材の持ち込み：' + (v.fabric || '-'),
-        '見ていた作品：' + (v.ref || '-'),
+        '見ていた作品：' + (piece || '-'),
         '言語：' + (v.lang === 'en' ? '英語' : '日本語'),
         '',
         '内容：',
