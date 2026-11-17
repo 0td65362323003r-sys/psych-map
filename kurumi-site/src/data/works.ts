@@ -102,7 +102,7 @@ export const works: Work[] = [
   {
     id: 'look-10',
     category: 'dress',
-    name: { ja: '花柄ジャケットとフリルスカート', en: 'Floral Jacket and Ruffled Skirt' },
+    name: { ja: '花柄とフリルのドレス', en: 'Floral Ruffled Dress' },
     materials: null,
     note: null,
     images: [photo('20'), photo('22'), photo('25')],
