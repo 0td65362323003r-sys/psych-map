@@ -11,7 +11,7 @@ interface Props {
 }
 const { lang } = Astro.props;
 const ui = t(lang);
-const pickup = ['look-08', 'look-02', 'look-04'].map((id) => works.find((w) => w.id === id)!);
+const pickup = ['look-06', 'look-02', 'look-04'].map((id) => works.find((w) => w.id === id)!);
 // 生地の見本帳。生地が大きく写っている写真を選び、その位置を拡大して短冊にする
 const swatchFocus: Record<string, { img: number; pos: string }> = {
   'look-01': { img: 1, pos: '52% 55%' },
