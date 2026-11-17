@@ -22,9 +22,9 @@ Node.js 22.12 以上が必要です。
 
 作品名は見た目からの仮名です。胡桃さんの回答（作品名・生地・説明）が届いたら `works.ts` を差し替えます。事実は `docs/REQUIREMENTS.md` と矛盾させないでください。
 
-## 配色の比較（デザイン確認用）
+## 配色とロゴ
 
-URLの末尾に `#palette` を付けて開くと、画面右下に「配色」ボタンが出て、茶×金に切り替えられます（同じタブを開いている間だけ表示）。配色が決まったら、`src/layouts/Base.astro` の `palette-switch` と切り替えのスクリプトを消し、`global.css` の配色を1つにします。
+配色は茶×金に決まりました（`src/styles/global.css` の `:root`）。背景はロゴの背景と同じ焦げ茶です。ロゴは `src/assets/brand/` にあり、元画像 `logo-source.jpg` から背景を抜いて、KMのマーク（`monogram.png`）、文字（`wordmark.png`）、全体（`logo.png`）を切り出しています。ファビコンとホーム画面用のアイコンもマークから作っています。
 
 ## 環境変数（Cloudflare Pages の設定画面で入れる）
 

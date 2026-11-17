@@ -1,4 +1,5 @@
-// 作品データ。作品名・生地・ひとことは胡桃さんの回答（LINE【11】）が届いたら埋める
+// 作品データ。Milan GX Fashion Week 2026 で発表した10着（ドレス6、ジャケット・スーツ3、コート1）
+// 作品名・生地・ひとことは胡桃さんの回答（LINE【11】）が届いたら埋める
 import type { ImageMetadata } from 'astro';
 
 const photos = import.meta.glob<{ default: ImageMetadata }>('../assets/works/*.jpg', { eager: true });
@@ -81,9 +82,13 @@ export const works: Work[] = [
   {
     id: 'look-08',
     category: 'dress',
-    name: { ja: '花鳥柄のロングドレス', en: 'Floral Bird-Motif Gown' },
-    materials: null,
-    note: null,
+    // イタリア国旗の色（赤・白・緑）で表現した紅型のドレス（2026年11月 胡桃さんに確認）
+    name: { ja: '紅型のロングドレス', en: 'Bingata Long Dress' },
+    materials: { ja: '紅型', en: 'Ryukyu bingata' },
+    note: {
+      ja: 'イタリア国旗の赤・白・緑で表現した紅型のドレスです。Milan GX Fashion Week 2026で発表しました。',
+      en: 'A bingata dress in the red, white and green of the Italian flag, shown at Milan GX Fashion Week 2026.',
+    },
     images: [photo('18'), photo('16'), photo('23')],
   },
   {
@@ -101,19 +106,11 @@ export const works: Work[] = [
     materials: null,
     note: null,
     images: [photo('20'), photo('22'), photo('25')],
-    quote: true,
-  },
-  {
-    id: 'look-11',
-    category: 'suit',
-    name: { ja: '黒ジャケットと波柄のセットアップ', en: 'Black Jacket and Wave-Pattern Set' },
-    materials: null,
-    note: null,
-    images: [photo('26')],
-    quote: true,
   },
 ];
 
 // TOPの写真。服が画面いっぱいに写っているものを使う
 export const heroImage = photo('13');
 export const storyImage = photo('23');
+// デザイナーのページのプロフィール写真（2026年11月 胡桃さんから指定）
+export const profileImage = photo('26');

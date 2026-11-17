@@ -1,33 +1,20 @@
 /*
  * デザイン方針（frontend-design の手順で決めたもの）
  * - 大胆にするのは1か所だけ：TOPの「生地の見本帳」。虹色は作り物のグラデーションではなく、実物の生地の色で見せる
- * - 黒は本物の黒。金はアンティーク寄りに落とし、文字と罫線にだけ使う
+ * - 背景はロゴと同じ焦げ茶。金は文字と罫線にだけ使う
  * - 書体は2つ：本文と見出しは しっぽり明朝、ロゴと英字の見出しは Bodoni Moda
  * - 左揃え。セクションの区切りは線ではなく余白でつくる
- * 配色は2案。data-palette で切り替える（ロゴの色が決まったら1つに絞る）
  */
-:root,
-:root[data-palette='black'] {
-  --bg: #000000;
-  --bg-soft: #15120e;
-  --line: #2b2620;
-  --text: #f2ece1;
-  --text-sub: #9a9184;
-  --gold: #b48a3c;
-  --gold-soft: rgba(180, 138, 60, 0.14);
-  /* 入力欄やボタンの枠。背景に対して3:1以上のコントラストを取る */
-  --field-border: #6e6558;
-}
-
-/* 焦げ茶（こげちゃ）を土台にした案 */
-:root[data-palette='brown'] {
-  --bg: #23160e;
-  --bg-soft: #2f2016;
-  --line: #45311f;
+:root {
+  /* 茶×金（2026年11月に胡桃さんが決定）。背景はロゴの背景と同じ焦げ茶にそろえる */
+  --bg: #1b0a03;
+  --bg-soft: #2a170c;
+  --line: #3e2717;
   --text: #f3eadb;
-  --text-sub: #b09d86;
-  --gold: #c49a48;
-  --gold-soft: rgba(196, 154, 72, 0.14);
+  --text-sub: #b3a08a;
+  --gold: #cfa45c;
+  --gold-soft: rgba(207, 164, 92, 0.14);
+  /* 入力欄やボタンの枠。背景に対して3:1以上のコントラストを取る */
   --field-border: #8a7660;
 }
 
@@ -165,8 +152,8 @@ button:focus-visible {
   max-width: 720px;
 }
 
-/* 茶×金では、暗い舞台写真の端を細い線で示す */
-:root[data-palette='brown'] main img {
+/* 暗い舞台写真の端を細い線で示す */
+main img {
   outline: 1px solid var(--line);
 }
 

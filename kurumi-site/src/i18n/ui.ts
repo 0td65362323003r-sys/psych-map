@@ -23,7 +23,6 @@ export const ui = {
     footer: { company: '会社情報', privacy: 'プライバシーポリシー', copyright: '© 2026 合同会社Kurumi&Co.' },
     menu: 'メニュー',
     close: '閉じる',
-    palette: { label: '配色の比較（確認用）', name: '配色', black: '黒×金', brown: '茶×金' },
 
     home: {
       heroSub: '西陣織や紅型など、和の生地で仕立てるオーダーメイドのドレスとジャケット',
@@ -34,7 +33,7 @@ export const ui = {
       storyBody: '和のものを見ると、日本の人も海外の人も「素敵！」と笑顔になります。KURUMIの服が世界に広がれば、笑顔も広がり、世の中が少し仲良くなると考えています。',
       storyMore: 'ブランドストーリーを読む',
       collectionTitle: '作品',
-      collectionBody: '2026年2月のMilan GX Fashion Week 2026で発表した作品を中心にご紹介します。',
+      collectionBody: '2026年2月のMilan GX Fashion Week 2026で発表した作品をご紹介します。',
       collectionMore: '作品を見る',
       swatchLabel: '生地から作品を見る',
       designerTitle: 'デザイナー 横山 胡桃',
@@ -111,7 +110,6 @@ export const ui = {
       name: '横山 胡桃',
       kana: 'よこやま くるみ',
       role: 'デザイナー',
-      photoCaption: 'KURUMIの作品（Milan GX Fashion Week 2026）',
       profile: [
         '神奈川県生まれ。中学生のときに家族で沖縄へ移り、モデル・タレントとして活動を始める。テレビ、ラジオ、CM、舞台、司会など幅広く出演し、東京に拠点を移してからも活動を続ける。',
         '2025年7月にブランドKURUMIを立ち上げ、2026年2月にMilan GX Fashion Week 2026でコレクションを発表。一般社団法人 日本オーダースーツ技能認定協会（JOSSCA）より、フィッターとして「マイスター」「ミドルマイスター」の認定を受ける。',
@@ -137,7 +135,7 @@ export const ui = {
 
     collection: {
       title: '作品',
-      lead: '2026年2月のMilan GX Fashion Week 2026で発表した作品を中心にご紹介します。西陣織、紅型、ちりめん、シルクなどの和の生地に、レースやレザー、英国やイタリアのスーツ生地を組み合わせています。どの作品も、デザインをもとにオーダーでお仕立てできます。',
+      lead: '2026年2月のMilan GX Fashion Week 2026で発表した10着です。西陣織、紅型、ちりめん、シルクなどの和の生地に、レースやレザー、英国やイタリアのスーツ生地を組み合わせています。どの作品も、デザインをもとにオーダーでお仕立てできます。',
       all: 'すべて',
       filterLabel: '作品の種類で絞り込む',
       filterStatus: (n: number) => `${n}点の作品を表示しています`,
@@ -193,6 +191,7 @@ export const ui = {
         { q: '着物などを持ち込んで作れますか？', a: '思い出の着物などをお持ち込みいただく場合は、内容によってご相談をお受けします。' },
         { q: '採寸はどこで？', a: '東京で、対面で行います。東京以外への出張採寸もお受けします（出張費がかかる場合があります）。お問い合わせの際にご相談ください。' },
         { q: '海外からもオーダーできますか？', a: 'はい、お受けしています。来日の際に採寸するか、別の採寸方法をご相談のうえ決めてまいります。' },
+        { q: '急ぎで作ってもらえますか？', a: '通常は採寸からおよそ1\u2060か\u2060月〜1\u2060か\u2060月\u2060半です。それより短い納期をご希望の場合は、ご相談ください。' },
       ],
     },
 
@@ -226,7 +225,7 @@ export const ui = {
       submit: 'この内容で相談する',
       sending: '送信中…',
       thanks: 'お問い合わせありがとうございます。内容を確認し、3営業日以内にご連絡いたします。',
-      thanksNote: 'ご返信はGmailのアドレスからお送りします。届かない場合は、迷惑メールフォルダもご確認ください。',
+      thanksNote: 'ご返信は kurumiandco@gmail.com からお送りします。届かない場合は、迷惑メールフォルダもご確認ください。',
       thanksMore: '作品をもっと見る',
       error: '送信できませんでした。時間をおいて、もう一度お試しください。',
       errorAlt: 'うまく送れない場合は、こちらのメッセージからもご連絡いただけます：',
@@ -291,7 +290,6 @@ export const ui = {
     footer: { company: 'Company', privacy: 'Privacy policy', copyright: '© 2026 Kurumi&Co. LLC' },
     menu: 'Menu',
     close: 'Close',
-    palette: { label: 'Palette comparison (review only)', name: 'Palette', black: 'Black/gold', brown: 'Brown/gold' },
 
     home: {
       heroSub: 'Made-to-order dresses and jackets in Nishijin brocade, bingata and other Japanese textiles',
@@ -302,7 +300,7 @@ export const ui = {
       storyBody: 'People in Japan and abroad smile when they see Japanese design, even without a shared language. As KURUMI reaches more people, we believe those smiles will spread and the world will become a little friendlier.',
       storyMore: 'Read our story',
       collectionTitle: 'Collection',
-      collectionBody: 'Featuring pieces shown at Milan GX Fashion Week 2026 in February 2026.',
+      collectionBody: 'Pieces shown at Milan GX Fashion Week 2026 in February 2026.',
       collectionMore: 'View the collection',
       swatchLabel: 'Browse by fabric',
       designerTitle: 'Designer Kurumi Yokoyama',
@@ -379,7 +377,6 @@ export const ui = {
       name: 'KURUMI YOKOYAMA',
       kana: '',
       role: 'Designer',
-      photoCaption: 'A KURUMI piece, Milan GX Fashion Week 2026',
       profile: [
         'Born in Kanagawa, Japan, Kurumi moved to Okinawa with her family in junior high school and began her career there as a model and TV personality. She has worked in television, radio, commercials and theater, and as an event host, and later moved her base to Tokyo.',
         'In July 2025 she launched KURUMI, and in February 2026 presented her collection at Milan GX Fashion Week 2026. She is a certified fitter at the Meister and Middle Meister grades, awarded by the Japan Order Suit Skill Certification Association (JOSSCA).',
@@ -405,7 +402,7 @@ export const ui = {
 
     collection: {
       title: 'Collection',
-      lead: 'Many of these pieces were shown at Milan GX Fashion Week 2026 in February 2026. Japanese textiles such as Nishijin brocade, Ryukyu bingata, chirimen and silk are combined with lace, leather and British and Italian suiting. Any of these designs can be made to order for you.',
+      lead: 'These ten pieces were shown at Milan GX Fashion Week 2026 in February 2026. Japanese textiles such as Nishijin brocade, Ryukyu bingata, chirimen and silk are combined with lace, leather and British and Italian suiting. Any of these designs can be made to order for you.',
       all: 'All',
       filterLabel: 'Filter by type',
       filterStatus: (n: number) => `Showing ${n} ${n === 1 ? 'piece' : 'pieces'}`,
@@ -461,6 +458,7 @@ export const ui = {
         { q: 'Can I bring my own fabric, such as a family kimono?', a: 'It depends on the fabric, and we are happy to discuss it. Please tell us about it when you inquire.' },
         { q: 'Where are measurements taken?', a: 'In person in Tokyo. We can also come to you outside Tokyo; a travel fee may apply. Please ask when you inquire.' },
         { q: 'Can I order from outside Japan?', a: 'Yes. We can take your measurements while you are in Japan, or agree on another way to do it.' },
+        { q: 'Can you make a piece in a hurry?', a: 'A piece usually takes about 4 to 6 weeks from your measurements. If you need it sooner, please ask us.' },
       ],
     },
 
@@ -494,7 +492,7 @@ export const ui = {
       submit: 'Send inquiry',
       sending: 'Sending…',
       thanks: 'Thank you for your inquiry. We will review it and reply within three business days.',
-      thanksNote: 'Our reply comes from a Gmail address. If you do not see it, please check your spam folder.',
+      thanksNote: 'Our reply comes from kurumiandco@gmail.com. If you do not see it, please check your spam folder.',
       thanksMore: 'See more of the collection',
       error: 'Your message could not be sent. Please try again in a little while.',
       errorAlt: 'If it still does not go through, you can also message us on',

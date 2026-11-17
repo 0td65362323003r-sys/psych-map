@@ -24,7 +24,6 @@ const swatchFocus: Record<string, { img: number; pos: string }> = {
   'look-08': { img: 0, pos: '50% 74%' },
   'look-09': { img: 1, pos: '60% 92%' },
   'look-10': { img: 1, pos: '50% 42%' },
-  'look-11': { img: 0, pos: '62% 88%' },
 };
 const posts = (await getPosts(lang)).slice(0, 3);
 const og = await getImage({ src: heroImage, width: 1200, format: 'jpg' });
@@ -305,7 +304,7 @@ const og = await getImage({ src: heroImage, width: 1200, format: 'jpg' });
     margin: 0;
     padding: 0;
     display: grid;
-    grid-template-columns: repeat(11, minmax(0, 1fr));
+    grid-template-columns: repeat(10, minmax(0, 1fr));
     gap: 2px;
   }
   .swatch {

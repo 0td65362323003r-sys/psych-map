@@ -28,8 +28,8 @@ const cats = [...new Set(works.map((w) => w.category))] as Category[];
     <p class="visually-hidden" aria-live="polite" id="filter-status" data-template={c.filterStatus(999)}></p>
     <ul class="grid">
       {works.map((w) => <li data-cat={w.quote ? 'all-only' : w.category}><WorkCard work={w} lang={lang} /></li>)}
-      {works.length % 3 === 2 && (
-        <li class="fill-li" data-cat="all">
+      {works.length % 3 !== 0 && (
+        <li class={`fill-li${works.length % 3 === 1 ? ' span-2' : ''}${works.length % 2 === 0 ? ' desktop-only' : ''}`} data-cat="all">
           <div class="fill">
             {/* 日本語は文末の「できます。」を1行にまとめ、最後の行に1文字だけ残らないようにする */}
             <p>{lang === 'ja' ? <>{c.fillBody.slice(0, -5)}<span class="nw">{c.fillBody.slice(-5)}</span></> : c.fillBody}</p>
@@ -113,7 +113,20 @@ const cats = [...new Set(works.map((w) => w.category))] as Category[];
   .nw {
     white-space: nowrap;
   }
+  /* 最後の段が1点だけのときは、案内カードを2列分にして段を埋める */
+  @media (min-width: 801px) {
+    .fill-li.span-2 {
+      grid-column: span 2;
+    }
+    .span-2 .fill {
+      aspect-ratio: auto;
+      height: 100%;
+    }
+  }
   @media (max-width: 800px) {
+    .fill-li.desktop-only {
+      display: none;
+    }
     .fill {
       padding: 14px;
       font-size: 13px;
