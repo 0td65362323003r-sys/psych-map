@@ -24,7 +24,7 @@ for dp, _, fs in os.walk(root):
         prefix = '../' * depth
         h = open(p).read()
         h = re.sub(r'<link rel="stylesheet" href="(/_astro/[^"]+\.css)">', lambda m: '<style>' + css[m.group(1)] + '</style>', h)
-        h = re.sub(r'(href|src)="(/[^"/][^"]*|/)"', lambda m: f'{m.group(1)}="{rel(prefix, m.group(2))}"', h)
+        h = re.sub(r'(href|src|poster)="(/[^"/][^"]*|/)"', lambda m: f'{m.group(1)}="{rel(prefix, m.group(2))}"', h)
         h = re.sub(r'srcset="([^"]+)"', lambda m: 'srcset="' + m.group(1).replace('/_astro/', prefix + '_astro/') + '"', h)
         if p == os.path.join(root, 'index.html'):
             # 先頭ページは公開時に枠で包まれるので、html/head/body のタグを外す
