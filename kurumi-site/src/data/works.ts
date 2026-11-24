@@ -1,5 +1,5 @@
 // 作品データ。look-01〜10 は Milan GX Fashion Week 2026 で発表した10着、men-01〜04 はメンズの作品
-// 作品名は仮名。正式な名前は胡桃さんからいただく（メンズは生地を書かない）
+// 作品名は仮名。正式な名前は胡桃さんからいただく（生地は書かない。11/24）
 import type { ImageMetadata } from 'astro';
 
 const photos = import.meta.glob<{ default: ImageMetadata }>('../assets/works/*.jpg', { eager: true });
@@ -87,7 +87,7 @@ export const works: Work[] = [
     category: 'dress',
     // イタリア国旗の色（赤・白・緑）で表現した紅型のドレス（2026年11月 胡桃さんに確認）
     name: { ja: '紅型のロングドレス', en: 'Bingata Long Dress' },
-    materials: { ja: '紅型', en: 'Ryukyu bingata' },
+    materials: null,
     note: {
       ja: 'イタリア国旗の赤・白・緑で表現した紅型のドレスです。Milan GX Fashion Week 2026で発表しました。',
       en: 'A bingata dress in the red, white and green of the Italian flag, shown at Milan GX Fashion Week 2026.',
