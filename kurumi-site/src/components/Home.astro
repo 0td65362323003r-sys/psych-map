@@ -188,10 +188,10 @@ const og = await getImage({ src: heroImage, width: 1200, format: 'jpg' });
     object-position: center 30%;
     position: relative;
     width: 100%;
-    height: min(78svh, 125vw);
-    min-height: 460px;
+    height: auto;
+    aspect-ratio: 2 / 3;
     object-fit: cover;
-    object-position: center 20%;
+    object-position: center top;
     outline: none;
   }
   /* 上はメニュー、下はキャッチコピーを読みやすくするための影 */
@@ -199,10 +199,8 @@ const og = await getImage({ src: heroImage, width: 1200, format: 'jpg' });
     content: '';
     position: absolute;
     inset: 76px 0 auto;
-    height: min(78svh, 125vw);
-    min-height: 460px;
+    height: 0;
     pointer-events: none;
-    background: linear-gradient(to top, var(--bg) 0%, transparent 14%);
   }
   .hero-text {
     position: relative;

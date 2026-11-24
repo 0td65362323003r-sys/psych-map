@@ -85,5 +85,8 @@ export function phraseHTML(html: string): string {
       t.parentNode!.replaceChild(frag, t);
     }
   }
-  return '<!doctype html>' + document.documentElement.outerHTML;
+  // ページ専用のスクリプトは </html> の後ろに出力されるので、そこは手を付けずにそのまま残す
+  const end = html.lastIndexOf('</html>');
+  const tail = end >= 0 ? html.slice(end + '</html>'.length) : '';
+  return '<!doctype html>' + document.documentElement.outerHTML + tail;
 }

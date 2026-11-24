@@ -27,7 +27,7 @@ const workCats = Object.fromEntries(works.filter((w) => !w.quote).map((w) => [w.
 
   <section class="wrap form-wrap">
     <p class="piece" hidden data-label={c.aboutPiece}></p>
-    <form id="contact" data-endpoint={endpoint} data-sending={c.sending} data-submit={c.submit} data-works={JSON.stringify(workNames)} data-cats={JSON.stringify(workCats)} novalidate>
+    <form id="contact" method="post" action="#" data-endpoint={endpoint} data-sending={c.sending} data-submit={c.submit} data-works={JSON.stringify(workNames)} data-cats={JSON.stringify(workCats)} novalidate>
       <input type="hidden" name="lang" value={lang} />
       <input type="hidden" name="ref" value="" />
       <input type="hidden" name="ref_name" value="" />
