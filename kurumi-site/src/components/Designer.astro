@@ -11,6 +11,9 @@ interface Props {
 const { lang } = Astro.props;
 const ui = t(lang);
 const d = ui.designer;
+// 「 / 」で区切った実績を1件ずつに分け、英数字の名前（MISS GOLF 2023 など）は途中で改行しないようにする
+const splitCareer = (p: string) =>
+  p.split(' / ').map((item) => (lang === 'ja' ? item.replace(/([A-Za-z0-9\u2019]) (?=[A-Za-z0-9])/g, '$1\u00a0') : item));
 ---
 
 <Base lang={lang} path="designer/" title={ui.seo.designer.title} description={ui.seo.designer.desc}>
@@ -40,7 +43,16 @@ const d = ui.designer;
     <div class="wrap">
       <h2>{d.careerTitle}</h2>
       <dl class="career">
-        {d.career.map((c) => <div><dt>{c.h}</dt><dd>{c.p}</dd></div>)}
+        {
+          d.career.map((c) => (
+            <div>
+              <dt>{c.h}</dt>
+              <dd>
+                <ul>{splitCareer(c.p).map((item) => <li>{item}</li>)}</ul>
+              </dd>
+            </div>
+          ))
+        }
       </dl>
     </div>
   </section>
@@ -79,6 +91,14 @@ const d = ui.designer;
   }
   .career dt {
     color: var(--gold);
+  }
+  .career ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .career li + li {
+    margin-top: 4px;
   }
   .career dd {
     margin: 0;

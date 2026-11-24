@@ -188,15 +188,29 @@ main > .section:last-child {
   padding-bottom: 112px;
 }
 
-/* 日本語を言葉の切れ目で改行し、最後の行に1文字だけ残らないようにする */
+/* 日本語を言葉の切れ目で改行し、行の長さをそろえる */
 h1,
 h2,
 h3,
 p,
 dd,
+dt,
 li,
+blockquote,
+figcaption,
 .btn {
   word-break: auto-phrase;
+  /* 段落ごとに行の長さをそろえる（7行を超える長い段落は通常の折り返しになる） */
+  text-wrap: balance;
+}
+
+/* 文節（src/lib/phrase.ts で区切ったまとまり）の途中では改行しない */
+.ph {
+  white-space: nowrap;
+}
+
+/* お知らせの本文のような長い文章は、自然な折り返しのままにする */
+.body p {
   text-wrap: pretty;
 }
 

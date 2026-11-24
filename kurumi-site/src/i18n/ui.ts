@@ -28,13 +28,13 @@ export const ui = {
       heroSub: '西陣織やちりめん、紅型などの和の生地で、ドレスやジャケット、スーツを一着ずつお仕立てします。',
       videoTitle: 'Milan GX Fashion Week 2026',
       videoBody: '2026年2月、ミラノで発表したコレクションのショー映像です。',
-      videoLabel: 'Milan GX Fashion Week 2026 のショー映像',
+      videoLabel: 'Milan\u00a0GX\u00a0Fashion\u00a0Week\u00a02026 のショー映像',
       videoExpand: '大きく見る',
       videoPause: '映像を止める',
       videoPlay: '映像を再生',
       conceptTitle: '和の生地を、いまの装いに',
       conceptBody:
-        'KURUMIは、西陣織やちりめん、紅型といった和の生地を、レースやレザー、シルクと掛け合わせ、一着ずつ新たに仕立てています。着物のリメイクではなく、和を再構築し、これからの時代にふさわしい装いとして届けること。レディースに加え、メンズのジャケットやスーツもお仕立てします。',
+        'KURUMIは、西陣織やちりめん、紅型などの和の生地を、レースやレザー、シルクと掛け合わせ、一着ずつ新たに仕立てています。着物のリメイクではなく、和を再構築し、これからの時代にふさわしい装いとして届けること。レディースに加え、メンズのジャケットやスーツもお仕立てします。',
       storyTitle: '和という、世界の共通言語',
       storyBody: '和の装いを前にすると、国や言葉の違いを越えて、人は自然と笑顔になります。KURUMIは、その笑顔の輪を世界へ広げていくことを目指しています。',
       storyMore: 'ブランドストーリー',
@@ -92,9 +92,9 @@ export const ui = {
         { h: '笑顔が広がること', p: '着る人にも、その姿を目にした人にも、自然と笑顔が生まれる服であること。' },
       ],
       milanTitle: 'ミラノでの発表',
-      milanAlt: 'Milan GX Fashion Week 2026のランウェイ',
+      milanAlt: 'Milan\u00a0GX\u00a0Fashion\u00a0Week\u00a02026のランウェイ',
       milan: [
-        '2026年2月25日、Milan GX Fashion Week 2026にて、ドレス6着、ジャケット・スーツ3着、コート1着の計10着を発表しました。',
+        '2026年2月25日、Milan\u00a0GX\u00a0Fashion\u00a0Week\u00a02026にて、ドレス6着、ジャケット・スーツ3着、コート1着の計10着を発表しました。',
         'テーマは「繋がる」。和の装いをミラノで披露し、日本と世界をつなぐことを目指しました。紅型のドレスは、イタリア国旗の色で表現しています。',
       ],
       futureTitle: 'これから',
@@ -112,7 +112,7 @@ export const ui = {
       profile: [
         '神奈川県に生まれ、沖縄で育つ。モデル・タレントとして人前に立つなかで、素敵な洋服を着てステージに立つときこそ、自分が最も笑顔になれると気づく。洋服には人を笑顔にし、自信を与える力がある。そう確信し、自らがつくる側へ進むことを決めた。',
         '絵を描くことは得意ではなかった。それでも試行錯誤を重ねるなかで、和を取り入れたデザインに出会い、2025年7月、ブランドKURUMIを立ち上げる。',
-        'ドレスを手がけた経験がないまま、ミラノでの発表の機会が訪れる。決め手は、心が躍るかどうか。挑戦を選び、2026年2月、Milan GX Fashion Week 2026でコレクションを発表した。',
+        'ドレスを手がけた経験がないまま、ミラノでの発表の機会が訪れる。決め手は、心が躍るかどうか。挑戦を選び、2026年2月、Milan\u00a0GX\u00a0Fashion\u00a0Week\u00a02026でコレクションを発表した。',
       ],
       viewTitle: 'デザインの視点',
       view: [
@@ -294,7 +294,7 @@ export const ui = {
       heroSub: 'Dresses, jackets and suits made to order from Nishijin brocade, chirimen, bingata and other Japanese textiles.',
       videoTitle: 'Milan GX Fashion Week 2026',
       videoBody: 'Footage of the collection shown in Milan in February 2026.',
-      videoLabel: 'Show footage from Milan GX Fashion Week 2026',
+      videoLabel: 'Show footage from Milan\u00a0GX\u00a0Fashion\u00a0Week\u00a02026',
       videoExpand: 'Watch full screen',
       videoPause: 'Pause video',
       videoPlay: 'Play video',
@@ -358,9 +358,9 @@ export const ui = {
         { h: 'Spreading smiles', p: 'Clothes that bring a smile to the wearer, and to everyone who sees them.' },
       ],
       milanTitle: 'Showing in Milan',
-      milanAlt: 'The runway at Milan GX Fashion Week 2026',
+      milanAlt: 'The runway at Milan\u00a0GX\u00a0Fashion\u00a0Week\u00a02026',
       milan: [
-        'On February 25, 2026, KURUMI presented ten looks at Milan GX Fashion Week 2026: six dresses, three jackets and suits, and one coat.',
+        'On February 25, 2026, KURUMI presented ten looks at Milan\u00a0GX\u00a0Fashion\u00a0Week\u00a02026: six dresses, three jackets and suits, and one coat.',
         'The show was titled Connect. By presenting Japanese clothes in Milan, we set out to connect Japan with the world. One bingata dress uses the colors of the Italian flag.',
       ],
       futureTitle: 'What comes next',
@@ -378,7 +378,7 @@ export const ui = {
       profile: [
         'Born in Kanagawa and raised in Okinawa. Years on stage as a model and TV personality led her to a realization: she smiled most when wearing beautiful clothes in front of an audience. Convinced that clothes can make people smile and give them confidence, she decided to become the one who makes them.',
         'Drawing was never her strength. Through trial and error she found her way to designs that bring in Japanese style, and in July 2025 she launched KURUMI.',
-        'Then came the chance to show in Milan, though she had never made a dress. Her deciding question was whether the challenge made her heart race. It did, and in February 2026 she presented her collection at Milan GX Fashion Week 2026.',
+        'Then came the chance to show in Milan, though she had never made a dress. Her deciding question was whether the challenge made her heart race. It did, and in February 2026 she presented her collection at Milan\u00a0GX\u00a0Fashion\u00a0Week\u00a02026.',
       ],
       viewTitle: 'How she designs',
       view: [
