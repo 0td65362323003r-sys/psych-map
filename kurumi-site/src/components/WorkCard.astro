@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import { t, localePath, type Lang } from '../i18n/ui';
+import { localePath, type Lang } from '../i18n/ui';
 import type { Work } from '../data/works';
 
 interface Props {
@@ -8,13 +8,11 @@ interface Props {
   lang: Lang;
 }
 const { work, lang } = Astro.props;
-const ui = t(lang);
 ---
 
-<a class="card" href={localePath(lang, `collection/${work.id}/`)}>
+{/* 一覧では写真だけを並べる（作品名と種類は、開いた先のページで出す） */}
+<a class="card" href={localePath(lang, `collection/${work.id}/`)} aria-label={work.name[lang]}>
   <Image src={work.images[0]} alt="" widths={[400, 720]} sizes="(max-width: 800px) 50vw, 33vw" />
-  <span class="cat sub">{work.quote ? '\u00a0' : ui.categories[work.category]}</span>
-  <span class="name">{work.name[lang]}</span>
 </a>
 
 <style>
@@ -31,18 +29,5 @@ const ui = t(lang);
   }
   .card:hover :global(img) {
     opacity: 0.85;
-  }
-  .card:hover .name {
-    color: var(--gold);
-  }
-  .cat {
-    display: block;
-    margin-top: 12px;
-    font-size: 12px;
-    letter-spacing: 0.1em;
-  }
-  .name {
-    display: block;
-    overflow-wrap: anywhere;
   }
 </style>

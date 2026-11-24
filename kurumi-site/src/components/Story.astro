@@ -16,7 +16,8 @@ const s = ui.story;
 const milanPhoto = works.find((w) => w.id === 'look-08')!.images[1];
 // 章のあいだに挟む寄りの写真（1章目と3章目のあと）
 const interludes: Record<number, { img: ImageMetadata; alt: string }> = {
-  0: { img: works.find((w) => w.id === 'look-01')!.images[1], alt: works.find((w) => w.id === 'look-01')!.name[lang] },
+  // 青い和柄のドレス（2026年11月 胡桃さんから指定）
+  0: { img: works.find((w) => w.id === 'look-07')!.images[2], alt: works.find((w) => w.id === 'look-07')!.name[lang] },
   2: { img: works.find((w) => w.id === 'look-10')!.images[1], alt: works.find((w) => w.id === 'look-10')!.name[lang] },
 };
 ---

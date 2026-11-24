@@ -20,7 +20,8 @@ function doPost(e) {
     if (value.length > LIMITS[key]) return json_({ ok: false, error: 'too_long:' + key });
     v[key] = value;
   }
-  if (!v.name || !v.item) return json_({ ok: false, error: 'missing' });
+  // ご希望のアイテムは任意（質問だけの方も送れるように）
+  if (!v.name) return json_({ ok: false, error: 'missing' });
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.email)) return json_({ ok: false, error: 'email' });
 
   // 見ていた作品は「作品名（look-01）」の形で残す
@@ -48,7 +49,7 @@ function doPost(e) {
         '',
         'お名前：' + v.name,
         'メールアドレス：' + v.email,
-        '希望アイテム：' + v.item,
+        '希望アイテム：' + (v.item || '-'),
         'ご予算：' + (v.budget || '-'),
         '着用予定日：' + (v.date || '-'),
         '着用シーン：' + (v.scene || '-'),

@@ -23,7 +23,6 @@ const workCats = Object.fromEntries(works.filter((w) => !w.quote).map((w) => [w.
     <h1>{c.title}</h1>
     <p class="lead">{c.lead}</p>
     <p class="sub next">{c.next}</p>
-    <p class="sub small">{c.credential}</p>
   </header>
 
   <section class="wrap form-wrap">
@@ -48,11 +47,10 @@ const workCats = Object.fromEntries(works.filter((w) => !w.quote).map((w) => [w.
         <p class="err" id="e-email" hidden>{c.invalid.email}</p>
       </div>
       <fieldset class="field">
-        <legend>{f.item}<em>{c.required}</em></legend>
+        <legend>{f.item}</legend>
         <div class="options">
-          {f.items.map((v, i) => <label class="opt"><input type="radio" name="item" value={v} required={i === 0} />{v}</label>)}
+          {f.items.map((v) => <label class="opt"><input type="radio" name="item" value={v} />{v}</label>)}
         </div>
-        <p class="err" id="e-item" hidden>{c.invalid.item}</p>
       </fieldset>
       <fieldset class="field">
         <legend>{f.budget}</legend>
@@ -126,7 +124,6 @@ const workCats = Object.fromEntries(works.filter((w) => !w.quote).map((w) => [w.
     const rules: [string, () => boolean][] = [
       ['name', () => (form.elements.namedItem('name') as HTMLInputElement).value.trim() !== ''],
       ['email', () => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((form.elements.namedItem('email') as HTMLInputElement).value.trim())],
-      ['item', () => !!form.querySelector('input[name=item]:checked')],
     ];
     let first: HTMLElement | null = null;
     for (const [key, ok] of rules) {
@@ -134,7 +131,7 @@ const workCats = Object.fromEntries(works.filter((w) => !w.quote).map((w) => [w.
       const err = document.getElementById(`e-${key}`)!;
       err.hidden = valid;
       // エラーがあるときだけ、欄とエラー文を結びつける（読み上げ用）
-      const targets = key === 'item' ? [...form.querySelectorAll<HTMLElement>('input[name=item]')] : [document.getElementById(`f-${key}`)!];
+      const targets = [document.getElementById(`f-${key}`)!];
       for (const el of targets) {
         el.setAttribute('aria-invalid', String(!valid));
         if (valid) el.removeAttribute('aria-describedby');

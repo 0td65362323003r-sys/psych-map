@@ -1,5 +1,5 @@
-// 作品データ。Milan GX Fashion Week 2026 で発表した10着（ドレス6、ジャケット・スーツ3、コート1）
-// 作品名・生地・ひとことは胡桃さんの回答（LINE【11】）が届いたら埋める
+// 作品データ。look-01〜10 は Milan GX Fashion Week 2026 で発表した10着、men-01〜04 はメンズの作品
+// 作品名は仮名。正式な名前は胡桃さんからいただく（メンズは生地を書かない）
 import type { ImageMetadata } from 'astro';
 
 const photos = import.meta.glob<{ default: ImageMetadata }>('../assets/works/*.jpg', { eager: true });
@@ -18,6 +18,8 @@ export interface Work {
   materials: { ja: string; en: string } | null;
   note: { ja: string; en: string } | null;
   images: ImageMetadata[];
+  // メンズの作品
+  men?: boolean;
   // 種類が確認できるまで参考価格を出さず「お見積もり」にする
   quote?: boolean;
 }
@@ -69,7 +71,8 @@ export const works: Work[] = [
     name: { ja: '金と赤のマーメイドドレス', en: 'Gold and Red Mermaid Dress' },
     materials: null,
     note: null,
-    images: [photo('12'), photo('13')],
+    // TOPの作品3枚の1枚目に、正面の写真（13）を使う
+    images: [photo('13'), photo('12')],
   },
   {
     id: 'look-07',
@@ -107,10 +110,46 @@ export const works: Work[] = [
     note: null,
     images: [photo('20'), photo('22'), photo('25')],
   },
+  {
+    id: 'men-01',
+    category: 'jacket',
+    men: true,
+    name: { ja: 'メンズジャケット（黒と金の刺繍）', en: "Men's Jacket in Black and Gold" },
+    materials: null,
+    note: null,
+    images: [photo('m01')],
+  },
+  {
+    id: 'men-02',
+    category: 'jacket',
+    men: true,
+    name: { ja: 'メンズジャケット（雲と金糸）', en: "Men's Jacket with Clouds and Gold Thread" },
+    materials: null,
+    note: null,
+    images: [photo('m02')],
+  },
+  {
+    id: 'men-03',
+    category: 'jacket',
+    men: true,
+    name: { ja: 'メンズジャケット（銀の曲線）', en: "Men's Jacket with Silver Curves" },
+    materials: null,
+    note: null,
+    images: [photo('m03')],
+  },
+  {
+    id: 'men-04',
+    category: 'suit',
+    men: true,
+    name: { ja: 'メンズスーツ（赤と金の和柄）', en: "Men's Suit in Red and Gold" },
+    materials: null,
+    note: null,
+    images: [photo('m04')],
+  },
 ];
 
-// TOPの写真。服が画面いっぱいに写っているものを使う
-export const heroImage = photo('13');
+// TOPの最初の写真（ミラノのガッレリアで撮影。2026年11月 胡桃さんから指定）
+export const heroImage = photo('27');
 export const storyImage = photo('23');
 // デザイナーのページのプロフィール写真（2026年11月 胡桃さんから指定）
 export const profileImage = photo('26');
