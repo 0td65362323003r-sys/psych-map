@@ -13,7 +13,7 @@ const ui = t(lang);
 const d = ui.designer;
 // 「 / 」で区切った実績を1件ずつに分け、英数字の名前（MISS GOLF 2023 など）は途中で改行しないようにする
 const splitCareer = (p: string) =>
-  p.split(' / ').map((item) => (lang === 'ja' ? item.replace(/([A-Za-z0-9\u2019]) (?=[A-Za-z0-9])/g, '$1\u00a0') : item));
+  p.split(/\s*\/\s+/).map((item) => (lang === 'ja' ? item.replace(/([A-Za-z0-9\u2019]) (?=[A-Za-z0-9])/g, '$1\u00a0') : item));
 ---
 
 <Base lang={lang} path="designer/" title={ui.seo.designer.title} description={ui.seo.designer.desc}>
