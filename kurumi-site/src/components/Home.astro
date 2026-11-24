@@ -176,9 +176,11 @@ const og = await getImage({ src: heroImage, width: 1200, format: 'jpg' });
 
 <style>
   /* スマホ：写真の下に文字を置く（写真に文字を重ねない） */
+  /* スマホ：写真はヘッダーの下から始め、見出しは写真の下に置く（写真や線に文字を重ねない） */
   .hero {
     position: relative;
     overflow: hidden;
+    padding-top: 76px;
   }
   .hero-img {
     display: block;
@@ -189,24 +191,23 @@ const og = await getImage({ src: heroImage, width: 1200, format: 'jpg' });
     height: min(78svh, 125vw);
     min-height: 460px;
     object-fit: cover;
-    object-position: center 40%;
+    object-position: center 20%;
+    outline: none;
   }
   /* 上はメニュー、下はキャッチコピーを読みやすくするための影 */
   .hero::after {
     content: '';
     position: absolute;
-    inset: 0 0 auto;
+    inset: 76px 0 auto;
     height: min(78svh, 125vw);
     min-height: 460px;
     pointer-events: none;
-    background:
-      linear-gradient(to bottom, color-mix(in srgb, var(--bg) 60%, transparent) 0%, transparent 18%),
-      linear-gradient(to top, var(--bg) 0%, transparent 22%);
+    background: linear-gradient(to top, var(--bg) 0%, transparent 14%);
   }
   .hero-text {
     position: relative;
     z-index: 1;
-    margin-top: -24px;
+    margin-top: 32px;
   }
   .hero-cta {
     margin-top: 32px;
@@ -229,6 +230,7 @@ const og = await getImage({ src: heroImage, width: 1200, format: 'jpg' });
     .hero {
       height: 100svh;
       min-height: 620px;
+      padding-top: 0;
     }
     .hero-img {
       position: absolute;
@@ -239,6 +241,7 @@ const og = await getImage({ src: heroImage, width: 1200, format: 'jpg' });
       object-position: center 62%;
     }
     .hero::after {
+      top: 0;
       height: 100%;
       background: linear-gradient(to bottom, color-mix(in srgb, var(--bg) 75%, transparent) 0%, transparent 18%);
     }

@@ -61,7 +61,11 @@ export function phraseHTML(html: string): string {
       const text = t.textContent ?? '';
       if (!JA.test(text)) continue;
       const frag = document.createDocumentFragment();
-      for (const p of phrases(text)) {
+      // 文章（段落・説明・お客様の声）は「。」のあとで改行し、1行あける（読みやすくするため。11/24の指示）
+      const sentence = (t.parentElement as Element | null)?.closest('p, dd, blockquote');
+      const breakAfterPeriod = !!sentence && !sentence.closest('.footer-philosophy, .hero-sub');
+      const list = phrases(text);
+      list.forEach((p, i) => {
         // スペースと、幅が広すぎる文節は包まない（狭い画面ではみ出さないように）
         if (/^ +$/.test(p) || est(p) > 20) {
           frag.appendChild(document.createTextNode(p));
@@ -71,7 +75,13 @@ export function phraseHTML(html: string): string {
           span.textContent = p;
           frag.appendChild(span);
         }
-      }
+        const rest = list.slice(i + 1).join('').trim();
+        if (breakAfterPeriod && /。」?$/.test(p) && rest) {
+          const sb = document.createElement('span');
+          sb.className = 'sb';
+          frag.appendChild(sb);
+        }
+      });
       t.parentNode!.replaceChild(frag, t);
     }
   }

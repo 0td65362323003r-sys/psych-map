@@ -209,6 +209,12 @@ figcaption,
   white-space: nowrap;
 }
 
+/* 「。」のあとの改行と1行あき（src/lib/phrase.ts で入れる） */
+.sb {
+  display: block;
+  height: 0.9em;
+}
+
 /* お知らせの本文のような長い文章は、自然な折り返しのままにする */
 .body p {
   text-wrap: pretty;
