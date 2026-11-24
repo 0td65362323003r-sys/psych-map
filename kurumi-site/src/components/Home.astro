@@ -21,7 +21,7 @@ const og = await getImage({ src: heroImage, width: 1200, format: 'jpg' });
   <section class="hero">
     <Image src={heroImage} alt="" widths={[640, 1024, 1600]} sizes="(min-width: 900px) 46vw, 100vw" class="hero-img" loading="eager" fetchpriority="high" />
     <div class="hero-text wrap">
-      <h1 class="hero-catch">{ui.philosophy.split(/(?<=[。.,、])\s*/).filter(Boolean).map((line) => <span>{line}</span>)}</h1>
+      <h1 class="hero-catch">{ui.philosophy.split(/(?<=[。.,、])\s*/).filter(Boolean).map((line, i) => <span>{i > 0 && ' '}{line}</span>)}</h1>
       <p class="hero-sub">{ui.home.heroSub}</p>
       <a class="btn hero-cta" href={localePath(lang, 'contact/')}>{ui.cta}</a>
     </div>
