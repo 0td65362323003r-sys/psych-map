@@ -92,7 +92,7 @@ export const works: Work[] = [
       ja: 'イタリア国旗の赤・白・緑で表現した紅型のドレスです。Milan\u00a0GX\u00a0Fashion\u00a0Week\u00a02026で発表しました。',
       en: 'A bingata dress in the red, white and green of the Italian flag, shown at Milan\u00a0GX\u00a0Fashion\u00a0Week\u00a02026.',
     },
-    images: [photo('18'), photo('16'), photo('23')],
+    images: [photo('18'), photo('16'), photo('23'), photo('24')],
   },
   {
     id: 'look-09',
